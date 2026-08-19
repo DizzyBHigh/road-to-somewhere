@@ -10,7 +10,10 @@
 <body>
   <header class="site-header">
     <a class="brand" href="./"><span class="brand-mark">RTS</span><span>ROAD TO SOMEWHERE</span></a>
-    <nav aria-label="Primary"><a href="#extensions">Extensions</a><a href="#about">About</a><a href="#support">Support</a></nav>
+    <div class="header-tools">
+      <nav aria-label="Primary"><a href="#extensions">Extensions</a><a href="#about">About</a><a href="#support">Support</a></nav>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">Light mode</button>
+    </div>
   </header>
 
   <main>
@@ -47,5 +50,14 @@
   </main>
 
   <footer><span>ROAD TO SOMEWHERE</span><span>Built for Streamer.bot creators.</span></footer>
+  <script>
+    const root=document.documentElement;
+    const button=document.getElementById('themeToggle');
+    const saved=localStorage.getItem('rts-theme');
+    if(saved) root.dataset.theme=saved;
+    function updateLabel(){button.textContent=root.dataset.theme==='light'?'Dark mode':'Light mode';}
+    updateLabel();
+    button.addEventListener('click',()=>{const theme=root.dataset.theme==='light'?'dark':'light';root.dataset.theme=theme;localStorage.setItem('rts-theme',theme);updateLabel();});
+  </script>
 </body>
 </html>
