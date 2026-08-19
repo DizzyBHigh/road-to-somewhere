@@ -12,6 +12,16 @@
     <a class="brand" href="./"><span class="brand-mark">RTS</span><span>ROAD TO SOMEWHERE</span></a>
     <div class="header-tools">
       <nav aria-label="Primary"><a href="#extensions">Extensions</a><a href="#about">About</a><a href="#support">Support</a></nav>
+      <label class="font-picker"><span>TYPE</span><select id="fontPair" aria-label="Preview typography pairing">
+        <option value="trailhead">01 · Trailhead</option>
+        <option value="waypoint">02 · Waypoint</option>
+        <option value="highway">03 · Highway</option>
+        <option value="outpost">04 · Outpost</option>
+        <option value="roam">05 · Roam</option>
+        <option value="summit">06 · Summit</option>
+        <option value="frontier">07 · Frontier</option>
+        <option value="journal">08 · Journal</option>
+      </select></label>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">Light mode</button>
     </div>
   </header>
@@ -52,12 +62,16 @@
   <footer><span>ROAD TO SOMEWHERE</span><span>Built for Streamer.bot creators.</span></footer>
   <script>
     const root=document.documentElement;
-    const button=document.getElementById('themeToggle');
-    const saved=localStorage.getItem('rts-theme');
-    if(saved) root.dataset.theme=saved;
-    function updateLabel(){button.textContent=root.dataset.theme==='light'?'Dark mode':'Light mode';}
-    updateLabel();
-    button.addEventListener('click',()=>{const theme=root.dataset.theme==='light'?'dark':'light';root.dataset.theme=theme;localStorage.setItem('rts-theme',theme);updateLabel();});
+    const themeButton=document.getElementById('themeToggle');
+    const fontPicker=document.getElementById('fontPair');
+    const savedTheme=localStorage.getItem('rts-theme');
+    const savedFont=localStorage.getItem('rts-font');
+    if(savedTheme) root.dataset.theme=savedTheme;
+    if(savedFont){root.dataset.font=savedFont;fontPicker.value=savedFont;}
+    function updateThemeLabel(){themeButton.textContent=root.dataset.theme==='light'?'Dark mode':'Light mode';}
+    updateThemeLabel();
+    themeButton.addEventListener('click',()=>{const theme=root.dataset.theme==='light'?'dark':'light';root.dataset.theme=theme;localStorage.setItem('rts-theme',theme);updateThemeLabel();});
+    fontPicker.addEventListener('change',()=>{root.dataset.font=fontPicker.value;localStorage.setItem('rts-font',fontPicker.value);});
   </script>
 </body>
 </html>
