@@ -9,18 +9,14 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./"><span class="brand-mark">RTS</span><span>ROAD TO SOMEWHERE</span></a>
+    <a class="brand" href="./" aria-label="Road to Somewhere home">
+      <span class="brand-mark" aria-hidden="true"><i></i><b></b><i></i></span>
+      <span class="brand-copy"><strong>ROAD TO</strong><em>SOMEWHERE</em></span>
+    </a>
     <div class="header-tools">
       <nav aria-label="Primary"><a href="#extensions">Extensions</a><a href="#about">About</a><a href="#support">Support</a></nav>
       <label class="font-picker"><span>TYPE</span><select id="fontPair" aria-label="Preview typography pairing">
-        <option value="trailhead">01 · Trailhead</option>
-        <option value="waypoint">02 · Waypoint</option>
-        <option value="highway">03 · Highway</option>
-        <option value="outpost">04 · Outpost</option>
-        <option value="roam">05 · Roam</option>
-        <option value="summit">06 · Summit</option>
-        <option value="frontier">07 · Frontier</option>
-        <option value="journal">08 · Journal</option>
+        <option value="trailhead">01 · Trailhead</option><option value="waypoint">02 · Waypoint</option><option value="highway">03 · Highway</option><option value="outpost">04 · Outpost</option><option value="roam">05 · Roam</option><option value="summit">06 · Summit</option><option value="frontier">07 · Frontier</option><option value="journal">08 · Journal</option>
       </select></label>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">Light mode</button>
     </div>
@@ -28,10 +24,15 @@
 
   <main>
     <section class="hero">
-      <div class="eyebrow">STREAMER.BOT EXTENSIONS</div>
-      <h1>Make your stream<br><em>feel like yours.</em></h1>
-      <p class="hero-copy">Road to Somewhere builds polished tools and visual experiences for streamers who want more than a collection of default widgets.</p>
-      <a class="button" href="#extensions">Explore extensions <span>→</span></a>
+      <div class="hero-main">
+        <div class="eyebrow">STREAMER.BOT EXTENSIONS</div>
+        <h1>Make your stream<br><em>feel like yours.</em></h1>
+        <p class="hero-copy">Road to Somewhere builds polished tools and visual experiences for streamers who want more than a collection of default widgets.</p>
+        <a class="button" href="#extensions">Explore extensions <span>→</span></a>
+      </div>
+      <aside class="hero-sign" aria-hidden="true">
+        <div class="sign-top">ROAD TO</div><strong>SOMEWHERE</strong><span>THE JOURNEY IS THE GOAL</span>
+      </aside>
       <div class="route-line" aria-hidden="true"><span></span><i></i><span></span><i></i><span></span></div>
     </section>
 
@@ -39,7 +40,7 @@
       <div class="section-kicker">THE WORKSHOP</div>
       <div class="section-heading"><h2>Extensions</h2><p>Built to be installed easily, configured clearly, and seen on stream.</p></div>
       <article class="product-card">
-        <div class="product-art"><div class="product-badge">FEATURED</div><div class="product-grid"></div><div class="van">DUHBUH</div></div>
+        <div class="product-art"><div class="product-badge">01 / FEATURED</div><div class="product-road"><i></i><b></b></div><div class="product-sky"></div><div class="van">DUHBUH</div></div>
         <div class="product-info">
           <div class="product-type">STREAMER.BOT + OBS</div>
           <h3>DuhBuh Ban Widget</h3>
@@ -59,15 +60,12 @@
     <section id="support" class="section support"><div class="section-kicker">NEED A HAND?</div><h2>Every extension comes with documentation that tells you what to do — and why.</h2><p>Installation steps, settings references, troubleshooting, and release notes will live alongside each product.</p></section>
   </main>
 
-  <footer><span>ROAD TO SOMEWHERE</span><span>Built for Streamer.bot creators.</span></footer>
+  <footer><span>ROAD TO SOMEWHERE</span><span>THE JOURNEY IS THE GOAL</span><span>Built for Streamer.bot creators.</span></footer>
   <script>
-    const root=document.documentElement;
-    const themeButton=document.getElementById('themeToggle');
-    const fontPicker=document.getElementById('fontPair');
-    const savedTheme=localStorage.getItem('rts-theme');
-    const savedFont=localStorage.getItem('rts-font');
+    const root=document.documentElement, themeButton=document.getElementById('themeToggle'), fontPicker=document.getElementById('fontPair');
+    const savedTheme=localStorage.getItem('rts-theme'), savedFont=localStorage.getItem('rts-font');
     if(savedTheme) root.dataset.theme=savedTheme;
-    if(savedFont){root.dataset.font=savedFont;fontPicker.value=savedFont;}
+    if(savedFont){root.dataset.font=savedFont;fontPicker.value=savedFont;} else root.dataset.font='roam';
     function updateThemeLabel(){themeButton.textContent=root.dataset.theme==='light'?'Dark mode':'Light mode';}
     updateThemeLabel();
     themeButton.addEventListener('click',()=>{const theme=root.dataset.theme==='light'?'dark':'light';root.dataset.theme=theme;localStorage.setItem('rts-theme',theme);updateThemeLabel();});
