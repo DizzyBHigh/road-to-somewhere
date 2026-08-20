@@ -4,19 +4,41 @@
   const overlayBtn=document.getElementById('copyOverlayUrl');
   const importUrl={{ site.data.rts_ban_timeout_import.filename | relative_url | jsonify }};
   const overlayUrl=new URL('overlay/',window.location.href).href;
-  function restoreCopyImport(){btn.innerHTML='Copy Import <span class="copy-icon">⧉</span>';btn.classList.remove('copied')}
-  function restoreOverlay(){overlayBtn.innerHTML='Copy Overlay URL <span class="button-icon">⧉</span>';overlayBtn.classList.remove('copied')}
+  function setCopied(button,label,icon){
+    button.innerHTML='COPIED <span class="'+icon+'">✓</span>';
+    button.classList.add('copied');
+    setTimeout(function(){
+      button.innerHTML=label+' <span class="'+icon+'">⧉</span>';
+      button.classList.remove('copied');
+    },1600);
+  }
   if(btn&&code){
     fetch(importUrl).then(r=>{if(!r.ok)throw new Error('Import file unavailable');return r.text()}).then(text=>{code.textContent=text}).catch(()=>{code.textContent='Unable to load the current import code. Use the versioned download link below.'});
     btn.addEventListener('click',async()=>{
-      try{await navigator.clipboard.writeText(code.textContent.trim());btn.innerHTML='Copied <span class="copy-icon">✓</span>';btn.classList.add('copied');setTimeout(restoreCopyImport,1600)}
-      catch(e){const range=document.createRange();range.selectNodeContents(code);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);document.execCommand?.('copy');sel.removeAllRanges();btn.innerHTML='Copied <span class="copy-icon">✓</span>';btn.classList.add('copied');setTimeout(restoreCopyImport,1600)}
+      try{
+        await navigator.clipboard.writeText(code.textContent.trim());
+        setCopied(btn,'COPY IMPORT','copy-icon');
+      }catch(e){
+        const range=document.createRange();range.selectNodeContents(code);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);
+        try{document.execCommand('copy');setCopied(btn,'COPY IMPORT','copy-icon')}catch(_){sel.removeAllRanges()}
+        sel.removeAllRanges();
+      }
     });
   }
   if(overlayBtn){
     overlayBtn.addEventListener('click',async()=>{
-      try{await navigator.clipboard.writeText(overlayUrl);overlayBtn.innerHTML='Copied <span class="button-icon">✓</span>';overlayBtn.classList.add('copied');setTimeout(restoreOverlay,1600)}
-      catch(e){overlayBtn.innerHTML='Copy Failed <span class="button-icon">⧉</span>';setTimeout(restoreOverlay,1600)}
+      try{
+        await navigator.clipboard.writeText(overlayUrl);
+        setCopied(overlayBtn,'COPY OVERLAY URL','button-icon');
+      }catch(e){
+        try{
+          const input=document.createElement('textarea');input.value=overlayUrl;input.style.position='fixed';input.style.opacity='0';document.body.appendChild(input);input.select();document.execCommand('copy');input.remove();
+          setCopied(overlayBtn,'COPY OVERLAY URL','button-icon');
+        }catch(_){
+          overlayBtn.innerHTML='COPY FAILED <span class="button-icon">!</span>';
+          setTimeout(function(){overlayBtn.innerHTML='COPY OVERLAY URL <span class="button-icon">⧉</span>'},1600);
+        }
+      }
     });
   }
   document.querySelectorAll('.collapse-toggle').forEach(toggle=>{
