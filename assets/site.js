@@ -59,16 +59,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const copyOverlayButton = document.createElement('button');
       copyOverlayButton.type = 'button';
-      copyOverlayButton.className = 'secondary-button';
-      copyOverlayButton.innerHTML = 'Copy Overlay URL <span>⧉</span>';
+      copyOverlayButton.className = 'copy-button';
+      copyOverlayButton.innerHTML = 'Copy Overlay URL';
       copyOverlayButton.addEventListener('click', async () => {
         const overlayUrl = new URL(overlayButton.href, window.location.href).href;
         try {
           await navigator.clipboard.writeText(overlayUrl);
-          copyOverlayButton.firstChild.textContent = 'Overlay URL Copied ';
-          setTimeout(() => { copyOverlayButton.firstChild.textContent = 'Copy Overlay URL '; }, 1600);
+          copyOverlayButton.textContent = 'Overlay URL Copied';
+          copyOverlayButton.classList.add('copied');
+          setTimeout(() => {
+            copyOverlayButton.textContent = 'Copy Overlay URL';
+            copyOverlayButton.classList.remove('copied');
+          }, 1600);
         } catch {
-          copyOverlayButton.firstChild.textContent = 'Copy Failed ';
+          copyOverlayButton.textContent = 'Copy Failed';
         }
       });
       overlayButton.insertAdjacentElement('afterend', copyOverlayButton);
@@ -87,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .quick-import-box .import-code{height:${Math.max(downloadStack.offsetHeight,120)}px;max-height:none}
       .quick-access-card>.dependency{margin-top:22px;width:100%}
       .quick-access-card .download-stack .secondary-button{width:100%;box-sizing:border-box}
+      .quick-access-card .download-stack .copy-button{width:100%;box-sizing:border-box}
       @media(max-width:760px){
         .quick-access-content{grid-template-columns:1fr}
         .quick-import-box{margin-top:0}
