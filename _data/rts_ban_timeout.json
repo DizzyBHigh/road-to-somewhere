@@ -1,15 +1,27 @@
 {
-  "product": "RTS — Ban / Timeout Widget",
+  "product": "RTS \u2014 Ban / Timeout Widget",
   "slug": "rts-ban-timeout-widget",
   "version": "1.0.0",
   "type": "STREAMER.BOT + OBS",
   "status": "RELEASED",
   "description": "Turn moderation into an event with a cinematic ban animation, independent timeout cells, configurable positioning, sizing, messages, and a proper event queue.",
   "tags": [
-    { "label": "Ban Queue", "class": "tag-ban" },
-    { "label": "Timeouts", "class": "tag-timeout" },
-    { "label": "OBS Overlay", "class": "tag-overlay" },
-    { "label": "Custom UI", "class": "tag-ui" }
+    {
+      "label": "Ban Queue",
+      "class": "tag-ban"
+    },
+    {
+      "label": "Timeouts",
+      "class": "tag-timeout"
+    },
+    {
+      "label": "OBS Overlay",
+      "class": "tag-overlay"
+    },
+    {
+      "label": "Custom UI",
+      "class": "tag-ui"
+    }
   ],
   "footerLabel": "The first road is open.",
   "url": "/extensions/rts-ban-timeout-widget/",
