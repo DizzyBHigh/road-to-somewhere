@@ -1,5 +1,5 @@
 title: The Road to Somewhere
-baseurl: ""
-url: ""
+baseurl: "/road-to-somewhere"
+url: "https://dizzybhigh.github.io"
 include:
   - extensions
