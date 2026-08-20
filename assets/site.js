@@ -51,12 +51,42 @@ document.addEventListener('DOMContentLoaded', () => {
     /* The old import section is now empty and can disappear. */
     if (importSection) importSection.remove();
 
+    /* Quick Access labels and overlay URL copy action. */
+    const overlayButton = downloadStack.querySelector('a[href="overlay/"]');
+    if (overlayButton) {
+      const label = overlayButton.firstChild;
+      if (label) label.textContent = 'Open Overlay in Browser ';
+
+      const copyOverlayButton = document.createElement('button');
+      copyOverlayButton.type = 'button';
+      copyOverlayButton.className = 'secondary-button';
+      copyOverlayButton.innerHTML = 'Copy Overlay URL <span>⧉</span>';
+      copyOverlayButton.addEventListener('click', async () => {
+        const overlayUrl = new URL(overlayButton.href, window.location.href).href;
+        try {
+          await navigator.clipboard.writeText(overlayUrl);
+          copyOverlayButton.firstChild.textContent = 'Overlay URL Copied ';
+          setTimeout(() => { copyOverlayButton.firstChild.textContent = 'Copy Overlay URL '; }, 1600);
+        } catch {
+          copyOverlayButton.firstChild.textContent = 'Copy Failed ';
+        }
+      });
+      overlayButton.insertAdjacentElement('afterend', copyOverlayButton);
+    }
+
+    const importDownload = downloadStack.querySelector('a[href*="Import Code"]');
+    if (importDownload) {
+      const label = importDownload.firstChild;
+      if (label) label.textContent = 'Download Overlay files for local use ';
+    }
+
     const style = document.createElement('style');
     style.textContent = `
       .quick-access-content{grid-template-columns:minmax(190px,.65fr) minmax(0,1.35fr);align-items:start}
       .quick-import-box{margin-top:0;min-width:0}
       .quick-import-box .import-code{height:${Math.max(downloadStack.offsetHeight,120)}px;max-height:none}
       .quick-access-card>.dependency{margin-top:22px;width:100%}
+      .quick-access-card .download-stack .secondary-button{width:100%;box-sizing:border-box}
       @media(max-width:760px){
         .quick-access-content{grid-template-columns:1fr}
         .quick-import-box{margin-top:0}
