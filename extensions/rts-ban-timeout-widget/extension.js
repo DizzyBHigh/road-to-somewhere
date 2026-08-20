@@ -5,7 +5,7 @@
   const versionEl=document.querySelector('.release-line .version');
   const versionMatch=versionEl&&versionEl.textContent.match(/v([0-9]+\.[0-9]+\.[0-9]+)/i);
   const version=versionMatch?versionMatch[1]:null;
-  const importUrl=version?new URL('../RTS%20Ban%20Timeout%20Widget%20v'+encodeURIComponent(version)+'%20-%20Import%20Code.txt',window.location.href).href:null;
+  const importUrl=version?new URL('RTS%20Ban%20Timeout%20Widget%20v'+encodeURIComponent(version)+'%20-%20Import%20Code.txt',window.location.href).href:null;
   const overlayUrl=new URL('overlay/',window.location.href).href;
   function setCopied(button,label,icon){
     button.innerHTML='COPIED <span class="'+icon+'">✓</span>';
