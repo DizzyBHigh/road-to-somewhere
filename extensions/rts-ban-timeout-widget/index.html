@@ -75,8 +75,8 @@
           </div>
           <button class="copy-button" id="copyImport" type="button">Copy Import</button>
         </div>
-        <pre class="import-code" id="importCode">{{ site.data.rts_ban_timeout_import.code }}</pre>
-        <p class="import-help">This is the exact import code published with the current release. The page is populated automatically from the extension release, so the displayed code and download stay together.</p>
+        <pre class="import-code" id="importCode">Loading release import…</pre>
+        <p class="import-help">This is the exact import code published with the current release. The page fetches the same versioned file used for download, so the displayed code and download stay together.</p>
         <div class="import-links"><a href="{{ site.data.rts_ban_timeout_import.filename | relative_url }}">Download exact import file →</a><a href="#install-guide">Installation steps below →</a></div>
       </div>
       <div id="install-guide" style="margin-top:22px"><div class="section-kicker">SETUP GUIDE</div><ol class="install-list"><li>Install the current Road to Somewhere UI DLL from the dedicated DLL page.</li><li>Open Streamer.bot and use <strong>Import</strong> to paste the import string above, or download the exact versioned import file.</li><li>Enable the imported actions and verify the extension's settings action is available.</li><li>Add the hosted overlay URL to an OBS Browser Source, or use the local overlay ZIP.</li><li>Open the extension settings and configure the presentation for your stream.</li><li>Run a test ban and timeout before putting it live.</li></ol><div class="note"><strong>v{{ site.data.rts_ban_timeout_import.version }}:</strong> This is the current released version of the RTS Ban / Timeout Widget.</div></div>
@@ -117,7 +117,9 @@
 (function(){
   const btn=document.getElementById('copyImport');
   const code=document.getElementById('importCode');
+  const importUrl={{ site.data.rts_ban_timeout_import.filename | relative_url | jsonify }};
   if(!btn||!code)return;
+  fetch(importUrl).then(r=>{if(!r.ok)throw new Error('Import file unavailable');return r.text()}).then(text=>{code.textContent=text}).catch(()=>{code.textContent='Unable to load the current import code. Use the versioned download link below.'});
   btn.addEventListener('click',async()=>{
     try{await navigator.clipboard.writeText(code.textContent.trim());btn.textContent='Copied';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy Import';btn.classList.remove('copied')},1600)}
     catch(e){const range=document.createRange();range.selectNodeContents(code);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);document.execCommand?.('copy');sel.removeAllRanges();btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy Import',1600)}
