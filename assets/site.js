@@ -42,6 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
     quickContent.appendChild(importBox);
     importBox.classList.add('quick-import-box');
 
+    /* The widget name is redundant here; the section is simply ACTION IMPORT. */
+    importBox.querySelector('.section-kicker:not(.import-title-kicker)')?.remove();
+
     /* Move Required Component below the two-column Quick Access row. */
     if (dependency) quickCard.appendChild(dependency);
 
