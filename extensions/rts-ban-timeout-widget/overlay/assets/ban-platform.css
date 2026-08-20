@@ -1,0 +1,30 @@
+/* Platform accents for the existing ban truck sequence. */
+.ban-scene {
+  --platform-accent: #ffd72f;
+}
+
+.ban-scene[data-platform="twitch"] {
+  --platform-accent: #9146ff;
+}
+
+.ban-scene[data-platform="kick"] {
+  --platform-accent: #53fc18;
+}
+
+.ban-scene[data-platform="youtube"] {
+  --platform-accent: #ff0000;
+}
+
+/* Keep the existing truck animation. Only the skid marks change by platform. */
+.ban-scene .ban-trail .skid {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--platform-accent) 12%, transparent) 12%,
+    color-mix(in srgb, var(--platform-accent) 55%, #111) 35%,
+    var(--platform-accent) 62%,
+    color-mix(in srgb, var(--platform-accent) 18%, transparent) 90%,
+    transparent 100%
+  );
+  box-shadow: 0 0 6px color-mix(in srgb, var(--platform-accent) 45%, transparent);
+}

@@ -1,0 +1,302 @@
+:root {
+    --cell-w: 331px;
+    --cell-h: 310px;
+    --edge: 28px;
+    --stack-gap: 18px;
+    --stack-scale: .333333;
+    --stack-h: 103.333px;
+    --ink: #111;
+    --gold: #ffd72f
+}
+
+* {
+    box-sizing: border-box
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif
+}
+
+#stage {
+    position: fixed;
+    inset: 0;
+    pointer-events: none
+}
+
+.cell {
+    position: absolute;
+    width: var(--cell-w);
+    height: var(--cell-h);
+    left: 50%;
+    top: 45%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    filter: drop-shadow(0 18px 12px #0008)
+}
+
+.cell .avatar {
+    position: absolute;
+    z-index: 2;
+    left: 37px;
+    top: 42px;
+    width: 258px;
+    height: 227px;
+    object-fit: cover;
+    border-radius: 50%;
+    background: #182028;
+    will-change: transform
+}
+
+/* The avatar is given the .angry class by script.js only during its brief shake. */
+.cell .avatar.angry {
+    animation: angryAvatar 2s steps(2, end) infinite
+}
+
+@keyframes angryAvatar {
+    0% { transform: translate(0, 0) rotate(0deg) }
+    20% { transform: translate(-3px, 1px) rotate(-.7deg) }
+    40% { transform: translate(4px, -1px) rotate(.8deg) }
+    60% { transform: translate(-4px, -2px) rotate(-.6deg) }
+    80% { transform: translate(3px, 2px) rotate(.7deg) }
+    100% { transform: translate(0, 0) rotate(0deg) }
+}
+
+.cell .frame {
+    position: absolute;
+    inset: 0;
+    width: 331px;
+    height: 310px;
+    object-fit: fill;
+    z-index: 5;
+    pointer-events: none
+}
+
+.cell .bars {
+    position: absolute;
+    z-index: 4;
+    left: 37px;
+    top: 40px;
+    width: 258px;
+    height: 231px;
+    overflow: hidden;
+    pointer-events: none
+}
+
+.cell .bar {
+    position: absolute;
+    top: 0;
+    height: 231px;
+    width: 12px;
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top center;
+    background: linear-gradient(90deg, #050505 0%, #2d2d2d 22%, #8a8a8a 43%, #242424 61%, #050505 100%);
+    border: 2px solid #030303;
+    border-radius: 2px;
+    box-shadow: 3px 0 4px rgba(0, 0, 0, .75), inset 1px 0 1px rgba(255, 255, 255, .35)
+}
+
+.cell .bar::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, .18), transparent 28%, transparent 72%, rgba(0, 0, 0, .28))
+}
+
+.cell .bar:nth-child(1) { left: 23px }
+.cell .bar:nth-child(2) { left: 56px }
+.cell .bar:nth-child(3) { left: 90px }
+.cell .bar:nth-child(4) { left: 123px }
+.cell .bar:nth-child(5) { left: 157px }
+.cell .bar:nth-child(6) { left: 190px }
+.cell .bar:nth-child(7) { left: 224px }
+.cell:not(.locking):not(.locked) .bar { transform: scaleY(0) }
+.cell.locking .bar { animation: barsDown 1.5s cubic-bezier(.25, .8, .25, 1) forwards }
+@keyframes barsDown { from { transform: scaleY(0) } to { transform: scaleY(1) } }
+.cell.releasing .bar { animation: barsUp 1.25s ease-in forwards }
+@keyframes barsUp { from { transform: scaleY(1) } to { transform: scaleY(0) } }
+
+.timer {
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    top: 9%;
+    transform: translateX(-50%);
+    width: 108px;
+    height: 38px;
+    padding: 5px 8px;
+    background: #111;
+    color: #efff00;
+    border: 3px solid var(--gold);
+    border-radius: 7px;
+    box-shadow: 0 3px 0 #0009;
+    text-align: center;
+    font: 900 17px monospace
+}
+
+.nameplate {
+    position: absolute;
+    z-index: 10;
+    left: 18%;
+    right: 18%;
+    bottom: 21%;
+    height: 9%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+    background: linear-gradient(#3a3a3a, #151515);
+    border: 3px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 4px 0 #0008;
+    color: #fff;
+    text-shadow: 0 2px 2px #000;
+    font: 1000 15px Arial, sans-serif;
+    padding: 0 8px
+}
+
+.nameplate span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100% }
+
+.reason {
+    position: absolute;
+    z-index: 10;
+    left: 16%;
+    right: 16%;
+    bottom: 8%;
+    height: 12%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+    background: linear-gradient(#f2d681, #c49a3d);
+    border: 4px solid var(--ink);
+    border-radius: 6px;
+    box-shadow: 0 4px 0 #0008;
+    color: #111;
+    font: 1000 14px Arial, sans-serif
+}
+
+.reason span { display: block; white-space: nowrap }
+.reason.scrolling { justify-content: flex-start }
+.reason.scrolling span { min-width: max-content; padding-left: 100%; animation: reasonScroll var(--scroll-time, 7s) linear infinite }
+@keyframes reasonScroll { from { transform: translateX(0) } to { transform: translateX(-100%) } }
+
+.cell.docked {
+    left: auto;
+    top: auto;
+    right: var(--edge);
+    bottom: var(--dock-bottom, var(--edge));
+    transform: scale(var(--stack-scale));
+    transform-origin: bottom right;
+    animation: dockIn .5s cubic-bezier(.2, .9, .2, 1) forwards
+}
+.cell.stack1 { --dock-bottom: calc(var(--edge) + var(--stack-h) + var(--stack-gap)); bottom: var(--dock-bottom) }
+.cell.stack2 { --dock-bottom: calc(var(--edge) + 2 * (var(--stack-h) + var(--stack-gap))); bottom: var(--dock-bottom) }
+.cell.stack3 { --dock-bottom: calc(var(--edge) + 3 * (var(--stack-h) + var(--stack-gap))); bottom: var(--dock-bottom) }
+@keyframes dockIn {
+    from { transform: translate(calc(-50vw + var(--edge) + 165.5px), calc(-55vh + var(--dock-bottom, var(--edge)) + 155px)) scale(1); opacity: 1 }
+    to { transform: translate(0, 0) scale(var(--stack-scale)); opacity: 1 }
+}
+.cell.releasing.docked { left: auto; top: auto; right: var(--edge); bottom: var(--dock-bottom, var(--edge)); transform: scale(var(--stack-scale)); transform-origin: bottom right; animation: none }
+.cell.releasing.stack1, .cell.releasing.stack2, .cell.releasing.stack3 { bottom: var(--dock-bottom) }
+.cell.releasing .avatar { animation: avatarOut 1.05s cubic-bezier(.2, .8, .2, 1) 1.25s forwards }
+.cell.releasing .timer, .cell.releasing .nameplate, .cell.releasing .reason { animation: fade .28s ease forwards }
+.cell.releasing .frame { opacity: 1 }
+.cell.releasing { animation: none }
+@keyframes avatarOut {
+    0% { transform: translateX(0) scale(1); opacity: 1 }
+    55% { transform: translateX(-260px) scale(.55); opacity: 1 }
+    100% { transform: translateX(-620px) scale(0); opacity: 0 }
+}
+@keyframes fade { to { opacity: 0 } }
+
+.ban-scene {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 60;
+    --ban-accent: #ff0000
+}
+.ban-scene[data-platform="twitch"] { --ban-accent: #9146ff }
+.ban-scene[data-platform="kick"] { --ban-accent: #53fc18 }
+.ban-scene[data-platform="youtube"] { --ban-accent: #ff0000 }
+
+.truck {
+    position: absolute;
+    left: -700px;
+    bottom: 7%;
+    width: 640px;
+    height: 320px;
+    background: url("jail-truck-black-window.png") center/100% 100% no-repeat;
+    animation: truckDriveIn 1.8s cubic-bezier(.18, .62, .1, 1) forwards;
+    filter: drop-shadow(0 18px 10px #0008)
+}
+.truck.driving-off { animation: truckDriveOff 3s linear forwards }
+
+.truck-window { position: absolute; left: 40.3%; top: 22.8%; width: 14.26%; height: 27.73%; z-index: 2; overflow: hidden; opacity: 0 }
+.truck-window.visible { opacity: 1 }
+.truck-avatar { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 2px; z-index: 1 }
+.truck-bars { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none }
+.truck-bars i { position: absolute; top: 0; bottom: 0; width: 7%; background: linear-gradient(90deg, #050505, #686868 34%, #111 62%, #020202); border: 1px solid #050505; box-shadow: 1px 0 2px rgba(0, 0, 0, .75); transform: scaleY(0); transform-origin: top center }
+.truck-bars i:nth-child(1) { left: 2% }
+.truck-bars i:nth-child(2) { left: 17% }
+.truck-bars i:nth-child(3) { left: 32% }
+.truck-bars i:nth-child(4) { left: 47% }
+.truck-bars i:nth-child(5) { left: 62% }
+.truck-bars i:nth-child(6) { left: 77% }
+.truck-bars i:nth-child(7) { left: 92% }
+
+.ban-trail { position: absolute; left: calc(50% - 320px); right: 0; bottom: 7%; height: 92px; z-index: 55; overflow: hidden; clip-path: inset(0 100% 0 0); opacity: 1 }
+.ban-trail.revealing { animation: trailReveal 3s linear forwards }
+.ban-trail.fading { animation: trailFade 1.2s ease forwards }
+.skid { position: absolute; left: 0; right: 0; height: 13px; bottom: 22px; filter: blur(.7px); background: linear-gradient(180deg, transparent 0%, rgba(15, 15, 15, .15) 12%, rgba(15, 15, 15, .8) 35%, rgba(10, 10, 10, .95) 62%, rgba(15, 15, 15, .25) 90%, transparent 100%); border-radius: 50% }
+.skid.one { transform: rotate(-.35deg) }
+.skid.two { bottom: 40px; transform: rotate(.35deg); opacity: .82 }
+
+.ban-reason {
+    position: absolute;
+    left: 4%;
+    right: 4%;
+    top: 2px;
+    min-height: 30px;
+    padding: 5px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    white-space: nowrap;
+    color: #fff;
+    text-shadow: 0 3px 4px #000, 0 0 7px #000;
+    font: 1000 20px Arial, sans-serif
+}
+.ban-reason::before {
+    content: "BANNED: ";
+    color: var(--ban-accent);
+    flex: 0 0 auto;
+    text-shadow: 0 3px 4px #000, 0 0 7px #000
+}
+.ban-reason span { display: block; white-space: nowrap }
+.ban-reason.scrolling { justify-content: flex-start }
+.ban-reason.scrolling span { min-width: max-content; padding-left: 100%; animation: banReasonScroll var(--ban-scroll-time, 7s) linear infinite }
+@keyframes banReasonScroll { from { transform: translateX(0) } to { transform: translateX(-100%) } }
+@keyframes trailReveal { from { clip-path: inset(0 100% 0 0) } to { clip-path: inset(0 0 0 0) } }
+@keyframes trailFade { to { opacity: 0 } }
+@keyframes truckDriveIn { 0% { transform: translateX(0) } 100% { transform: translateX(1020px) } }
+@keyframes truckDriveOff { 0% { transform: translateX(1020px) } 100% { transform: translateX(calc(100vw + 700px)) } }
+
+#status { position: absolute; left: 14px; top: 14px; z-index: 100; background: #000b; color: #fff; padding: 6px 9px; border-radius: 5px; font: 700 11px monospace; opacity: 0; transition: opacity .2s }
+#status.show { opacity: 1 }

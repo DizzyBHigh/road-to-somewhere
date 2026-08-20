@@ -1,0 +1,246 @@
+.timeout-key {
+  position: absolute;
+  z-index: 3;
+  left: -96px;
+  top: 96px;
+  width: 132px;
+  height: 72px;
+  pointer-events: none;
+  transform-origin: 116px 36px;
+  transform-style: preserve-3d;
+  perspective: 700px;
+  transform: translateX(-104px) rotateX(0deg) scale(.9);
+  opacity: 0;
+  filter: drop-shadow(0 5px 4px rgba(0, 0, 0, .75));
+}
+
+.cell.locking .timeout-key {
+  animation: timeoutKeyUnlock 2.5s cubic-bezier(.2, .85, .25, 1) forwards;
+}
+
+.timeout-key-head {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  padding: 5px;
+  background: linear-gradient(145deg, #ffe56b, #d49b00 60%, #a66f00);
+  border: 3px solid #8b6200;
+  box-shadow: inset 2px 2px 2px rgba(255,255,255,.5), inset -3px -3px 4px rgba(0,0,0,.35);
+  transform-style: preserve-3d;
+}
+
+.timeout-key-head::after {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border: 3px solid #8b6200;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.25);
+}
+
+.timeout-key-head img {
+  position: absolute;
+  inset: 8px;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.timeout-key-shaft {
+  position: absolute;
+  left: 55px;
+  top: 27px;
+  width: 66px;
+  height: 16px;
+  border-radius: 3px;
+  background: linear-gradient(#ffe77b, #d49b00 55%, #a66f00);
+  border: 3px solid #8b6200;
+  transform-origin: 0 50%;
+}
+
+.timeout-key-tooth {
+  position: absolute;
+  left: 112px;
+  top: 22px;
+  width: 20px;
+  height: 28px;
+  background: linear-gradient(#ffe77b, #d49b00 55%, #a66f00);
+  border: 3px solid #8b6200;
+  border-left: 0;
+  border-radius: 0 3px 3px 0;
+  box-sizing: border-box;
+}
+
+.timeout-key-tooth::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  bottom: -3px;
+  width: 8px;
+  height: 9px;
+  background: #d49b00;
+  border: 3px solid #8b6200;
+  border-top: 0;
+}
+
+.timeout-key-label {
+  position: absolute;
+  left: -34px;
+  top: 77px;
+  width: 145px;
+  padding: 3px 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+  background: rgba(12, 12, 12, .92);
+  border: 2px solid #ffd72f;
+  border-radius: 4px;
+  color: #fff;
+  font: 900 10px Arial, sans-serif;
+  text-shadow: 0 1px 2px #000;
+}
+
+@keyframes timeoutKeyUnlock {
+  /* Start left edge = -200px. */
+  0% {
+    opacity: 0;
+    transform: translateX(-104px) rotateX(0deg) scale(.9);
+  }
+
+  /* Wait 1 second before moving. */
+  40% {
+    opacity: 1;
+    transform: translateX(-104px) rotateX(0deg) scale(1);
+  }
+
+  /* End left edge = -96px: tip is seated in the lock. */
+  60% {
+    opacity: 1;
+    transform: translateX(0) rotateX(0deg) scale(1);
+  }
+
+  /* Hold inserted for 500ms. */
+  80% {
+    opacity: 1;
+    transform: translateX(0) rotateX(0deg) scale(1);
+  }
+
+  /* Turn around the key's horizontal shaft axis. */
+  90% {
+    opacity: 1;
+    transform: translateX(0) rotateX(-72deg) scale(1);
+  }
+
+  94% {
+    opacity: 1;
+    transform: translateX(0) rotateX(-72deg) scale(1);
+  }
+
+  /* Retract back to the left. */
+  100% {
+    opacity: 0;
+    transform: translateX(-104px) rotateX(-72deg) scale(.9);
+  }
+}
+
+.cell.locking .timeout-key-label {
+  animation: timeoutKeyLabel 2.5s cubic-bezier(.2, .85, .25, 1) forwards;
+}
+
+@keyframes timeoutKeyLabel {
+  0%, 40% {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  45%, 94% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+.cell.docked .timeout-key {
+  display: none;
+}
+
+/* Platform identity for the timeout key. */
+.cell[data-platform="twitch"] .timeout-key-head {
+  background: linear-gradient(145deg, #c084ff, #9146ff 60%, #5b1bb7);
+  border-color: #5b1bb7;
+}
+
+.cell[data-platform="twitch"] .timeout-key-head::after {
+  border-color: #5b1bb7;
+}
+
+.cell[data-platform="twitch"] .timeout-key-shaft,
+.cell[data-platform="twitch"] .timeout-key-tooth {
+  background: linear-gradient(#c084ff, #9146ff 55%, #5b1bb7);
+  border-color: #5b1bb7;
+}
+
+.cell[data-platform="twitch"] .timeout-key-tooth::before {
+  background: #9146ff;
+  border-color: #5b1bb7;
+}
+
+.cell[data-platform="twitch"] .timeout-key-label {
+  border-color: #9146ff;
+}
+
+.cell[data-platform="kick"] .timeout-key-head {
+  background: linear-gradient(145deg, #70f0a0, #53d769 60%, #16883b);
+  border-color: #16883b;
+}
+
+.cell[data-platform="kick"] .timeout-key-head::after {
+  border-color: #16883b;
+}
+
+.cell[data-platform="kick"] .timeout-key-shaft,
+.cell[data-platform="kick"] .timeout-key-tooth {
+  background: linear-gradient(#70f0a0, #53d769 55%, #16883b);
+  border-color: #16883b;
+}
+
+.cell[data-platform="kick"] .timeout-key-tooth::before {
+  background: #53d769;
+  border-color: #16883b;
+}
+
+.cell[data-platform="kick"] .timeout-key-label {
+  border-color: #53d769;
+}
+
+.cell[data-platform="youtube"] .timeout-key-head {
+  background: linear-gradient(145deg, #ff7070, #ff3030 60%, #a90000);
+  border-color: #a90000;
+}
+
+.cell[data-platform="youtube"] .timeout-key-head::after {
+  border-color: #a90000;
+}
+
+.cell[data-platform="youtube"] .timeout-key-shaft,
+.cell[data-platform="youtube"] .timeout-key-tooth {
+  background: linear-gradient(#ff7070, #ff3030 55%, #a90000);
+  border-color: #a90000;
+}
+
+.cell[data-platform="youtube"] .timeout-key-tooth::before {
+  background: #ff3030;
+  border-color: #a90000;
+}
+
+.cell[data-platform="youtube"] .timeout-key-label {
+  border-color: #ff3030;
+}

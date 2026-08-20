@@ -1,0 +1,46 @@
+/* Calibrated Ban Truck geometry. Vertical position is supplied in viewport pixels by ban-van-size.js. */
+.ban-scene .truck {
+  left: 520px;
+  top: var(--ban-van-top, 220px);
+  bottom: auto;
+  width: 590px;
+  height: auto;
+  aspect-ratio: 590 / 320;
+  transform-origin: left bottom;
+  animation-name: banTruckCalibratedIn;
+  z-index: 60;
+}
+
+.ban-scene .truck { --ban-van-scale: 1; }
+html[data-ban-van-size="Medium"] .ban-scene .truck { --ban-van-scale: 0.85; }
+html[data-ban-van-size="Small"] .ban-scene .truck { --ban-van-scale: 0.70; }
+html[data-ban-van-size="Extra Small"] .ban-scene .truck { --ban-van-scale: 0.60; }
+
+.ban-scene .truck:not(.driving-off) { transform: translateX(0) scale(var(--ban-van-scale)); }
+.ban-scene .truck.driving-off { transform: translateX(0) scale(var(--ban-van-scale)); animation-name: banTruckCalibratedOff; }
+
+.ban-scene .ban-trail {
+  left: 520px;
+  right: auto;
+  top: var(--ban-trail-top, 499px);
+  bottom: auto;
+  width: calc(100vw + 1400px);
+  height: 92px;
+  z-index: 55;
+  overflow: visible;
+  clip-path: none;
+}
+
+.ban-scene .ban-trail.revealing { animation: none; }
+.ban-scene .ban-trail .skid { left: 0; right: auto; width: 100%; top: 22px; bottom: auto; transform-origin: left center; transform: scaleX(0); }
+.ban-scene .ban-trail .skid.two { top: 40px; bottom: auto; }
+.ban-scene .ban-trail.revealing .skid { animation: banSkidRevealWithTruck 4.3s linear forwards; }
+
+.ban-scene .ban-reason { left: -8px; right: auto; top: -19px; width: max-content !important; max-width: none; min-height: 30px; padding-left: 0; padding-right: 0; justify-content: flex-start; white-space: nowrap; overflow: visible; z-index: 3; opacity: 0; }
+.ban-scene .ban-reason span { display: inline-block; white-space: nowrap; overflow: visible; max-width: none; }
+.ban-scene .ban-trail.revealing .ban-reason { animation: banReasonAppear .18s ease-out forwards; }
+
+@keyframes banTruckCalibratedIn { from { transform: translateX(-1220px) scale(var(--ban-van-scale)); } to { transform: translateX(0) scale(var(--ban-van-scale)); } }
+@keyframes banTruckCalibratedOff { from { transform: translateX(0) scale(var(--ban-van-scale)); } to { transform: translateX(calc(100vw + 700px)) scale(var(--ban-van-scale)); } }
+@keyframes banSkidRevealWithTruck { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes banReasonAppear { from { opacity: 0; } to { opacity: 1; } }

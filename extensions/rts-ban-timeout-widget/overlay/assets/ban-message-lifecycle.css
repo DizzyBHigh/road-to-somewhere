@@ -1,0 +1,31 @@
+/* Independent Ban Truck message layer. */
+.ban-scene .ban-trail > .ban-reason { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+.ban-scene .ban-trail.fading { animation: none !important; opacity: 1 !important; }
+.ban-scene .ban-trail.message-complete { animation: banSkidsFade 1.2s ease forwards !important; }
+
+.ban-scene .ban-message-layer { position: absolute; left: 512px; top: var(--ban-message-top, 480px); width: calc(100vw - 512px); height: calc(32px * var(--ban-message-scale, 1)); z-index: 70; display: flex; align-items: center; overflow: visible; pointer-events: none; }
+.ban-scene .ban-message-label { flex: 0 0 auto; margin: 0 calc(6px * var(--ban-message-scale, 1)) 0 0; white-space: nowrap; color: var(--ban-accent); text-shadow: 0 3px 4px #000, 0 0 7px #000; font-family: Arial, sans-serif; font-size: calc(20px * var(--ban-message-scale, 1)); font-weight: 1000; opacity: 0; }
+.ban-scene .ban-message-viewport { position: relative; flex: 1 1 auto; min-width: 0; height: calc(32px * var(--ban-message-scale, 1)); overflow: hidden; clip-path: inset(0 100% 0 0); }
+.ban-scene .ban-message-text { position: absolute; left: 0; top: 0; width: max-content; height: calc(32px * var(--ban-message-scale, 1)); display: flex; align-items: center; white-space: nowrap; color: #fff; text-shadow: 0 3px 4px #000, 0 0 7px #000; font-family: Arial, sans-serif; font-size: calc(20px * var(--ban-message-scale, 1)); font-weight: 1000; transform: translateX(0); }
+
+.ban-scene .ban-message-layer.revealing .ban-message-label { animation: banMessageLabelIn .18s ease-out forwards; }
+.ban-scene .ban-message-layer.revealing .ban-message-viewport { animation: banMessageReveal 4.3s linear forwards; }
+.ban-scene .ban-message-layer.scrolling .ban-message-text { animation: banMessageScroll var(--ban-message-scroll-time, 7s) linear forwards; }
+.ban-scene .ban-message-layer.fading { animation: banMessageFade 1.2s ease forwards; }
+
+html[data-ban-message-size="Medium"] { --ban-message-scale: 0.85; }
+html[data-ban-message-size="Small"] { --ban-message-scale: 0.70; }
+html[data-ban-message-size="Extra Small"] { --ban-message-scale: 0.60; }
+html[data-ban-message-visibility="Hidden"] .ban-scene .ban-message-layer { display: none !important; }
+
+.ban-scene.arrival-message-style .ban-message-layer { left: 28px; width: calc(100vw - 56px); }
+.ban-scene.arrival-message-style .ban-message-layer.arrival-style .ban-message-label { opacity: 1; animation: none; }
+.ban-scene.arrival-message-style .ban-message-layer.arrival-style .ban-message-viewport { clip-path: none; animation: none; }
+.ban-scene.arrival-message-style .ban-trail { left: 0; right: auto; width: calc(100vw + 1400px); overflow: visible; }
+.ban-scene.arrival-message-style .ban-trail .skid { left: 0; right: auto; width: 0; transform: none !important; transform-origin: left center; animation: none !important; }
+
+@keyframes banMessageLabelIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes banMessageReveal { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes banMessageScroll { from { transform: translateX(0); } to { transform: translateX(var(--ban-message-scroll-distance, 0px)); } }
+@keyframes banMessageFade { to { opacity: 0; } }
+@keyframes banSkidsFade { to { opacity: 0; } }

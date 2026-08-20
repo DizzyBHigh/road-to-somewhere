@@ -1,0 +1,11 @@
+/*
+ * Ban van size is deliberately isolated from the calibrated animation.
+ * Large (1) is identical to the existing truck size.
+ */
+:root {
+  --ban-van-scale: 1;
+}
+
+.ban-scene .truck {
+  scale: var(--ban-van-scale);
+}

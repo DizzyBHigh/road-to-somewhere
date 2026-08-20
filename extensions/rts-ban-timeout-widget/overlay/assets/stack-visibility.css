@@ -1,0 +1,7 @@
+#stage.ban-stack-hidden .cell.docked {
+    visibility: hidden;
+}
+
+#stage.ban-stack-hidden .cell.docked.releasing {
+    visibility: visible;
+}

@@ -1,0 +1,27 @@
+/* Platform identity accents for timeout cells. */
+.cell {
+  --platform-accent: #ffd72f;
+}
+
+.cell[data-platform="twitch"] {
+  --platform-accent: #9146ff;
+}
+
+.cell[data-platform="kick"] {
+  --platform-accent: #53fc18;
+}
+
+.cell[data-platform="youtube"] {
+  --platform-accent: #ff0000;
+}
+
+/* Keep the platform identity in the cell's information panels rather than
+   adding a glow around the whole cell. */
+.cell[data-platform] .timer,
+.cell[data-platform] .nameplate {
+  border-color: var(--platform-accent);
+}
+
+.cell[data-platform] .reason {
+  border-color: var(--platform-accent);
+}
