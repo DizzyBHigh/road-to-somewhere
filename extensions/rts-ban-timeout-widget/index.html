@@ -11,11 +11,12 @@
   <style>
     .extension-hero{max-width:var(--max);margin:auto;padding:46px 28px 30px;border-bottom:1px solid var(--line);position:relative;overflow:hidden}.extension-hero-main{position:relative;z-index:2;max-width:780px}.extension-hero h1{font-family:var(--heading)!important;font-size:clamp(46px,6.5vw,78px);line-height:.88;letter-spacing:-.055em;margin:10px 0 14px}.extension-hero h1 em{font-style:normal;color:var(--accent)}.extension-hero-copy{font-size:15px;color:var(--muted);max-width:680px}.release-line{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.release-line span{border:1px solid var(--line);border-radius:5px;padding:6px 9px;font:500 8px var(--mono);text-transform:uppercase;color:var(--muted)}.release-line .version{color:var(--accent2);border-color:currentColor}.extension-road{position:absolute;right:-80px;bottom:-100px;width:430px;height:280px;background:linear-gradient(90deg,#0a0b0b,#181817 50%,#0a0b0b);clip-path:polygon(43% 0,57% 0,100% 100%,0 100%);opacity:.65}.extension-road:after{content:"";position:absolute;left:50%;top:0;width:3px;height:100%;background:var(--accent);transform:translateX(-50%);box-shadow:0 45px 0 var(--accent),0 90px 0 var(--accent),0 135px 0 var(--accent)}
     .extension-grid{max-width:var(--max);margin:auto;padding:26px 28px}.experience-row{display:grid;grid-template-columns:1.25fr .75fr;gap:22px}.extension-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:24px}.extension-card h2{font-family:var(--heading)!important;font-size:35px;line-height:.92;letter-spacing:-.04em;margin:5px 0 12px}.extension-card p{color:var(--muted);font-size:14px}.feature-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.feature{border:1px solid var(--line);border-radius:5px;padding:13px}.feature strong{display:block;font:600 10px var(--mono);text-transform:uppercase;margin-bottom:5px}.feature span{font-size:12px;color:var(--muted)}.feature:nth-child(1) strong{color:var(--accent)}.feature:nth-child(2) strong{color:#2d9cff}.feature:nth-child(3) strong{color:#63c878}.feature:nth-child(4) strong{color:#a77cff}.quick-access-card{margin-top:22px}.quick-access-content{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
-    .download-stack{display:flex;flex-direction:column;gap:9px;margin-top:18px}.secondary-button{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border:1px solid var(--line);border-radius:4px;font:600 9px var(--mono);text-transform:uppercase;color:var(--text)}.secondary-button:hover{border-color:var(--accent)}.dependency{margin-top:0;border:1px solid var(--line);border-radius:6px;padding:18px;background:var(--panel2)}.dependency strong{display:block;font:600 9px var(--mono);text-transform:uppercase;color:var(--accent2);margin-bottom:6px}.dependency p{margin:0 0 10px}.dependency a{font:600 9px var(--mono);text-transform:uppercase;color:var(--accent2)}
-    .import-box{margin-top:22px;padding:18px;border:1px solid var(--line);border-radius:6px;background:var(--panel2)}.import-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.import-header .section-kicker{margin:0}.copy-button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:4px;padding:8px 10px;font:600 9px var(--mono);text-transform:uppercase;cursor:pointer}.copy-button:hover{border-color:var(--accent);color:var(--accent)}.copy-button.copied{border-color:#63c878;color:#63c878}.import-meta{font:400 8px var(--mono);text-transform:uppercase;color:var(--muted);margin-bottom:10px}.import-code{margin:0;max-height:320px;overflow:auto;padding:14px;border:1px solid var(--line);border-radius:4px;background:#080909;color:#cfd2d5;font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;white-space:pre-wrap;word-break:break-word}.import-help{font-size:12px;color:var(--muted);margin-top:10px}.import-links{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.import-links a{font:600 8px var(--mono);text-transform:uppercase;color:var(--accent2)}
+    .quick-access-left{display:flex;flex-direction:column;align-items:stretch;gap:9px}.download-stack{display:flex;flex-direction:column;gap:9px}.secondary-button{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border:1px solid var(--line);border-radius:4px;font:600 9px var(--mono);text-transform:uppercase;color:var(--text);text-align:left;background:transparent;cursor:pointer}.secondary-button:hover{border-color:var(--accent)}.secondary-button .button-icon{font-size:12px;line-height:1;color:var(--accent2);margin-left:14px;flex:0 0 auto}.dependency{margin-top:8px;border:1px solid var(--line);border-radius:6px;padding:18px;background:var(--panel2);width:auto}.dependency strong{display:block;font:600 9px var(--mono);text-transform:uppercase;color:var(--accent2);margin-bottom:6px}.dependency p{margin:0 0 10px}.dependency a{font:600 9px var(--mono);text-transform:uppercase;color:var(--accent2)}
+    .import-box{margin:0;padding:18px;border:1px solid var(--line);border-radius:6px;background:var(--panel2);height:100%;box-sizing:border-box}.import-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.import-header .section-kicker{margin:0}.copy-button{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:4px;padding:8px 10px;font:600 9px var(--mono);text-transform:uppercase;cursor:pointer;white-space:nowrap}.copy-button:hover{border-color:var(--accent);color:var(--accent)}.copy-button.copied{border-color:#63c878;color:#63c878}.copy-icon{display:inline-block;margin-left:7px;font-size:12px;line-height:1;color:currentColor}.import-meta{font:400 8px var(--mono);text-transform:uppercase;color:var(--muted);margin-bottom:10px}.import-code{margin:0;height:150px;max-height:150px;overflow:auto;padding:14px;border:1px solid var(--line);border-radius:4px;background:#080909;color:#cfd2d5;font:11px/1.5 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;white-space:pre-wrap;word-break:break-word}.import-help{font-size:12px;color:var(--muted);margin-top:10px}.import-links{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.import-links a{font:600 8px var(--mono);text-transform:uppercase;color:var(--accent2)}
     .setup-section,.settings-section{max-width:var(--max);margin:auto;padding:26px 28px}.setup-title{font-family:var(--heading)!important;font-size:35px;line-height:.92;letter-spacing:-.04em;margin:0 0 12px}.settings-intro{color:var(--muted);font-size:14px;max-width:760px}.install-list{counter-reset:steps;list-style:none;padding:0;margin:18px 0}.install-list li{counter-increment:steps;display:grid;grid-template-columns:30px 1fr;gap:10px;padding:11px 0;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}.install-list li:before{content:counter(steps,decimal-leading-zero);color:var(--accent);font:500 9px var(--mono);padding-top:3px}.note{padding:12px;border-left:2px solid var(--accent);border-radius:0 4px 4px 0;background:rgba(242,185,0,.05);font-size:12px;color:var(--muted);margin-top:16px}
     .settings-groups{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}.settings-group{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:18px}.settings-group h3{font:600 10px var(--mono);text-transform:uppercase;color:var(--accent2);margin:0 0 10px}.setting-row{padding:11px 0;border-top:1px solid var(--line)}.setting-row:first-of-type{border-top:0;padding-top:0}.setting-row strong{display:block;font-size:13px;color:var(--text);margin-bottom:4px}.setting-row span{display:block;font-size:12px;color:var(--muted)}.setting-range{font:500 8px var(--mono);text-transform:uppercase;color:var(--accent);margin-top:5px}.meta-row{max-width:var(--max);margin:auto;padding:0 28px 30px;display:flex;justify-content:space-between;gap:20px;color:var(--muted);font:400 8px var(--mono);text-transform:uppercase}.meta-row a{color:var(--accent2)}.video-frame{margin-top:18px;border:1px solid var(--line);border-radius:6px;aspect-ratio:16/9;background:var(--panel2);display:grid;place-items:center;text-align:center;padding:25px}.video-frame strong{display:block;font:600 11px var(--mono);text-transform:uppercase;color:var(--accent)}.video-frame span{display:block;color:var(--muted);font-size:12px;margin-top:6px}.video-card .video-frame{margin-top:18px}
-    @media(max-width:760px){.extension-hero{padding:34px 20px 26px}.extension-road{right:-150px;opacity:.35}.extension-grid{padding:20px}.experience-row,.quick-access-content{grid-template-columns:1fr}.feature-list,.settings-groups{grid-template-columns:1fr}.settings-section,.setup-section{padding-left:20px;padding-right:20px}.meta-row{padding:0 20px 25px;flex-direction:column}.import-header{flex-direction:column}.copy-button{width:100%}.quick-access-card{margin-top:20px}.dependency{margin-top:0}}
+    .collapse-toggle{appearance:none;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:4px;padding:7px 10px;font:600 8px var(--mono);text-transform:uppercase;cursor:pointer}.collapse-toggle:hover{border-color:var(--accent);color:var(--accent)}.section-heading-row{display:flex;align-items:center;justify-content:space-between;gap:16px}.collapsible-content{display:block}.collapsible-content.is-collapsed{display:none}
+    @media(max-width:760px){.extension-hero{padding:34px 20px 26px}.extension-road{right:-150px;opacity:.35}.extension-grid{padding:20px}.experience-row,.quick-access-content{grid-template-columns:1fr}.feature-list,.settings-groups{grid-template-columns:1fr}.settings-section,.setup-section{padding-left:20px;padding-right:20px}.meta-row{padding:0 20px 25px;flex-direction:column}.import-header{flex-direction:column}.copy-button{width:100%}.quick-access-card{margin-top:20px}.dependency{margin-top:8px}.import-box{height:auto}.import-code{height:140px;max-height:140px}.section-heading-row{align-items:flex-start;flex-direction:column}}
   </style>
 </head>
 <body>
@@ -23,9 +24,9 @@
 <main>
   <section class="extension-hero">
     <div class="extension-hero-main">
-      <div class="section-kicker">RTS / EXTENSION 01</div>
+      <div class="section-kicker">RTS / BAN ACTION TIMEOUT WIDGET</div>
       <h1>Ban them.<br><em>Make it an event.</em></h1>
-      <p class="extension-hero-copy">RTS — Ban / Timeout Widget turns moderation into part of the show. Bans arrive as complete animated events, while timeout cells run independently and stack without holding up the ban queue.</p>
+      <p class="extension-hero-copy">Ban / Timeout Widget turns moderation into part of the show. Bans arrive as complete animated events, while timeout cells run independently and stack without holding up the ban queue.</p>
       <div class="release-line"><span class="version">v{{ site.data.rts_ban_timeout_import.version }} / RELEASED</span><span>Streamer.bot</span><span>OBS Overlay</span><span>Ban Queue</span><span>Timeouts</span></div>
     </div>
     <div class="extension-road" aria-hidden="true"></div>
@@ -55,76 +56,77 @@
       <div class="section-kicker">QUICK ACCESS</div>
       <h2>Everything you need to get started.</h2>
       <div class="quick-access-content">
-        <div class="download-stack">
-          <a class="secondary-button" href="overlay/">Open online overlay <span>↗</span></a>
-          <a class="secondary-button" href="#install">Installation guide <span>↓</span></a>
-          <a class="secondary-button" href="{{ site.data.rts_ban_timeout_import.filename | relative_url }}">Download import v{{ site.data.rts_ban_timeout_import.version }} <span>↓</span></a>
-        </div>
-        <div class="dependency">
-          <strong>Required component</strong>
-          <p>This extension uses the Road to Somewhere UI DLL for its settings interface. Install it once and it can be shared by other Road to Somewhere extensions.</p>
-          <a href="{{ '/dll/' | relative_url }}">View UI DLL & installation →</a>
-        </div>
-      </div>
-    </article>
-  </section>
-
-  <section class="setup-section" id="import">
-    <article class="extension-card">
-      <div class="import-box">
-        <div class="import-header">
-          <div>
-            <div class="section-kicker">RTS BAN TIMEOUT WIDGET V{{ site.data.rts_ban_timeout_import.version }}</div>
-            <div class="section-kicker import-title-kicker">ACTION IMPORT</div>
-            <div class="import-meta">Copy this string into Streamer.bot → Import</div>
+        <div class="quick-access-left">
+          <div class="download-stack">
+            <a class="secondary-button" href="overlay/">Open Overlay in Browser <span class="button-icon">↗</span></a>
+            <button class="secondary-button" id="copyOverlayUrl" type="button">Copy Overlay URL <span class="button-icon">⧉</span></button>
+            <a class="secondary-button" href="#install">Installation guide <span class="button-icon">↓</span></a>
+            <a class="secondary-button" href="overlay/">Download Overlay files for local use <span class="button-icon">↓</span></a>
           </div>
-          <button class="copy-button" id="copyImport" type="button">Copy Import</button>
+          <div class="dependency">
+            <strong>Required component</strong>
+            <p>This extension uses the Road to Somewhere UI DLL for its settings interface. Install it once and it can be shared by other Road to Somewhere extensions.</p>
+            <a href="{{ '/dll/' | relative_url }}">View UI DLL & installation →</a>
+          </div>
         </div>
-        <pre class="import-code" id="importCode">Loading release import…</pre>
-        <p class="import-help">This is the exact import code published with the current release. The page fetches the same versioned file used for download, so the displayed code and download stay together.</p>
-        <div class="import-links"><a href="{{ site.data.rts_ban_timeout_import.filename | relative_url }}">Download exact import file →</a><a href="#install">Installation steps below →</a></div>
+        <div class="import-box" id="import">
+          <div class="import-header">
+            <div>
+              <div class="section-kicker">ACTION IMPORT</div>
+              <div class="import-meta">Copy this string into Streamer.bot → Import</div>
+            </div>
+            <button class="copy-button" id="copyImport" type="button">Copy Import <span class="copy-icon">⧉</span></button>
+          </div>
+          <pre class="import-code" id="importCode">Loading release import…</pre>
+          <p class="import-help">This is the exact import code published with the current release. The page fetches the same versioned file used for download, so the displayed code and download stay together.</p>
+          <div class="import-links"><a href="{{ site.data.rts_ban_timeout_import.filename | relative_url }}">Download exact import file →</a><a href="#install">Installation steps below →</a></div>
+        </div>
       </div>
     </article>
   </section>
 
   <section class="setup-section" id="install">
     <article class="extension-card">
-      <div class="section-kicker">SETUP GUIDE</div>
-      <h2>Get the widget running.</h2>
-      <p>Install the RTS UI DLL, import the Streamer.bot actions, add the overlay to OBS, then configure the widget settings.</p>
-      <ol class="install-list">
-        <li>Install the current Road to Somewhere UI DLL from the dedicated DLL page.</li>
-        <li>Open Streamer.bot and use <strong>Import</strong> to paste the import string above, or download the exact versioned import file.</li>
-        <li>Enable the imported actions and verify the extension's settings action is available.</li>
-        <li>Add the hosted overlay URL to an OBS Browser Source, or use the local overlay ZIP.</li>
-        <li>Open the extension settings and configure the presentation for your stream.</li>
-        <li>Run a test ban and timeout before putting it live.</li>
-      </ol>
-      <div class="note"><strong>v{{ site.data.rts_ban_timeout_import.version }}:</strong> This is the current released version of the RTS Ban / Timeout Widget.</div>
+      <div class="section-heading-row"><div class="section-kicker">SETUP GUIDE</div><button class="collapse-toggle" type="button" data-toggle="setupContent" aria-expanded="true">Collapse</button></div>
+      <div class="collapsible-content" id="setupContent">
+        <h2>Get the widget running.</h2>
+        <p>Install the RTS UI DLL, import the Streamer.bot actions, add the overlay to OBS, then configure the widget settings.</p>
+        <ol class="install-list">
+          <li>Install the current Road to Somewhere UI DLL from the dedicated DLL page.</li>
+          <li>Open Streamer.bot and use <strong>Import</strong> to paste the import string above, or download the exact versioned import file.</li>
+          <li>Enable the imported actions and verify the extension's settings action is available.</li>
+          <li>Add the hosted overlay URL to an OBS Browser Source, or use the local overlay ZIP.</li>
+          <li>Open the extension settings and configure the presentation for your stream.</li>
+          <li>Run a test ban and timeout before putting it live.</li>
+        </ol>
+        <div class="note"><strong>v{{ site.data.rts_ban_timeout_import.version }}:</strong> This is the current released version of the RTS Ban / Timeout Widget.</div>
+      </div>
     </article>
   </section>
 
   <section class="settings-section" id="settings">
     <article class="extension-card">
-      <div class="section-kicker">SETTINGS UI</div>
-      <h2 class="setup-title">Configure the widget for your scene.</h2>
-      <p class="settings-intro">The settings UI is provided through the Road to Somewhere UI DLL. These descriptions mirror the released extension settings so users can understand what each control changes before they install it.</p>
-      <div class="settings-groups">
-        <div class="settings-group">
-          <h3>Ban presentation</h3>
-          <div class="setting-row"><strong>Ban Van Size</strong><span>Controls the scale of the ban vehicle.</span><div class="setting-range">Large 100% · Medium 85% · Small 70% · Extra Small 60%</div></div>
-          <div class="setting-row"><strong>Ban Van Vertical Position</strong><span>Moves the ban vehicle up or down within the available range.</span><div class="setting-range">0–100 · Default 50</div></div>
-          <div class="setting-row"><strong>Ban Message Visibility</strong><span>Shows or hides the ban reason/message.</span></div>
-          <div class="setting-row"><strong>Ban Message Size</strong><span>Controls the scale of the ban message.</span><div class="setting-range">Large 100% · Medium 85% · Small 70% · Extra Small 60%</div></div>
-          <div class="setting-row"><strong>Ban Message Vertical Position</strong><span>Moves the ban message up or down within the available range.</span><div class="setting-range">0–100 · Default 50</div></div>
-          <div class="setting-row"><strong>Ban Message Arrival Style</strong><span>Controls the arrival-style presentation used while the vehicle enters.</span></div>
-        </div>
-        <div class="settings-group">
-          <h3>Timeout stack</h3>
-          <div class="setting-row"><strong>Timeout Stack Scale</strong><span>Controls the size of timeout cells once they move into the stack.</span><div class="setting-range">10–100% · Default 33%</div></div>
-          <div class="setting-row"><strong>Maximum Docked Timeouts</strong><span>Sets the maximum number of timeout cells that can remain stacked.</span><div class="setting-range">1–25 cells</div></div>
-          <div class="setting-row"><strong>Timeout Stack Edge Offset</strong><span>Controls the distance between the timeout stack and the overlay edge.</span><div class="setting-range">0–200 px</div></div>
-          <div class="setting-row"><strong>Timeout Stack Gap</strong><span>Controls the vertical gap between timeout cells.</span><div class="setting-range">0–100 px</div></div>
+      <div class="section-heading-row"><div class="section-kicker">SETTINGS UI</div><button class="collapse-toggle" type="button" data-toggle="settingsContent" aria-expanded="true">Collapse</button></div>
+      <div class="collapsible-content" id="settingsContent">
+        <h2 class="setup-title">Configure the widget for your scene.</h2>
+        <p class="settings-intro">The settings UI is provided through the Road to Somewhere UI DLL. These descriptions mirror the released extension settings so users can understand what each control changes before they install it.</p>
+        <div class="settings-groups">
+          <div class="settings-group">
+            <h3>Ban presentation</h3>
+            <div class="setting-row"><strong>Ban Van Size</strong><span>Controls the scale of the ban vehicle.</span><div class="setting-range">Large 100% · Medium 85% · Small 70% · Extra Small 60%</div></div>
+            <div class="setting-row"><strong>Ban Van Vertical Position</strong><span>Moves the ban vehicle up or down within the available range.</span><div class="setting-range">0–100 · Default 50</div></div>
+            <div class="setting-row"><strong>Ban Message Visibility</strong><span>Shows or hides the ban reason/message.</span></div>
+            <div class="setting-row"><strong>Ban Message Size</strong><span>Controls the scale of the ban message.</span><div class="setting-range">Large 100% · Medium 85% · Small 70% · Extra Small 60%</div></div>
+            <div class="setting-row"><strong>Ban Message Vertical Position</strong><span>Moves the ban message up or down within the available range.</span><div class="setting-range">0–100 · Default 50</div></div>
+            <div class="setting-row"><strong>Ban Message Arrival Style</strong><span>Controls the arrival-style presentation used while the vehicle enters.</span></div>
+          </div>
+          <div class="settings-group">
+            <h3>Timeout stack</h3>
+            <div class="setting-row"><strong>Timeout Stack Scale</strong><span>Controls the size of timeout cells once they move into the stack.</span><div class="setting-range">10–100% · Default 33%</div></div>
+            <div class="setting-row"><strong>Maximum Docked Timeouts</strong><span>Sets the maximum number of timeout cells that can remain stacked.</span><div class="setting-range">1–25 cells</div></div>
+            <div class="setting-row"><strong>Timeout Stack Edge Offset</strong><span>Controls the distance between the timeout stack and the overlay edge.</span><div class="setting-range">0–200 px</div></div>
+            <div class="setting-row"><strong>Timeout Stack Gap</strong><span>Controls the vertical gap between timeout cells.</span><div class="setting-range">0–100 px</div></div>
+          </div>
         </div>
       </div>
     </article>
@@ -138,12 +140,27 @@
 (function(){
   const btn=document.getElementById('copyImport');
   const code=document.getElementById('importCode');
+  const overlayBtn=document.getElementById('copyOverlayUrl');
   const importUrl={{ site.data.rts_ban_timeout_import.filename | relative_url | jsonify }};
-  if(!btn||!code)return;
-  fetch(importUrl).then(r=>{if(!r.ok)throw new Error('Import file unavailable');return r.text()}).then(text=>{code.textContent=text}).catch(()=>{code.textContent='Unable to load the current import code. Use the versioned download link below.'});
-  btn.addEventListener('click',async()=>{
-    try{await navigator.clipboard.writeText(code.textContent.trim());btn.textContent='Copied';btn.classList.add('copied');setTimeout(()=>{btn.textContent='Copy Import';btn.classList.remove('copied')},1600)}
-    catch(e){const range=document.createRange();range.selectNodeContents(code);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);document.execCommand?.('copy');sel.removeAllRanges();btn.textContent='Copied';setTimeout(()=>btn.textContent='Copy Import',1600)}
+  const overlayUrl=new URL('overlay/',window.location.href).href;
+  if(btn&&code){
+    fetch(importUrl).then(r=>{if(!r.ok)throw new Error('Import file unavailable');return r.text()}).then(text=>{code.textContent=text}).catch(()=>{code.textContent='Unable to load the current import code. Use the versioned download link below.'});
+    btn.addEventListener('click',async()=>{
+      try{await navigator.clipboard.writeText(code.textContent.trim());btn.innerHTML='Copied <span class="copy-icon">⧉</span>';btn.classList.add('copied');setTimeout(()=>{btn.innerHTML='Copy Import <span class="copy-icon">⧉</span>';btn.classList.remove('copied')},1600)}
+      catch(e){const range=document.createRange();range.selectNodeContents(code);const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);document.execCommand?.('copy');sel.removeAllRanges();btn.innerHTML='Copied <span class="copy-icon">⧉</span>';setTimeout(()=>btn.innerHTML='Copy Import <span class="copy-icon">⧉</span>',1600)}
+    });
+  }
+  if(overlayBtn){
+    overlayBtn.addEventListener('click',async()=>{
+      try{await navigator.clipboard.writeText(overlayUrl);overlayBtn.innerHTML='Overlay URL Copied <span class="button-icon">⧉</span>';overlayBtn.classList.add('copied');setTimeout(()=>{overlayBtn.innerHTML='Copy Overlay URL <span class="button-icon">⧉</span>';overlayBtn.classList.remove('copied')},1600)}
+      catch(e){overlayBtn.textContent='Copy Failed';setTimeout(()=>{overlayBtn.innerHTML='Copy Overlay URL <span class="button-icon">⧉</span>'},1600)}
+    });
+  }
+  document.querySelectorAll('.collapse-toggle').forEach(toggle=>{
+    toggle.addEventListener('click',()=>{
+      const target=document.getElementById(toggle.dataset.toggle);if(!target)return;
+      const collapsed=target.classList.toggle('is-collapsed');toggle.setAttribute('aria-expanded',String(!collapsed));toggle.textContent=collapsed?'Expand':'Collapse';
+    });
   });
 })();
 </script>
