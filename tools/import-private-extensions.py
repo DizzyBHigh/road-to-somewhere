@@ -64,7 +64,7 @@ def rewrite_published_image_paths(value, slug: str):
     if isinstance(value, dict):
         return {
             key: (
-                f"/extensions/{slug}/images/{item['src'][len('/assets/images/'):]}"
+                f"/extensions/{slug}/images/{item[len('/assets/images/'):]}"
                 if key == "src"
                 and isinstance(item, str)
                 and item.startswith("/assets/images/")
