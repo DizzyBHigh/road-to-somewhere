@@ -1,3 +1,7 @@
+<style>
+.setup-guide-list{list-style:none;margin:24px 0 0;padding:0}.setup-main-step{margin:0;padding:0;border-top:1px solid var(--line)}.setup-main-step:last-child{border-bottom:1px solid var(--line)}.setup-main-step-content{padding:22px 0 24px}.setup-step-heading{display:flex;align-items:baseline;gap:14px}.setup-step-number{flex:0 0 auto;color:var(--accent);font:500 10px var(--mono);letter-spacing:.08em}.setup-step-heading strong{color:var(--text);font:600 18px var(--heading);letter-spacing:-.02em}.setup-step-description{margin:5px 0 0 28px;color:var(--muted);font-size:13px;max-width:760px}.setup-substeps{display:flex;flex-direction:column;gap:14px;margin:18px 0 0 28px}.setup-substep{border:1px solid var(--line);border-radius:5px;background:var(--panel2);overflow:hidden}.setup-substep-copy{display:flex;gap:12px;padding:15px 16px 13px}.setup-substep-number{flex:0 0 auto;padding-top:2px;color:var(--accent2);font:500 8px var(--mono);letter-spacing:.06em}.setup-substep-copy h3{margin:0;color:var(--text);font:600 16px var(--heading);letter-spacing:-.015em}.setup-substep-copy p{margin:3px 0 0;color:var(--muted);font-size:12px;line-height:1.55}.setup-substep-images{display:flex;flex-direction:column;gap:10px;padding:0 16px 16px}.setup-substep-images figure{margin:0;border:1px solid var(--line);border-radius:4px;background:var(--bg);overflow:hidden}.setup-substep-images img{display:block;width:100%;height:auto}.setup-dll-note{margin-top:20px}.setup-guide-list>li:not(:has(.setup-substeps)) .setup-step-description{margin-bottom:2px}@media(max-width:760px){.setup-step-heading{gap:10px}.setup-step-heading strong{font-size:17px}.setup-step-description{margin-left:22px}.setup-substeps{margin-left:22px}.setup-substep-copy{padding:13px 12px 11px}.setup-substep-images{padding:0 12px 12px}}
+</style>
+
 <section class="setup-section" id="install">
   <article class="extension-card">
     <div class="section-heading-row">
@@ -6,52 +10,58 @@
     </div>
 
     <div class="collapsible-content" id="setupContent">
-      <h2>Get the extension running.</h2>
-      <p>Import the Streamer.bot actions, enable them, add the overlay to OBS, then test the extension.</p>
+      <h2>{{ include.data.setup.title }}</h2>
+      <p>{{ include.data.setup.intro }}</p>
 
       <ol class="install-list setup-guide-list">
-        <li>
-          <div>
-            <strong>Import the Streamer.bot actions</strong>
-            <span>Open Streamer.bot and use <strong>Import</strong> to paste the supplied import string, or download the exact versioned import file.</span>
-            <div class="setup-step-images">
-              <figure><img src="{{ '/assets/images/SB-Import-code-screenshot.png' | relative_url }}" alt="Streamer.bot import screen showing the RTS extension import code"></figure>
-              <figure><img src="{{ '/assets/images/SB-Import-code-confirm-screenshot.png' | relative_url }}" alt="Streamer.bot import confirmation dialog"></figure>
-              <figure><img src="{{ '/assets/images/SB-Import-code-confirm-again-screenshot.png' | relative_url }}" alt="Streamer.bot second import confirmation dialog"></figure>
+        {% for step in include.data.setup.steps %}
+        <li class="setup-main-step">
+          <div class="setup-main-step-content">
+            <div class="setup-step-heading">
+              <span class="setup-step-number">{{ step.number }}</span>
+              <strong>{{ step.title }}</strong>
             </div>
-          </div>
-        </li>
 
-        <li>
-          <div>
-            <strong>Enable the imported actions</strong>
-            <span>Enable the imported RTS actions so the extension can respond to events.</span>
-            <div class="setup-step-images">
-              <figure><img src="{{ '/assets/images/SB-Import-code-Enable-Actions-screenshot.png' | relative_url }}" alt="Streamer.bot actions being enabled"></figure>
-              <figure><img src="{{ '/assets/images/SB-Import-code-Commands-screenshot.png' | relative_url }}" alt="Streamer.bot commands and imported extension actions"></figure>
+            {% if step.description %}
+            <p class="setup-step-description">{{ step.description }}</p>
+            {% endif %}
+
+            {% if step.substeps and step.substeps.size > 0 %}
+            <div class="setup-substeps">
+              {% for substep in step.substeps %}
+              <article class="setup-substep">
+                <div class="setup-substep-copy">
+                  <span class="setup-substep-number">{{ substep.number }}</span>
+                  <div>
+                    <h3>{{ substep.title }}</h3>
+                    {% if substep.text %}<p>{{ substep.text }}</p>{% endif %}
+                  </div>
+                </div>
+
+                {% if substep.images and substep.images.size > 0 %}
+                <div class="setup-substep-images">
+                  {% for image in substep.images %}
+                  <figure>
+                    <img src="{{ image.src | relative_url }}" alt="{{ image.alt }}" loading="lazy">
+                  </figure>
+                  {% endfor %}
+                </div>
+                {% endif %}
+              </article>
+              {% endfor %}
             </div>
+            {% endif %}
           </div>
         </li>
-
-        <li>
-          <div>
-            <strong>Add the extension overlay to OBS</strong>
-            <span>Add the extension's hosted overlay URL as an OBS Browser Source, or use the supplied local overlay files.</span>
-          </div>
-        </li>
-
-        <li>
-          <div>
-            <strong>Test the extension</strong>
-            <span>Run a test event and confirm the overlay responds correctly before putting it live.</span>
-          </div>
-        </li>
+        {% endfor %}
       </ol>
 
-      <div class="note">
-        <strong>DLL information:</strong>
-        This extension requires {{ include.data.dependencies.rtsUiDll.name }} {{ include.data.dependencies.rtsUiDll.minimumVersion }} or newer.
+      {% if include.data.setup.dllInformation %}
+      <div class="note setup-dll-note">
+        <strong>{{ include.data.setup.dllInformation.title }}:</strong>
+        {{ include.data.setup.dllInformation.text }}
       </div>
+      {% endif %}
     </div>
   </article>
 </section>
