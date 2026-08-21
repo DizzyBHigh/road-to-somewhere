@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "extensions": [
+    {
+      "repository": "DizzyBHigh/RTS-Ban-Timeout-Widget",
+      "ref": "main",
+      "manifest": "site/extension.json"
+    }
+  ]
+}
