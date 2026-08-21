@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+"""Import the publishable surface of private RTS extension repositories.
+
+The private repository remains the source of truth. Only the extension manifest
+and explicitly published assets are copied into the public Jekyll build tree.
+"""
+
+from __future__ import annotations
+
+import json
+import shutil
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+SOURCES = ROOT / "extensions" / "sources.json"
+DATA_DIR = ROOT / "_data"
+EXT_DIR = ROOT / "extensions"
+
+
+def fail(message: str) -> None:
+    print(f"ERROR: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+def load_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        fail(f"Could not read JSON {path}: {exc}")
+
+
+def safe_relative(root: Path, relative: str) -> Path:
+    candidate = (root / relative).resolve()
+    root_resolved = root.resolve()
+    if candidate != root_resolved and root_resolved not in candidate.parents:
+        fail(f"Path escapes source repository: {relative}")
+    return candidate
+
+
+def copy_tree(source: Path, destination: Path) -> bool:
+    if not source.exists():
+        return False
+    destination.mkdir(parents=True, exist_ok=True)
+    for item in source.iterdir():
+        target = destination / item.name
+        if item.is_dir():
+            shutil.copytree(item, target, dirs_exist_ok=True)
+        else:
+            shutil.copy2(item, target)
+    return True
+
+
+def copy_file(source: Path, destination: Path) -> bool:
+    if not source.is_file():
+        return False
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, destination)
+    return True
+
+
+def import_extension(entry: dict) -> None:
+    repo_dir = Path(entry["checkoutPath"]).resolve()
+    manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/extension.json"))
+    manifest = load_json(manifest_path)
+
+    if manifest.get("schemaVersion") != 1:
+        fail(f"{manifest_path}: unsupported schemaVersion")
+
+    slug = manifest.get("slug")
+    if not isinstance(slug, str) or not slug or "/" in slug or "\\" in slug or slug in {".", ".."}:
+        fail(f"{manifest_path}: invalid slug")
+
+    name = manifest.get("name")
+    if not isinstance(name, str) or not name.strip():
+        fail(f"{manifest_path}: name is required")
+
+    public_manifest = json.loads(json.dumps(manifest))
+    publish = public_manifest.pop("publish", {})
+
+    website = public_manifest.setdefault("website", {})
+    public_extension_dir = EXT_DIR / slug
+
+    overlay_source = publish.get("overlay")
+    if overlay_source:
+        overlay_source_path = safe_relative(repo_dir, overlay_source)
+        overlay_destination = public_extension_dir / "overlay"
+        if overlay_destination.exists():
+            shutil.rmtree(overlay_destination)
+        if not copy_tree(overlay_source_path, overlay_destination):
+            fail(f"{manifest_path}: publish.overlay does not exist: {overlay_source}")
+        website["overlayUrl"] = f"/extensions/{slug}/overlay/"
+
+    import_source = publish.get("importFile")
+    if import_source:
+        import_source_path = safe_relative(repo_dir, import_source)
+        import_destination = public_extension_dir / import_source_path.name
+        if not copy_file(import_source_path, import_destination):
+            fail(f"{manifest_path}: publish.importFile does not exist: {import_source}")
+        website["importFilename"] = f"extensions/{slug}/{import_source_path.name}"
+
+    images_source = publish.get("images")
+    if images_source:
+        images_source_path = safe_relative(repo_dir, images_source)
+        images_destination = public_extension_dir / "images"
+        if images_destination.exists():
+            shutil.rmtree(images_destination)
+        if images_source_path.exists():
+            copy_tree(images_source_path, images_destination)
+
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    data_path = DATA_DIR / f"{slug}.json"
+    data_path.write_text(json.dumps(public_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    print(f"Imported {name} v{public_manifest.get('version', '?')} -> {slug}")
+
+
+def main() -> None:
+    registry = load_json(SOURCES)
+    if registry.get("schemaVersion") != 1:
+        fail("Unsupported extensions/sources.json schemaVersion")
+
+    entries = registry.get("extensions", [])
+    if not entries:
+        print("No private extension sources configured.")
+        return
+
+    for entry in entries:
+        if "checkoutPath" not in entry:
+            fail("Importer requires checkoutPath for each source")
+        import_extension(entry)
+
+
+if __name__ == "__main__":
+    main()
