@@ -59,6 +59,24 @@ def copy_file(source: Path, destination: Path) -> bool:
     return True
 
 
+def rewrite_published_image_paths(value, slug: str):
+    """Rewrite manifest image paths to the public imported asset location."""
+    if isinstance(value, dict):
+        return {
+            key: (
+                f"/extensions/{slug}/images/{item['src'][len('/assets/images/'):]}"
+                if key == "src"
+                and isinstance(item, str)
+                and item.startswith("/assets/images/")
+                else rewrite_published_image_paths(item, slug)
+            )
+            for key, item in value.items()
+        }
+    if isinstance(value, list):
+        return [rewrite_published_image_paths(item, slug) for item in value]
+    return value
+
+
 def import_extension(entry: dict) -> None:
     repo_dir = Path(entry["checkoutPath"]).resolve()
     manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/extension.json"))
@@ -107,6 +125,7 @@ def import_extension(entry: dict) -> None:
             shutil.rmtree(images_destination)
         if images_source_path.exists():
             copy_tree(images_source_path, images_destination)
+        public_manifest = rewrite_published_image_paths(public_manifest, slug)
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     data_path = DATA_DIR / f"{slug}.json"
