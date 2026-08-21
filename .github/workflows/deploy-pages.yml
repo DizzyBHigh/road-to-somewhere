@@ -1,0 +1,68 @@
+name: Build and deploy RTS site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout public site
+        uses: actions/checkout@v4
+
+      - name: Checkout private extension sources
+        env:
+          RTS_EXTENSION_TOKEN: ${{ secrets.RTS_EXTENSION_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$RTS_EXTENSION_TOKEN" || { echo "RTS_EXTENSION_TOKEN is not configured"; exit 1; }
+          mkdir -p .import-src
+          while IFS= read -r entry; do
+            repo=$(echo "$entry" | jq -r '.repository')
+            ref=$(echo "$entry" | jq -r '.ref // "main"')
+            path=$(echo "$entry" | jq -r '.checkoutPath')
+            test -n "$repo" && test -n "$path"
+            rm -rf "$path"
+            mkdir -p "$(dirname "$path")"
+            git -c "http.extraheader=AUTHORIZATION: bearer $RTS_EXTENSION_TOKEN" \
+              clone --depth 1 --branch "$ref" "https://github.com/$repo.git" "$path"
+          done < <(jq -c '.extensions[]' extensions/sources.json)
+
+      - name: Import private extension manifests and public assets
+        run: python3 tools/import-private-extensions.py
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build Jekyll site
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
