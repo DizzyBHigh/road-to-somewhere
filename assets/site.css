@@ -11,3 +11,7 @@ html[data-font="trailhead"]{--heading:'Space Grotesk',sans-serif;--body:'DM Sans
 
 /* Extension product-page naming */
 .extension-hero-main>.section-kicker{font-size:0;line-height:1.05}.extension-hero-main>.section-kicker:after{content:"RTS / BAN ACTION TIMEOUT WIDGET";font-size:30px;letter-spacing:.08em;font-weight:600}.extension-hero-copy{font-size:0}.extension-hero-copy:after{content:"Ban / Timeout Widget turns moderation into part of the show. Bans arrive as complete animated events, while timeout cells run independently and stack without holding up the ban queue.";display:block;font-size:15px;color:var(--muted);max-width:680px}
+
+/* Shared extension setup guide */
+.setup-guide-list li>div{min-width:0}.setup-guide-list li>div>strong{display:block;color:var(--text);font-size:13px;margin-bottom:3px}.setup-guide-list li>div>span{display:block;color:var(--muted);font-size:13px}.setup-step-images{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.setup-step-images figure{margin:0;border:1px solid var(--line);border-radius:5px;background:var(--panel2);overflow:hidden}.setup-step-images img{display:block;width:100%;height:auto}.setup-step-images figure:first-child:last-child{grid-column:1/-1}.setup-step-images figure:nth-child(3):last-child{grid-column:1/-1;max-width:calc(50% - 5px)}
+@media(max-width:760px){.setup-step-images{grid-template-columns:1fr}.setup-step-images figure:nth-child(3):last-child{max-width:none}}
