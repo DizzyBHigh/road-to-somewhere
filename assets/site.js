@@ -47,14 +47,32 @@ function setCopyState(button, label) {
 }
 
 function appendInlineMarkup(parent, text) {
-  const parts = String(text).replace(/\r\n/g, '\n').split(/(\*\*[\s\S]*?\*\*|\n)/g);
-  parts.forEach(part => {
-    if (!part) return;
-    if (part === '\n') { parent.appendChild(document.createElement('br')); return; }
-    const bold = part.match(/^\*\*([\s\S]+)\*\*$/);
-    if (bold) { const strong = document.createElement('strong'); appendFormattedText(strong, bold[1]); parent.appendChild(strong); return; }
-    appendFormattedText(parent, part);
-  });
+  const source = String(text).replace(/\r\n/g, '\n');
+  let i = 0;
+  while (i < source.length) {
+    if (source[i] === '\n') {
+      parent.appendChild(document.createElement('br'));
+      i++;
+      continue;
+    }
+    if (source[i] === '\\' && source[i + 1] === 'n') {
+      parent.appendChild(document.createElement('br'));
+      i += 2;
+      continue;
+    }
+    if (source[i] === '*' && source[i + 1] === '*') {
+      const end = source.indexOf('**', i + 2);
+      if (end !== -1) {
+        const strong = document.createElement('strong');
+        appendFormattedText(strong, source.slice(i + 2, end));
+        parent.appendChild(strong);
+        i = end + 2;
+        continue;
+      }
+    }
+    parent.appendChild(document.createTextNode(source[i]));
+    i++;
+  }
 }
 
 function siteRootPath() {
@@ -140,6 +158,11 @@ function appendFormattedText(parent, text) {
         i = end + 2;
         continue;
       }
+    }
+    if (source[i] === '\n') {
+      parent.appendChild(document.createElement('br'));
+      i++;
+      continue;
     }
     if (source[i] === '\\' && source[i + 1] === 'n') {
       parent.appendChild(document.createElement('br')); i += 2; continue;
