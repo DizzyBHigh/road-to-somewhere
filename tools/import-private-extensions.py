@@ -59,6 +59,26 @@ def copy_file(source: Path, destination: Path) -> bool:
     return True
 
 
+def versioned_import_filename(filename: str, version: str) -> str:
+    """Insert the extension version into the published import filename.
+
+    Source repositories keep a stable filename such as
+    ``RTS Ban Timeout Widget - Import Code.txt``. Published files are versioned
+    so each release can be downloaded exactly as it was published.
+    """
+    path = Path(filename)
+    stem = path.stem
+    suffix = path.suffix
+    marker = " - Import Code"
+
+    if marker in stem:
+        stem = stem.replace(marker, f" v{version}{marker}", 1)
+    else:
+        stem = f"{stem} v{version}"
+
+    return f"{stem}{suffix}"
+
+
 def rewrite_published_image_paths(value, slug: str):
     """Rewrite extension-owned asset paths to their public imported location.
 
@@ -99,6 +119,10 @@ def import_extension(entry: dict) -> None:
     if not isinstance(name, str) or not name.strip():
         fail(f"{manifest_path}: name is required")
 
+    version = manifest.get("version")
+    if not isinstance(version, str) or not version.strip():
+        fail(f"{manifest_path}: version is required for publishing")
+
     public_manifest = json.loads(json.dumps(manifest))
     publish = public_manifest.pop("publish", {})
 
@@ -118,10 +142,11 @@ def import_extension(entry: dict) -> None:
     import_source = publish.get("importFile")
     if import_source:
         import_source_path = safe_relative(repo_dir, import_source)
-        import_destination = public_extension_dir / import_source_path.name
+        published_import_name = versioned_import_filename(import_source_path.name, version)
+        import_destination = public_extension_dir / published_import_name
         if not copy_file(import_source_path, import_destination):
             fail(f"{manifest_path}: publish.importFile does not exist: {import_source}")
-        website["importFilename"] = f"extensions/{slug}/{import_source_path.name}"
+        website["importFilename"] = f"extensions/{slug}/{published_import_name}"
 
     assets_source = publish.get("assets")
     if assets_source:
@@ -140,7 +165,7 @@ def import_extension(entry: dict) -> None:
     data_path = DATA_DIR / f"{slug}.json"
     data_path.write_text(json.dumps(public_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    print(f"Imported {name} v{public_manifest.get('version', '?')} -> {slug}")
+    print(f"Imported {name} v{version} -> {slug}")
 
 
 def main() -> None:
