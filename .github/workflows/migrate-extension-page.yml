@@ -1,4 +1,4 @@
-name: One-Time — Migrate Extension Page Assets
+name: One-Time Migration — RTS Ban/Timeout Page Assets
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
     paths:
       - 'extensions/rts-ban-timeout-widget/index.html'
       - '.github/workflows/migrate-extension-page.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
