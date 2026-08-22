@@ -54,7 +54,7 @@
         data.eventName || data.triggerCustomEventName || "",
       ).toLowerCase();
 
-      if (eventName === "banwidget") {
+      if (eventName === "rts-banwidget") {
         if (typeof data.banWidgetAlwaysShowStack === "boolean") {
           state.alwaysShowStack = data.banWidgetAlwaysShowStack;
           if (state.alwaysShowStack) setStackVisible(true);

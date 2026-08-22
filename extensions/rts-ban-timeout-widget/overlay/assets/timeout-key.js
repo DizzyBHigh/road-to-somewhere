@@ -1,5 +1,5 @@
 (() => {
-  // Consume the canonical BanWidget payload produced by script.js.
+  // Consume the canonical RTS-BanWidget payload produced by script.js.
   const initiators = new Map();
   let showKeyAnimation = true;
 
@@ -58,12 +58,12 @@
   // Keep the normal CustomEvent listener, but also expose a direct hook for
   // script.js and wrap dispatchEvent so the handoff is robust during startup.
   window.__banWidgetTimeoutKey = remember;
-  window.addEventListener("BanWidget", event => remember(event.detail));
+  window.addEventListener("RTS-BanWidget", event => remember(event.detail));
 
   const originalDispatchEvent = window.dispatchEvent.bind(window);
   window.dispatchEvent = function (event) {
-    if (event && event.type === "BanWidget") {
-      try { remember(event.detail); } catch (err) { console.warn("BanWidget key handoff error", err); }
+    if (event && event.type === "RTS-BanWidget") {
+      try { remember(event.detail); } catch (err) { console.warn("RTS-BanWidget key handoff error", err); }
     }
     return originalDispatchEvent(event);
   };

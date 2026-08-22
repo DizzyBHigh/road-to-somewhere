@@ -1,6 +1,7 @@
 (() => {
   const stage = document.getElementById("stage");
-  if (!stage) return;
+  const banStage = document.getElementById("ban-stage") || stage;
+  if (!stage || !banStage) return;
 
   let arrivalStyle = false;
   const root = document.documentElement;
@@ -13,9 +14,6 @@
 
   root.style.setProperty("--ban-van-scale", "1");
 
-  // script.js exposes applyOverlaySettings as a global function. Wrap it so
-  // the persisted Streamer.bot settings are available to this visual layer
-  // without duplicating the websocket connection.
   const originalApplySettings = window.applyOverlaySettings;
   if (typeof originalApplySettings === "function") {
     window.applyOverlaySettings = (d) => {
@@ -38,8 +36,6 @@
     scene.dataset.banMessageStyleApplied = "1";
     scene.classList.add("arrival-message-style");
 
-    // Start the existing calibrated trail reveal immediately, in parallel
-    // with the truck's calibrated arrival animation.
     const trail = scene.querySelector(".ban-trail");
     if (trail) trail.classList.add("revealing");
   }
@@ -54,5 +50,5 @@
     }
   });
 
-  observer.observe(stage, { childList: true, subtree: true });
+  observer.observe(banStage, { childList: true, subtree: true });
 })();

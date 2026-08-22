@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "id": "rts-ban-timeout-widget",
+  "name": "RTS — Ban / Timeout Widget",
+  "slug": "rts-ban-timeout-widget",
+  "version": "1.0.0",
+  "status": "released",
+  "description": "Turn moderation into an event with a cinematic ban animation, independent timeout cells, configurable positioning, sizing, messages, and a proper event queue.",
+  "tags": [
+    "Moderation",
+    "Overlay",
+    "Social"
+  ],
+  "repository": "https://github.com/DizzyBHigh/RTS-Ban-Timeout-Widget",
+  "runtime": {
+    "platforms": [
+      "Streamer.bot",
+      "OBS",
+      "Meld",
+      "Twitch",
+      "YouTube",
+      "Kick"
+    ],
+    "streamerBot": {
+      "importFile": "RTS Ban Timeout Widget v1.0.0 - Import Code.txt"
+    },
+    "overlay": {
+      "type": "browser-source",
+      "path": "overlay/"
+    }
+  },
+  "dependencies": {
+    "rtsUiDll": {
+      "id": "rts-ui-dll",
+      "name": "RTS UI DLL",
+      "minimumVersion": "0.1.0"
+    }
+  },
+  "cards": {
+    "settings": true,
+    "commands": true,
+    "variables": true,
+    "faq": true,
+    "changelog": true
+  },
+  "setup": {
+    "title": "Get the extension running.",
+    "intro": "Import the Streamer.bot actions, enable them, add the overlay to OBS, then test the extension.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Import the Streamer.bot actions",
+        "description": "Open Streamer.bot and use Import to paste the supplied import string, or download the exact versioned import file.",
+        "substeps": [
+          {
+            "number": "01.1",
+            "title": "Open Import",
+            "text": "Select Import from the Streamer.bot toolbar.",
+            "images": [
+              {
+                "src": "/assets/images/SB-Import-code-screenshot.png",
+                "alt": "Streamer.bot import screen showing the RTS extension import code"
+              }
+            ]
+          },
+          {
+            "number": "01.2",
+            "title": "Paste the import code",
+            "text": "Paste the supplied import string into the Import String box, then select Import.",
+            "images": [
+              {
+                "src": "/assets/images/SB-Import-code-confirm-screenshot.png",
+                "alt": "Streamer.bot import confirmation dialog"
+              }
+            ]
+          },
+          {
+            "number": "01.3",
+            "title": "Confirm the import",
+            "text": "Review the actions being imported, then select Import to continue.",
+            "images": [
+              {
+                "src": "/assets/images/SB-Import-code-confirm-again-screenshot.png",
+                "alt": "Streamer.bot second import confirmation dialog"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "number": "02",
+        "title": "Enable the imported actions",
+        "description": "Enable the imported RTS actions so the extension can respond to events.",
+        "substeps": [
+          {
+            "number": "02.1",
+            "title": "Enable the extension actions",
+            "text": "Enable the imported RTS actions in Streamer.bot.",
+            "images": [
+              {
+                "src": "/assets/images/SB-Import-code-Enable-Actions-screenshot.png",
+                "alt": "Streamer.bot imported RTS actions being enabled"
+              }
+            ]
+          },
+          {
+            "number": "02.2",
+            "title": "Check the commands",
+            "text": "Confirm the imported extension commands are present and enabled where required.",
+            "images": [
+              {
+                "src": "/assets/images/SB-Import-code-Commands-screenshot.png",
+                "alt": "Streamer.bot commands showing the imported RTS extension commands"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "number": "03",
+        "title": "Add the extension overlay to OBS",
+        "description": "Add the extension's hosted overlay URL as an OBS Browser Source, or use the supplied local overlay files.",
+        "substeps": []
+      },
+      {
+        "number": "04",
+        "title": "Test the extension",
+        "description": "Run a test event and confirm the overlay responds correctly before putting it live.",
+        "substeps": []
+      }
+    ],
+    "dllInformation": {
+      "title": "DLL information",
+      "text": "This extension requires RTS UI DLL 0.1.0 or newer.",
+      "dependencyId": "rts-ui-dll"
+    }
+  },
+  "website": {
+    "footerLabel": "The first road is open.",
+    "overlayUrl": "/extensions/rts-ban-timeout-widget/overlay/",
+    "importFilename": "extensions/rts-ban-timeout-widget/RTS Ban Timeout Widget v1.0.0 - Import Code.txt"
+  }
+}

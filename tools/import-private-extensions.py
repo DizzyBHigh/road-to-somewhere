@@ -60,20 +60,26 @@ def copy_file(source: Path, destination: Path) -> bool:
 
 
 def rewrite_published_image_paths(value, slug: str):
-    """Rewrite manifest image paths to the public imported asset location."""
+    """Rewrite extension-owned asset paths to their public imported location.
+
+    Shared site assets use absolute /assets/... paths and are left untouched.
+    Extension-owned assets use relative assets/... paths and are rewritten.
+    """
     if isinstance(value, dict):
         return {
             key: (
-                f"/extensions/{slug}/images/{item[len('/assets/images/'):]}"
+                f"/extensions/{slug}/{item}"
                 if key == "src"
                 and isinstance(item, str)
-                and item.startswith("/assets/images/")
+                and item.startswith("assets/")
                 else rewrite_published_image_paths(item, slug)
             )
             for key, item in value.items()
         }
+
     if isinstance(value, list):
         return [rewrite_published_image_paths(item, slug) for item in value]
+
     return value
 
 
@@ -117,14 +123,17 @@ def import_extension(entry: dict) -> None:
             fail(f"{manifest_path}: publish.importFile does not exist: {import_source}")
         website["importFilename"] = f"extensions/{slug}/{import_source_path.name}"
 
-    images_source = publish.get("images")
-    if images_source:
-        images_source_path = safe_relative(repo_dir, images_source)
-        images_destination = public_extension_dir / "images"
-        if images_destination.exists():
-            shutil.rmtree(images_destination)
-        if images_source_path.exists():
-            copy_tree(images_source_path, images_destination)
+    assets_source = publish.get("assets")
+    if assets_source:
+        assets_source_path = safe_relative(repo_dir, assets_source)
+        assets_destination = public_extension_dir / "assets"
+
+        if assets_destination.exists():
+            shutil.rmtree(assets_destination)
+
+        if not copy_tree(assets_source_path, assets_destination):
+            fail(f"{manifest_path}: publish.assets does not exist: {assets_source}")
+
         public_manifest = rewrite_published_image_paths(public_manifest, slug)
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)

@@ -1,6 +1,7 @@
 (() => {
   const NativeWebSocket = window.WebSocket;
   const stage = document.getElementById("stage");
+  const banStage = document.getElementById("ban-stage") || stage;
   const connections = new Set();
   const banQueue = [];
   let banActive = false;
@@ -21,7 +22,7 @@
 
       const eventName = String(data.eventName || data.triggerCustomEventName || "").toLowerCase();
       const action = String(data.banWidgetAction || data.action || "").toLowerCase();
-      if (eventName && eventName !== "banwidget") return null;
+      if (eventName && eventName !== "rts-banwidget") return null;
       if (action !== "ban") return null;
 
       return { message, data };
@@ -36,16 +37,11 @@
 
   function deliverBan(item) {
     banActive = true;
-
-    // Deliver the exact same BanWidget event to every listener only when the
-    // ban reaches the front of the queue. This keeps message/style settings
-    // attached to the ban that is actually starting.
     connections.forEach((connection) => {
       if (typeof connection.handler === "function") {
         try { connection.handler.call(connection.ws, item.event); } catch (err) { console.warn("Ban queue handler error", err); }
       }
     });
-
     requestAnimationFrame(() => applyQueuedBanSettings(item.data));
   }
 
@@ -55,7 +51,7 @@
   }
 
   function applyQueuedBanSettings(data) {
-    const scenes = stage ? [...stage.querySelectorAll(".ban-scene")] : [];
+    const scenes = banStage ? [...banStage.querySelectorAll(".ban-scene")] : [];
     const scene = scenes[scenes.length - 1];
     if (!scene) return;
 
@@ -93,8 +89,6 @@
       const banEvent = isBanEvent(event);
 
       if (banEvent) {
-        // Ban events are owned by the main BanWidget websocket. All BanWidget
-        // listeners are suppressed until the queued ban reaches the front.
         if (connection.subscriptionId === "ban-widget-v4" && mainConnectionSeen) {
           const parsed = parseMessage(event);
           banQueue.push({ event, data: parsed.data });
@@ -115,7 +109,7 @@
   queuedWebSocket.prototype = NativeWebSocket.prototype;
   window.WebSocket = queuedWebSocket;
 
-  if (stage) {
+  if (banStage) {
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         for (const node of mutation.removedNodes) {
@@ -127,6 +121,6 @@
         }
       }
     });
-    observer.observe(stage, { childList: true });
+    observer.observe(banStage, { childList: true });
   }
 })();

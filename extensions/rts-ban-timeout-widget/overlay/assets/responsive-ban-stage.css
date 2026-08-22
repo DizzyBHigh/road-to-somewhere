@@ -1,0 +1,25 @@
+/* Fixed 1920x1080 presentation stage for ban animations. */
+:root {
+  --ban-design-width: 1920px;
+  --ban-design-height: 1080px;
+}
+
+#ban-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--ban-design-width);
+  height: var(--ban-design-height);
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center center;
+  pointer-events: none;
+  overflow: visible;
+}
+
+#ban-stage .ban-scene {
+  position: absolute;
+  inset: 0;
+  width: var(--ban-design-width);
+  height: var(--ban-design-height);
+  overflow: hidden;
+}
