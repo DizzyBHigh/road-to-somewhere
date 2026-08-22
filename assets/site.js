@@ -28,8 +28,163 @@ themeButton?.addEventListener('click', () => {
   updateThemeLabel();
 });
 
+function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+  const input = document.createElement('textarea');
+  input.value = text;
+  input.setAttribute('readonly', '');
+  input.style.position = 'fixed';
+  input.style.opacity = '0';
+  document.body.appendChild(input);
+  input.select();
+  if (!document.execCommand('copy')) {
+    input.remove();
+    return Promise.reject(new Error('Copy failed'));
+  }
+  input.remove();
+  return Promise.resolve();
+}
+
+function setCopyState(button, label) {
+  button.textContent = 'Copied';
+  button.classList.add('copied');
+  window.setTimeout(() => {
+    button.textContent = label;
+    button.classList.remove('copied');
+  }, 1600);
+}
+
+function appendInlineMarkup(parent, text) {
+  const parts = String(text).replace(/\r\n/g, '\n').split(/(\*\*[^*]+\*\*|\n)/g);
+  parts.forEach(part => {
+    if (!part) return;
+    if (part === '\n') {
+      parent.appendChild(document.createElement('br'));
+      return;
+    }
+    const bold = part.match(/^\*\*(.+)\*\*$/s);
+    if (bold) {
+      const strong = document.createElement('strong');
+      strong.textContent = bold[1];
+      parent.appendChild(strong);
+      return;
+    }
+    parent.appendChild(document.createTextNode(part));
+  });
+}
+
+function siteRootPath() {
+  const stylesheet = document.querySelector('link[href*="/assets/site.css"]');
+  if (!stylesheet) return '';
+  return new URL(stylesheet.href, window.location.href).pathname.replace(/\/assets\/site\.css$/, '');
+}
+
+function makeCopyButton(label, kind) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'rts-copy-token';
+  button.dataset.copyKind = kind;
+  button.textContent = label;
+  return button;
+}
+
+function appendFormattedText(parent, text, context) {
+  const source = String(text);
+  const tokenPattern = /\[\[([a-z0-9-]+):([\s\S]*?)\]\]/gi;
+  let lastIndex = 0;
+  let match;
+
+  while ((match = tokenPattern.exec(source)) !== null) {
+    appendInlineMarkup(parent, source.slice(lastIndex, match.index));
+
+    const tag = match[1].toLowerCase();
+    const value = match[2];
+
+    if (tag === 'blue' || tag === 'yellow' || tag === 'muted') {
+      const span = document.createElement('span');
+      span.className = `rts-text-${tag}`;
+      appendInlineMarkup(span, value);
+      parent.appendChild(span);
+    } else if (tag === 'code' || tag === 'overlay') {
+      parent.appendChild(makeCopyButton(value, tag));
+    } else if (tag === 'dll') {
+      const link = document.createElement('a');
+      link.className = 'rts-content-link';
+      link.href = `${siteRootPath()}/dll/`;
+      appendInlineMarkup(link, value);
+      parent.appendChild(link);
+    } else if (tag === 'link') {
+      const separator = value.indexOf('|');
+      const url = separator >= 0 ? value.slice(0, separator).trim() : '';
+      const label = separator >= 0 ? value.slice(separator + 1) : value;
+      const link = document.createElement('a');
+      link.className = 'rts-content-link';
+      if (/^(https?:\/\/|\/)/i.test(url)) link.href = url;
+      else link.href = '#';
+      appendInlineMarkup(link, label);
+      parent.appendChild(link);
+    } else if (tag !== 'code' && tag !== 'overlay') {
+      const extensionLink = document.createElement('a');
+      extensionLink.className = 'rts-content-link';
+      extensionLink.href = `${siteRootPath()}/extensions/${tag}/`;
+      appendInlineMarkup(extensionLink, value);
+      parent.appendChild(extensionLink);
+    }
+
+    lastIndex = tokenPattern.lastIndex;
+  }
+
+  appendInlineMarkup(parent, source.slice(lastIndex));
+}
+
+function formatRtsContent() {
+  const formatted = document.querySelectorAll('.rts-format');
+  if (!formatted.length) return;
+
+  formatted.forEach(element => {
+    if (element.dataset.rtsFormatted === 'true') return;
+    const source = element.textContent || '';
+    element.textContent = '';
+    appendFormattedText(element, source, {});
+    element.dataset.rtsFormatted = 'true';
+  });
+
+  document.querySelectorAll('.rts-copy-token').forEach(button => {
+    if (button.dataset.rtsBound === 'true') return;
+    button.dataset.rtsBound = 'true';
+    const label = button.textContent;
+
+    button.addEventListener('click', async () => {
+      try {
+        let text;
+        if (button.dataset.copyKind === 'overlay') {
+          text = new URL('overlay/', window.location.href).href;
+        } else {
+          const importUrl = document.body.dataset.importUrl;
+          if (!importUrl) throw new Error('Import URL unavailable');
+          if (!window.rtsImportCodePromise) {
+            window.rtsImportCodePromise = fetch(importUrl)
+              .then(response => {
+                if (!response.ok) throw new Error('Import file unavailable');
+                return response.text();
+              });
+          }
+          text = await window.rtsImportCodePromise;
+        }
+        await copyText(text.trim());
+        setCopyState(button, label);
+      } catch {
+        button.textContent = 'Copy failed';
+        window.setTimeout(() => { button.textContent = label; }, 1600);
+      }
+    });
+  });
+}
+
 /* Extension product-page layout */
 document.addEventListener('DOMContentLoaded', () => {
+  formatRtsContent();
+
   const quickCard = document.querySelector('.quick-access-card');
   const quickContent = quickCard?.querySelector('.quick-access-content');
   const downloadStack = quickCard?.querySelector('.download-stack');
@@ -38,20 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const importBox = importSection?.querySelector('.import-box');
 
   if (quickCard && quickContent && downloadStack && importBox) {
-    /* Move the live import box into Quick Access, on the right. */
     quickContent.appendChild(importBox);
     importBox.classList.add('quick-import-box');
-
-    /* The widget name is redundant here; the section is simply ACTION IMPORT. */
     importBox.querySelector('.section-kicker:not(.import-title-kicker)')?.remove();
-
-    /* Move Required Component below the two-column Quick Access row. */
     if (dependency) quickCard.appendChild(dependency);
-
-    /* The old import section is now empty and can disappear. */
     if (importSection) importSection.remove();
 
-    /* Quick Access labels and overlay URL copy action. */
     const overlayButton = downloadStack.querySelector('a[href="overlay/"]');
     if (overlayButton) {
       const label = overlayButton.firstChild;
@@ -64,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
       copyOverlayButton.addEventListener('click', async () => {
         const overlayUrl = new URL(overlayButton.href, window.location.href).href;
         try {
-          await navigator.clipboard.writeText(overlayUrl);
+          await copyText(overlayUrl);
           copyOverlayButton.textContent = 'Overlay URL Copied';
           copyOverlayButton.classList.add('copied');
           setTimeout(() => {
@@ -101,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(style);
   }
 
-  /* Collapsible Setup Guide and Settings UI cards. */
   document.querySelectorAll('#install, #settings').forEach(section => {
     const card = section.querySelector('.extension-card');
     const kicker = card?.querySelector('.section-kicker');
@@ -141,6 +287,14 @@ document.addEventListener('DOMContentLoaded', () => {
       .collapse-toggle{appearance:none;border:1px solid var(--line);border-radius:4px;background:transparent;color:var(--muted);padding:7px 10px;font:600 8px var(--mono);text-transform:uppercase;cursor:pointer;white-space:nowrap}
       .collapse-toggle:hover{border-color:var(--accent);color:var(--accent)}
       .collapsible-content[hidden]{display:none}
+      .rts-copy-token{appearance:none;border:1px solid var(--line);border-radius:4px;background:var(--panel2);color:var(--accent);padding:2px 6px;font:600 11px var(--mono);cursor:pointer;vertical-align:baseline}
+      .rts-copy-token:hover{border-color:var(--accent);filter:brightness(1.08)}
+      .rts-copy-token.copied{background:#2f9e68;border-color:#2f9e68;color:#fff}
+      .rts-content-link{color:var(--accent);font-weight:600;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--accent) 45%,transparent);text-underline-offset:2px}
+      .rts-content-link:hover{color:var(--text)}
+      .rts-text-blue{color:#0384cb;font-weight:600}
+      .rts-text-yellow{color:var(--accent);font-weight:600}
+      .rts-text-muted{color:var(--muted)}
     `;
     document.head.appendChild(style);
   }
