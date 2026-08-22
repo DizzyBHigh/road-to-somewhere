@@ -1,4 +1,4 @@
-name: Build and deploy RTS site
+name: Build & Deploy Road to Somewhere
 
 on:
   push:
