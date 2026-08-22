@@ -49,7 +49,7 @@ function setCopyState(button, label) {
   button.textContent = 'Copied';
   button.classList.add('copied');
   window.setTimeout(() => {
-    button.textContent = label;
+    button.textContent = `${label} ⧉`;
     button.classList.remove('copied');
   }, 1600);
 }
@@ -84,7 +84,7 @@ function makeCopyButton(label, kind) {
   button.type = 'button';
   button.className = 'rts-copy-token';
   button.dataset.copyKind = kind;
-  button.textContent = label;
+  button.textContent = `${label} ⧉`;
   return button;
 }
 
@@ -152,7 +152,7 @@ function formatRtsContent() {
   document.querySelectorAll('.rts-copy-token').forEach(button => {
     if (button.dataset.rtsBound === 'true') return;
     button.dataset.rtsBound = 'true';
-    const label = button.textContent;
+    const label = button.textContent.replace(/\s*⧉\s*$/, '');
 
     button.addEventListener('click', async () => {
       try {
@@ -175,7 +175,7 @@ function formatRtsContent() {
         setCopyState(button, label);
       } catch {
         button.textContent = 'Copy failed';
-        window.setTimeout(() => { button.textContent = label; }, 1600);
+        window.setTimeout(() => { button.textContent = `${label} ⧉`; }, 1600);
       }
     });
   });
