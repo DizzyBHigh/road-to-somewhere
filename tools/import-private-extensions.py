@@ -103,6 +103,50 @@ def rewrite_published_image_paths(value, slug: str):
     return value
 
 
+def populate_dependency_information(manifest: dict) -> None:
+    """Populate generated dependency text from the dependency definition.
+
+    The manifest stores the dependency version once, under ``dependencies``.
+    Human-readable dependency information references that dependency by ID so
+    the displayed minimum version cannot drift from the actual requirement.
+    """
+    setup = manifest.get("setup")
+    if not isinstance(setup, dict):
+        return
+
+    dll_info = setup.get("dllInformation")
+    if not isinstance(dll_info, dict):
+        return
+
+    dependency_id = dll_info.get("dependencyId")
+    if not isinstance(dependency_id, str) or not dependency_id.strip():
+        return
+
+    dependencies = manifest.get("dependencies")
+    if not isinstance(dependencies, dict):
+        fail("setup.dllInformation references a dependency, but dependencies is missing")
+
+    dependency = next(
+        (
+            item
+            for item in dependencies.values()
+            if isinstance(item, dict) and item.get("id") == dependency_id
+        ),
+        None,
+    )
+    if dependency is None:
+        fail(f"setup.dllInformation references unknown dependency: {dependency_id}")
+
+    name = dependency.get("name")
+    minimum_version = dependency.get("minimumVersion")
+    if not isinstance(name, str) or not name.strip():
+        fail(f"dependency {dependency_id}: name is required")
+    if not isinstance(minimum_version, str) or not minimum_version.strip():
+        fail(f"dependency {dependency_id}: minimumVersion is required")
+
+    dll_info["text"] = f"This extension requires {name} {minimum_version} or newer."
+
+
 def import_extension(entry: dict) -> None:
     repo_dir = Path(entry["checkoutPath"]).resolve()
     manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/extension.json"))
@@ -125,6 +169,8 @@ def import_extension(entry: dict) -> None:
 
     public_manifest = json.loads(json.dumps(manifest))
     publish = public_manifest.pop("publish", {})
+
+    populate_dependency_information(public_manifest)
 
     website = public_manifest.setdefault("website", {})
     public_extension_dir = EXT_DIR / slug
