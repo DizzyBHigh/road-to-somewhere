@@ -1,4 +1,4 @@
-name: Migrate extension page assets
+name: One-Time — Migrate Extension Page Assets
 
 on:
   push:
@@ -40,7 +40,6 @@ jobs:
           (base / 'extension.js').write_text(js_match.group(1).strip() + '\n')
 
           text = text[:css_match.start()] + '<link rel="stylesheet" href="extension.css">' + text[css_match.end():]
-          # Re-find the script after the CSS replacement.
           js_match = re.search(r'<script>\s*(.*?)\s*</script>', text, re.S)
           text = text[:js_match.start()] + '<script src="extension.js"></script>' + text[js_match.end():]
 
