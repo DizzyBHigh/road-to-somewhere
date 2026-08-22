@@ -287,9 +287,9 @@ document.addEventListener('DOMContentLoaded', () => {
       .collapse-toggle{appearance:none;border:1px solid var(--line);border-radius:4px;background:transparent;color:var(--muted);padding:7px 10px;font:600 8px var(--mono);text-transform:uppercase;cursor:pointer;white-space:nowrap}
       .collapse-toggle:hover{border-color:var(--accent);color:var(--accent)}
       .collapsible-content[hidden]{display:none}
-      .rts-copy-token{appearance:none;border:1px solid var(--line);border-radius:4px;background:var(--panel2);color:var(--accent);padding:2px 6px;font:600 11px var(--mono);cursor:pointer;vertical-align:baseline}
-      .rts-copy-token:hover{border-color:var(--accent);filter:brightness(1.08)}
-      .rts-copy-token.copied{background:#2f9e68;border-color:#2f9e68;color:#fff}
+      .rts-copy-token{appearance:none;border:0;border-radius:0;background:transparent;color:#0384cb;padding:0;margin:0;font:inherit;font-weight:600;line-height:inherit;cursor:pointer;vertical-align:baseline}
+      .rts-copy-token:hover{color:#0384cb;text-decoration:underline;text-underline-offset:2px}
+      .rts-copy-token.copied{background:transparent;border:0;color:#2f9e68}
       .rts-content-link{color:var(--accent);font-weight:600;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--accent) 45%,transparent);text-underline-offset:2px}
       .rts-content-link:hover{color:var(--text)}
       .rts-text-blue{color:#0384cb;font-weight:600}
