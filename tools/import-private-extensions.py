@@ -202,10 +202,11 @@ def import_extension(entry: dict) -> None:
         if assets_destination.exists():
             shutil.rmtree(assets_destination)
 
-        if not copy_tree(assets_source_path, assets_destination):
-            fail(f"{manifest_path}: publish.assets does not exist: {assets_source}")
-
-        public_manifest = rewrite_published_image_paths(public_manifest, slug)
+        if assets_source_path.is_dir():
+            copy_tree(assets_source_path, assets_destination)
+            public_manifest = rewrite_published_image_paths(public_manifest, slug)
+        else:
+            print(f"Skipping optional extension assets: {assets_source}")
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     data_path = DATA_DIR / f"{slug}.json"
