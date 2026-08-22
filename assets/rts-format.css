@@ -1,0 +1,54 @@
+.rts-copy-token {
+  appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #0384cb;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  font-weight: 600;
+  line-height: inherit;
+  cursor: pointer;
+  vertical-align: baseline;
+}
+
+.rts-copy-token:hover {
+  color: #0384cb;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.rts-copy-token.copied {
+  border: 0;
+  background: transparent;
+  color: #2f9e68;
+}
+
+.rts-content-link {
+  color: #0384cb;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(3, 132, 203, .45);
+  text-underline-offset: 2px;
+}
+
+.rts-content-link:hover {
+  color: var(--text);
+}
+
+.rts-text-blue {
+  color: #0384cb;
+  font-weight: 600;
+}
+
+.rts-text-yellow {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.rts-text-muted {
+  color: var(--muted);
+}
