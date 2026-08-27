@@ -6,7 +6,7 @@ plugin_data: obs-move-workflow
 ---
 {% assign plugin = site.data[page.plugin_data] %}
 <link rel="stylesheet" href="{{ '/assets/obs-plugin.css' | relative_url }}">
-<main>
+<main class="obs-plugin-page">
   <section class="obs-plugin-hero">
     <div class="obs-plugin-hero-main">
       <div class="section-kicker">{{ plugin.hero.kicker }}</div>
@@ -36,39 +36,45 @@ plugin_data: obs-move-workflow
   </section>
 
   <section class="obs-plugin-section">
-    <div class="section-kicker">WHAT IT DOES</div>
-    <h2>Build workflows instead of chains.</h2>
-    <p class="obs-plugin-intro rts-format">{{ plugin.description }}</p>
-    <div class="obs-plugin-features">
-      {% for feature in plugin.features %}
-      <article class="obs-plugin-feature">
-        <strong class="rts-format">{{ feature.title }}</strong>
-        <span class="rts-format">{{ feature.description }}</span>
-      </article>
-      {% endfor %}
-    </div>
+    <article class="extension-card">
+      <div class="section-kicker">WHAT IT DOES</div>
+      <h2>Build workflows instead of chains.</h2>
+      <p class="obs-plugin-intro rts-format">{{ plugin.description }}</p>
+      <div class="obs-plugin-features">
+        {% for feature in plugin.features %}
+        <article class="obs-plugin-feature">
+          <strong class="rts-format">{{ feature.title }}</strong>
+          <span class="rts-format">{{ feature.description }}</span>
+        </article>
+        {% endfor %}
+      </div>
+    </article>
   </section>
 
   <section class="obs-plugin-section">
-    <div class="section-kicker">REQUIREMENTS</div>
-    <h2>Before you install.</h2>
-    <ul class="obs-plugin-list">
-      {% for requirement in plugin.requirements %}<li class="rts-format">{{ requirement }}</li>{% endfor %}
-    </ul>
+    <article class="extension-card">
+      <div class="section-kicker">REQUIREMENTS</div>
+      <h2>Before you install.</h2>
+      <ul class="obs-plugin-list">
+        {% for requirement in plugin.requirements %}<li class="rts-format">{{ requirement }}</li>{% endfor %}
+      </ul>
+    </article>
   </section>
 
   {% include obs-plugin-step-guide.html data=plugin.setup id="install" content_id="installContent" kicker="INSTALLATION" %}
   {% include obs-plugin-step-guide.html data=plugin.gettingStarted id="getting-started" content_id="gettingStartedContent" kicker="GETTING STARTED" %}
 
   <section class="obs-plugin-section">
-    <div class="section-kicker">IMPORTANT NOTES</div>
-    <ul class="obs-plugin-list">
-      {% for note in plugin.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}
-    </ul>
-    <div class="obs-plugin-links">
-      <a class="secondary-button" href="{{ plugin.repository }}">Source repository ↗</a>
-      <a class="secondary-button" href="{{ plugin.links.moveTransition }}">Move Transition ↗</a>
-    </div>
+    <article class="extension-card">
+      <div class="section-kicker">IMPORTANT NOTES</div>
+      <ul class="obs-plugin-list">
+        {% for note in plugin.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}
+      </ul>
+      <div class="obs-plugin-links">
+        <a class="secondary-button" href="{{ plugin.repository }}">Source repository ↗</a>
+        <a class="secondary-button" href="{{ plugin.links.moveTransition }}">Move Transition ↗</a>
+      </div>
+    </article>
   </section>
 
   <div class="obs-plugin-page-footer">
