@@ -3,7 +3,7 @@ layout: default
 title: OBS Plugins — The Road to Somewhere
 description: OBS Studio plugins from The Road to Somewhere.
 ---
-{% assign plugins = site.data | where_exp: 'item', 'item[1].category == "obs-plugin"' %}
+{% assign plugin = site.data["obs-move-workflow"] %}
 <main>
   <section class="section">
     <div class="section-kicker">OBS STUDIO</div>
@@ -11,22 +11,19 @@ description: OBS Studio plugins from The Road to Somewhere.
       <h3>OBS Plugins</h3>
       <p>Tools for building more capable OBS setups.</p>
     </div>
-    {% for item in plugins %}
-      {% assign plugin = item[1] %}
-      <article class="product-card">
-        <div class="product-art">
-          <div class="product-badge">OBS / {{ plugin.version }}</div>
-          <div class="van-lockup"><span class="van">OBS</span></div>
-        </div>
-        <div class="product-info">
-          <div class="product-type">OBS STUDIO PLUGIN</div>
-          <h3>{{ plugin.name }}</h3>
-          <p>{{ plugin.description }}</p>
-          <div class="tags">{% for tag in plugin.tags %}<span>{{ tag }}</span>{% endfor %}</div>
-          <div class="product-actions"><a class="button" href="{{ '/obs-plugins/' | append: plugin.slug | append: '/' | relative_url }}">View plugin <span>→</span></a><span class="status">v{{ plugin.version }}</span></div>
-        </div>
-        <div class="product-card-footer"><span>{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span><strong>{{ plugin.website.footerLabel }}</strong><span>v{{ plugin.version }}</span></div>
-      </article>
-    {% endfor %}
+    <article class="product-card">
+      <div class="product-art">
+        <div class="product-badge">OBS / {{ plugin.version }}</div>
+        <div class="van-lockup"><span class="van">OBS</span></div>
+      </div>
+      <div class="product-info">
+        <div class="product-type">OBS STUDIO PLUGIN</div>
+        <h3>{{ plugin.name }}</h3>
+        <p>{{ plugin.description }}</p>
+        <div class="tags">{% for tag in plugin.tags %}<span>{{ tag }}</span>{% endfor %}</div>
+        <div class="product-actions"><a class="button" href="{{ '/obs-plugins/' | append: plugin.slug | append: '/' | relative_url }}">View plugin <span>→</span></a><span class="status">v{{ plugin.version }}</span></div>
+      </div>
+      <div class="product-card-footer"><span>01</span><strong>{{ plugin.website.footerLabel }}</strong><span>v{{ plugin.version }}</span></div>
+    </article>
   </section>
 </main>
