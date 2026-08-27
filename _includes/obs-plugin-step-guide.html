@@ -1,0 +1,25 @@
+<section class="setup-section" id="{{ include.id | default: 'guide' }}">
+  <article class="extension-card">
+    <div class="section-heading-row">
+      <div class="section-kicker">{{ include.kicker | default: 'GUIDE' }}</div>
+      <button class="collapse-toggle" type="button" data-toggle="{{ include.content_id | default: 'guideContent' }}" aria-expanded="true">Collapse</button>
+    </div>
+    <div class="collapsible-content" id="{{ include.content_id | default: 'guideContent' }}">
+      <h2 class="rts-format">{{ include.data.title }}</h2>
+      {% if include.data.intro %}<p class="rts-format">{{ include.data.intro }}</p>{% endif %}
+      <ol class="install-list setup-guide-list">
+        {% for step in include.data.steps %}
+        <li class="setup-main-step">
+          <div class="setup-main-step-content">
+            <div class="setup-step-heading">
+              <span class="setup-step-number rts-format">{{ step.number }}</span>
+              <strong class="rts-format">{{ step.title }}</strong>
+            </div>
+            {% if step.description %}<p class="setup-step-description rts-format">{{ step.description }}</p>{% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </article>
+</section>
