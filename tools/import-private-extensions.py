@@ -199,17 +199,18 @@ def import_extension(entry: dict) -> None:
         assets_source_path = safe_relative(repo_dir, assets_source)
         assets_destination = public_extension_dir / "assets"
 
-        if assets_destination.exists():
-            shutil.rmtree(assets_destination)
-
-        if assets_source_path.is_dir():
-            if any(assets_source_path.iterdir()):
-                copy_tree(assets_source_path, assets_destination)
-                public_manifest = rewrite_published_image_paths(public_manifest, slug)
-            else:
-                print(f"Skipping optional extension assets: {assets_source} (directory is empty)")
-        else:
+        # Assets are optional. The template may declare publish.assets before
+        # an extension has any extension-owned assets. Missing and empty
+        # directories are both treated as "nothing to publish".
+        if not assets_source_path.is_dir():
             print(f"Skipping optional extension assets: {assets_source} (directory does not exist)")
+        elif not any(assets_source_path.iterdir()):
+            print(f"Skipping optional extension assets: {assets_source} (directory is empty)")
+        else:
+            if assets_destination.exists():
+                shutil.rmtree(assets_destination)
+            copy_tree(assets_source_path, assets_destination)
+            public_manifest = rewrite_published_image_paths(public_manifest, slug)
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     data_path = DATA_DIR / f"{slug}.json"
