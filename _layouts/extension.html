@@ -60,10 +60,10 @@ layout: default
       <div class="quick-access-content">
         <div class="quick-access-left">
           <div class="download-stack">
-            <a class="secondary-button" href="{{ extension.website.overlayUrl | relative_url }}"><span class="rts-format">{{ extension_content.quickAccess.openOverlayLabel }}</span><span class="button-icon">↗</span></a>
-            <button class="secondary-button" id="copyOverlayUrl" type="button"><span class="rts-format">{{ extension_content.quickAccess.copyOverlayLabel }}</span><span class="button-icon">⧉</span></button>
-            <a class="secondary-button" href="#install"><span class="rts-format">{{ extension_content.quickAccess.installLabel }}</span><span class="button-icon">↓</span></a>
-            <a class="secondary-button" href="{{ extension.website.overlayZipFilename | relative_url }}"><span class="rts-format">{{ extension_content.quickAccess.downloadOverlayLabel }}</span><span class="button-icon">↓</span></a>
+            <a class="button button--blue" href="{{ extension.website.overlayUrl | relative_url }}"><span class="rts-format">{{ extension_content.quickAccess.openOverlayLabel }}</span><span class="button-icon">↗</span></a>
+            <button class="button button--blue" id="copyOverlayUrl" type="button"><span class="rts-format">{{ extension_content.quickAccess.copyOverlayLabel }}</span><span class="button-icon">⧉</span></button>
+            <a class="button button--blue" href="#install"><span class="rts-format">{{ extension_content.quickAccess.installLabel }}</span><span class="button-icon">↓</span></a>
+            <a class="button button--blue" href="{{ extension.website.overlayZipFilename | relative_url }}"><span class="rts-format">{{ extension_content.quickAccess.downloadOverlayLabel }}</span><span class="button-icon">↓</span></a>
           </div>
           <div class="dependency">
             <strong class="rts-format">Requires RtsUI.dll for settings configuration</strong>
