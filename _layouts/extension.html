@@ -66,9 +66,13 @@ layout: default
             <a class="secondary-button" href="{{ extension.website.overlayZipFilename | relative_url }}"><span class="rts-format">{{ extension_content.quickAccess.downloadOverlayLabel }}</span><span class="button-icon">↓</span></a>
           </div>
           <div class="dependency">
-            <strong class="rts-format">{{ extension_content.quickAccess.dependencyTitle }}</strong>
-            <p><span class="rts-format">{{ extension_content.quickAccess.dependencyText }}</span> <strong>{{ extension.dependencies.rtsUiDll.minimumVersion }}</strong>.</p>
-            <a href="{{ '/dll/' | relative_url }}" class="rts-format">{{ extension_content.quickAccess.dependencyLinkLabel }}</a>
+            <strong class="rts-format">Requires RtsUI.dll for settings configuration</strong>
+            <p>Minimum version: <strong>{{ extension.dependencies.rtsUiDll.minimumVersion }}</strong></p>
+            <div class="dependency-links">
+              <a href="{{ '/dll/' | relative_url }}" class="rts-content-link">More Information</a>
+              <span aria-hidden="true">|</span>
+              <a href="https://github.com/DizzyBHigh/RTS-UI-Dll/releases/latest/download/RtsUI.dll" class="rts-content-link">Download</a>
+            </div>
           </div>
         </div>
 
