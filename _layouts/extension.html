@@ -14,6 +14,22 @@ layout: default
         {% for platform in extension.runtime.platforms %}<span>{{ platform }}</span>{% endfor %}
       </div>
     </div>
+
+    {% if extension_content.release or extension.website.overlayZipFilename %}
+    <aside class="extension-release-card">
+      <div class="section-kicker rts-format">{{ extension_content.release.kicker | default: "LATEST RELEASE" }}</div>
+      <div class="extension-release-version">{{ extension.version }}</div>
+      <p class="extension-release-copy rts-format">{{ extension_content.release.description | default: "Download the current release directly from GitHub." }}</p>
+      {% if extension.website.overlayZipFilename %}
+      <a class="extension-release-download" href="{{ extension.website.overlayZipFilename | relative_url }}">
+        <span>{{ extension_content.release.downloadLabel | default: extension_content.quickAccess.downloadOverlayLabel }}</span>
+        <span class="extension-release-download-icon">DOWNLOAD ↓</span>
+      </a>
+      {% endif %}
+      <a class="extension-release-link" href="{{ extension_content.release.releaseUrl | default: extension.repository | append: '/releases/latest' }}">{{ extension_content.release.releaseLabel | default: "View release on GitHub ↗" }}</a>
+    </aside>
+    {% endif %}
+
     {% if extension_content.hero.showRoad %}<div class="extension-road" aria-hidden="true"></div>{% endif %}
   </section>
 
