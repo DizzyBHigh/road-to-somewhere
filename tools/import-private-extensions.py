@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import shutil
 import sys
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -58,6 +59,15 @@ def copy_file(source: Path, destination: Path) -> bool:
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
     return True
+
+
+def create_overlay_zip(overlay_source: Path, destination: Path) -> None:
+    """Create a ZIP containing the complete contents of the published overlay."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for item in sorted(overlay_source.rglob("*")):
+            if item.is_file():
+                archive.write(item, item.relative_to(overlay_source).as_posix())
 
 
 def versioned_import_filename(filename: str, version: str) -> str:
@@ -193,7 +203,15 @@ def import_extension(entry: dict) -> None:
             shutil.rmtree(overlay_destination)
         if not copy_tree(overlay_source_path, overlay_destination):
             fail(f"{manifest_path}: publish.overlay does not exist: {overlay_source}")
+
+        overlay_zip_name = f"overlay {version}.zip"
+        overlay_zip_destination = public_extension_dir / overlay_zip_name
+        if overlay_zip_destination.exists():
+            overlay_zip_destination.unlink()
+        create_overlay_zip(overlay_source_path, overlay_zip_destination)
+
         website["overlayUrl"] = f"/extensions/{slug}/overlay/"
+        website["overlayZipFilename"] = f"extensions/{slug}/{overlay_zip_name}"
 
     import_source = publish.get("importFile")
     if import_source:
