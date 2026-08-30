@@ -13,7 +13,7 @@
 	--button-text: #11100a;
 	--max: 1180px;
 	--heading: 'Rajdhani', sans-serif;
-	--body: 'Inter', sans-serif;
+	--font-body: 'Inter', sans-serif;
 	--mono: 'DM Mono', monospace
 }
 
@@ -31,42 +31,42 @@ html[data-theme="light"] {
 
 html[data-font="trailhead"] {
 	--heading: 'Space Grotesk', sans-serif;
-	--body: 'DM Sans', sans-serif
+	--font-body: 'DM Sans', sans-serif
 }
 
 html[data-font="waypoint"] {
 	--heading: 'Barlow Condensed', sans-serif;
-	--body: 'Barlow', sans-serif
+	--font-body: 'Barlow', sans-serif
 }
 
 html[data-font="highway"] {
 	--heading: 'Oswald', sans-serif;
-	--body: 'Inter', sans-serif
+	--font-body: 'Inter', sans-serif
 }
 
 html[data-font="outpost"] {
 	--heading: 'Kanit', sans-serif;
-	--body: 'Manrope', sans-serif
+	--font-body: 'Manrope', sans-serif
 }
 
 html[data-font="roam"] {
 	--heading: 'Rajdhani', sans-serif;
-	--body: 'Inter', sans-serif
+	--font-body: 'Inter', sans-serif
 }
 
 html[data-font="summit"] {
 	--heading: 'Archivo', sans-serif;
-	--body: 'DM Sans', sans-serif
+	--font-body: 'DM Sans', sans-serif
 }
 
 html[data-font="frontier"] {
 	--heading: 'Titillium Web', sans-serif;
-	--body: 'Barlow', sans-serif
+	--font-body: 'Barlow', sans-serif
 }
 
 html[data-font="journal"] {
 	--heading: 'Urbanist', sans-serif;
-	--body: 'Manrope', sans-serif
+	--font-body: 'Manrope', sans-serif
 }
 
 * {
@@ -81,7 +81,7 @@ body {
 	margin: 0;
 	background: radial-gradient(circle at 75% 8%, rgba(242, 185, 0, .12), transparent 30%), var(--bg);
 	color: var(--body);
-	font-family: var(--body) !important;
+	font-family: var(--font-body) !important;
 	line-height: 1.5;
 	transition: background .25s, color .25s
 }
