@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Import the publishable surface of private RTS extension repositories.
 
-The private repository remains the source of truth. Only the extension manifest
-and explicitly published assets are copied into the public Jekyll build tree.
+The private repository remains the source of truth. Only the extension manifest,
+explicitly published assets, and a tiny generated page stub are copied into the
+public Jekyll tree. Page content stays in the private manifest.
 """
 
 from __future__ import annotations
@@ -60,12 +61,7 @@ def copy_file(source: Path, destination: Path) -> bool:
 
 
 def versioned_import_filename(filename: str, version: str) -> str:
-    """Insert the extension version into the published import filename.
-
-    Source repositories keep a stable filename such as
-    ``RTS Ban Timeout Widget - Import Code.txt``. Published files are versioned
-    so each release can be downloaded exactly as it was published.
-    """
+    """Insert the extension version into the published import filename."""
     path = Path(filename)
     stem = path.stem
     suffix = path.suffix
@@ -80,11 +76,7 @@ def versioned_import_filename(filename: str, version: str) -> str:
 
 
 def rewrite_published_asset_paths(value, slug: str):
-    """Rewrite extension-owned asset paths to their public imported location.
-
-    Shared site assets use absolute /assets/... paths and are left untouched.
-    Extension-owned assets use relative assets/... paths and are rewritten.
-    """
+    """Rewrite extension-owned asset paths to their public imported location."""
     if isinstance(value, dict):
         return {
             key: (
@@ -104,12 +96,7 @@ def rewrite_published_asset_paths(value, slug: str):
 
 
 def populate_dependency_information(manifest: dict) -> None:
-    """Populate generated dependency text from the dependency definition.
-
-    The manifest stores the dependency version once, under ``dependencies``.
-    Human-readable dependency information references that dependency by ID so
-    the displayed minimum version cannot drift from the actual requirement.
-    """
+    """Populate generated dependency text from the dependency definition."""
     setup = manifest.get("setup")
     if not isinstance(setup, dict):
         return
@@ -147,6 +134,20 @@ def populate_dependency_information(manifest: dict) -> None:
     dll_info["text"] = f"This extension requires {name} {minimum_version} or newer."
 
 
+def write_page_stub(public_extension_dir: Path, slug: str, name: str, version: str, description: str) -> None:
+    """Generate the minimal Jekyll page stub; all visible page content lives in the manifest."""
+    page = (
+        "---\n"
+        "layout: extension\n"
+        f"extension_data: {slug}\n"
+        f"title: {json.dumps(f'{name} v{version}', ensure_ascii=False)}\n"
+        f"description: {json.dumps(description, ensure_ascii=False)}\n"
+        "extra_css: /assets/extension.css\n"
+        "---\n"
+    )
+    (public_extension_dir / "index.html").write_text(page, encoding="utf-8")
+
+
 def import_extension(entry: dict) -> None:
     repo_dir = Path(entry["checkoutPath"]).resolve()
     manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/extension.json"))
@@ -167,6 +168,10 @@ def import_extension(entry: dict) -> None:
     if not isinstance(version, str) or not version.strip():
         fail(f"{manifest_path}: version is required for publishing")
 
+    description = manifest.get("description", "")
+    if not isinstance(description, str):
+        fail(f"{manifest_path}: description must be a string")
+
     public_manifest = json.loads(json.dumps(manifest))
     publish = public_manifest.pop("publish", {})
 
@@ -174,6 +179,7 @@ def import_extension(entry: dict) -> None:
 
     website = public_manifest.setdefault("website", {})
     public_extension_dir = EXT_DIR / slug
+    public_extension_dir.mkdir(parents=True, exist_ok=True)
 
     overlay_source = publish.get("overlay")
     if overlay_source:
@@ -214,6 +220,7 @@ def import_extension(entry: dict) -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     data_path = DATA_DIR / f"{slug}.json"
     data_path.write_text(json.dumps(public_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    write_page_stub(public_extension_dir, slug, name, version, description)
 
     print(f"Imported {name} v{version} -> {slug}")
 
