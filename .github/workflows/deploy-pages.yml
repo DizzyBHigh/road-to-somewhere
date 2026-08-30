@@ -23,6 +23,8 @@ jobs:
       - name: Checkout public site
         uses: actions/checkout@v4
 
+      # The private extension repository is the source of truth; this checkout
+      # deliberately fetches the current main branch on every build.
       - name: Checkout private extension sources
         env:
           RTS_EXTENSION_TOKEN: ${{ secrets.RTS_EXTENSION_TOKEN }}

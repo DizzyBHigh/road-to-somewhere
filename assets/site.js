@@ -50,25 +50,11 @@ function appendInlineMarkup(parent, text) {
   const source = String(text).replace(/\r\n/g, '\n');
   let i = 0;
   while (i < source.length) {
-    if (source[i] === '\n') {
-      parent.appendChild(document.createElement('br'));
-      i++;
-      continue;
-    }
-    if (source[i] === '\\' && source[i + 1] === 'n') {
-      parent.appendChild(document.createElement('br'));
-      i += 2;
-      continue;
-    }
+    if (source[i] === '\n') { parent.appendChild(document.createElement('br')); i++; continue; }
+    if (source[i] === '\\' && source[i + 1] === 'n') { parent.appendChild(document.createElement('br')); i += 2; continue; }
     if (source[i] === '*' && source[i + 1] === '*') {
       const end = source.indexOf('**', i + 2);
-      if (end !== -1) {
-        const strong = document.createElement('strong');
-        appendFormattedText(strong, source.slice(i + 2, end));
-        parent.appendChild(strong);
-        i = end + 2;
-        continue;
-      }
+      if (end !== -1) { const strong = document.createElement('strong'); appendFormattedText(strong, source.slice(i + 2, end)); parent.appendChild(strong); i = end + 2; continue; }
     }
     parent.appendChild(document.createTextNode(source[i]));
     i++;
@@ -87,8 +73,7 @@ function makeCopyButton(label, kind) {
   button.className = 'rts-copy-token';
   button.dataset.copyKind = kind;
   appendFormattedText(button, label);
-  const marker = document.createTextNode(' ⧉');
-  button.appendChild(marker);
+  button.appendChild(document.createTextNode(' ⧉'));
   return button;
 }
 
@@ -151,22 +136,10 @@ function appendFormattedText(parent, text) {
     }
     if (source[i] === '*' && source[i + 1] === '*') {
       const end = source.indexOf('**', i + 2);
-      if (end !== -1) {
-        const strong = document.createElement('strong');
-        appendFormattedText(strong, source.slice(i + 2, end));
-        parent.appendChild(strong);
-        i = end + 2;
-        continue;
-      }
+      if (end !== -1) { const strong = document.createElement('strong'); appendFormattedText(strong, source.slice(i + 2, end)); parent.appendChild(strong); i = end + 2; continue; }
     }
-    if (source[i] === '\n') {
-      parent.appendChild(document.createElement('br'));
-      i++;
-      continue;
-    }
-    if (source[i] === '\\' && source[i + 1] === 'n') {
-      parent.appendChild(document.createElement('br')); i += 2; continue;
-    }
+    if (source[i] === '\n') { parent.appendChild(document.createElement('br')); i++; continue; }
+    if (source[i] === '\\' && source[i + 1] === 'n') { parent.appendChild(document.createElement('br')); i += 2; continue; }
     parent.appendChild(document.createTextNode(source[i]));
     i++;
   }
@@ -206,9 +179,25 @@ function formatRtsContent() {
   });
 }
 
+function initCollapseToggles() {
+  document.querySelectorAll('.collapse-toggle[data-toggle]').forEach(toggle => {
+    if (toggle.dataset.collapseBound === 'true') return;
+    const target = document.getElementById(toggle.dataset.toggle);
+    if (!target) return;
+    toggle.dataset.collapseBound = 'true';
+    toggle.addEventListener('click', () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!expanded));
+      target.hidden = expanded;
+      toggle.textContent = expanded ? 'Expand +' : 'Collapse −';
+    });
+  });
+}
+
 /* Extension product-page layout */
 document.addEventListener('DOMContentLoaded', () => {
   formatRtsContent();
+  initCollapseToggles();
   const quickCard = document.querySelector('.quick-access-card');
   const quickContent = quickCard?.querySelector('.quick-access-content');
   const downloadStack = quickCard?.querySelector('.download-stack');
@@ -229,17 +218,5 @@ document.addEventListener('DOMContentLoaded', () => {
     const importDownload = downloadStack.querySelector('a[href*="Import Code"]');
     if (importDownload) { const label = importDownload.firstChild; if (label) label.textContent = 'Download Overlay files for local use '; }
     const style = document.createElement('style'); style.textContent = `.quick-access-content{grid-template-columns:minmax(190px,.65fr) minmax(0,1.35fr);align-items:start}.quick-import-box{margin-top:0;min-width:0}.quick-import-box .import-code{height:${Math.max(downloadStack.offsetHeight,120)}px;max-height:none}.quick-access-card>.dependency{margin-top:22px;width:100%}.quick-access-card .download-stack .secondary-button{width:100%;box-sizing:border-box}.quick-access-card .download-stack .copy-button{width:100%;box-sizing:border-box}@media(max-width:760px){.quick-access-content{grid-template-columns:1fr}.quick-import-box{margin-top:0}.quick-import-box .import-code{height:180px}}`; document.head.appendChild(style);
-  }
-  document.querySelectorAll('#install, #settings').forEach(section => {
-    const card = section.querySelector('.extension-card'); const kicker = card?.querySelector('.section-kicker');
-    if (!card || !kicker || card.querySelector('.collapse-toggle')) return;
-    const content = document.createElement('div'); content.className = 'collapsible-content'; while (kicker.nextSibling) content.appendChild(kicker.nextSibling);
-    const heading = document.createElement('div'); heading.className = 'collapsible-heading'; heading.appendChild(kicker);
-    const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'collapse-toggle'; toggle.setAttribute('aria-expanded', 'true'); toggle.textContent = 'Collapse −'; heading.appendChild(toggle);
-    card.appendChild(heading); card.appendChild(content);
-    toggle.addEventListener('click', () => { const expanded = toggle.getAttribute('aria-expanded') === 'true'; toggle.setAttribute('aria-expanded', String(!expanded)); content.hidden = expanded; toggle.textContent = expanded ? 'Expand +' : 'Collapse −'; });
-  });
-  if (document.querySelector('.collapsible-heading')) {
-    const style = document.createElement('style'); style.textContent = `.collapsible-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:12px}.collapsible-heading .section-kicker{margin:0}.collapse-toggle{appearance:none;border:1px solid var(--line);border-radius:4px;background:transparent;color:var(--muted);padding:7px 10px;font:600 8px var(--mono);text-transform:uppercase;cursor:pointer;white-space:nowrap}.collapse-toggle:hover{border-color:var(--accent);color:var(--accent)}.collapsible-content[hidden]{display:none}.rts-copy-token{appearance:none;border:0;border-radius:0;background:transparent;color:#0384cb;padding:0;margin:0;font:inherit;font-weight:600;line-height:inherit;cursor:pointer;vertical-align:baseline}.rts-copy-token:hover{color:#0384cb;text-decoration:underline;text-underline-offset:2px}.rts-copy-token.copied{background:transparent;border:0;color:#2f9e68}.rts-content-link{color:var(--accent);font-weight:600;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--accent) 45%,transparent);text-underline-offset:2px}.rts-content-link:hover{color:var(--text)}.rts-text-blue{color:#0384cb;font-weight:600}.rts-text-yellow{color:var(--accent);font-weight:600}.rts-text-muted{color:var(--muted)}`; document.head.appendChild(style);
   }
 });
