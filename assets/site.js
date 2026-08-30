@@ -271,22 +271,26 @@ function initDemoPlayers() {
         media.controls = item.controls !== false;
         media.playsInline = true;
         media.preload = 'metadata';
-        if (item.autoplay === true) {
+        media.src = item.src;
+        media.alt = item.alt || item.title || '';
+
+        media.addEventListener('ended', () => {
+          if (autoplay) show(index + 1);
+        }, { once: true });
+
+        if (autoplay || item.autoplay === true) {
           media.muted = item.muted !== false;
           media.autoplay = true;
           media.play().catch(() => {});
         }
-        media.addEventListener('ended', () => {
-          if (autoplay) show(index + 1);
-        }, { once: true });
       } else {
         media = document.createElement('img');
         media.loading = 'lazy';
         media.decoding = 'async';
+        media.src = item.src;
+        media.alt = item.alt || item.title || '';
       }
 
-      media.src = item.src;
-      media.alt = item.alt || item.title || '';
       mediaHost.appendChild(media);
 
       if (caption) {
