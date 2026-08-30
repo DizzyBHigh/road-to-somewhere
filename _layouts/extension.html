@@ -4,6 +4,7 @@ layout: default
 {% assign extension = site.data[page.extension_data] %}
 {% assign extension_content = extension.content %}
 <link rel="stylesheet" href="{{ '/assets/extension-release.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}">
 <main class="extension-page" data-import-url="{{ extension.website.importFilename | relative_url }}" data-overlay-zip-url="{{ extension.website.overlayZipFilename | relative_url }}">
   <section class="extension-hero">
     <div class="extension-hero-main">
