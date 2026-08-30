@@ -1,0 +1,15 @@
+/* Fixed Road to Somewhere background: blue, gold and black. */
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(3, 132, 203, 0.18), transparent 32%),
+    radial-gradient(circle at 75% 12%, rgba(242, 185, 0, 0.14), transparent 30%),
+    linear-gradient(135deg, #090a0b 0%, #090a0b 45%, #0b0d0f 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
