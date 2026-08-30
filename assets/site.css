@@ -5,6 +5,7 @@
 	--panel: #111415;
 	--panel2: #0d0f10;
 	--line: #303331;
+	--body: #ffffff;
 	--text: #1d86e8;
 	--muted: #a9aca5;
 	--accent: #f2b900;
@@ -298,7 +299,7 @@ main {
 
 .hero-copy {
 	font-size: 15px;
-	color: var(--muted);
+	color: var(--body);
 	max-width: 520px;
 	margin: 0 0 16px
 }
