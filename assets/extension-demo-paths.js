@@ -1,6 +1,10 @@
 // Resolve extension-relative demo media paths against the published extension page.
 // Shared site assets (/assets/...) and fully-qualified URLs are left unchanged.
 (function resolveExtensionDemoPaths() {
+  const pageBase = new URL(
+    window.location.pathname.endsWith('/') ? window.location.href : `${window.location.href}/`
+  );
+
   document.querySelectorAll('[data-demo-items]').forEach(card => {
     const raw = card.dataset.demoItems;
     if (!raw) return;
@@ -17,7 +21,7 @@
 
         return {
           ...item,
-          src: new URL(src, window.location.href).href
+          src: new URL(src, pageBase).href
         };
       });
 
