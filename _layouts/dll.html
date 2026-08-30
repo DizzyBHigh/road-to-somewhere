@@ -17,7 +17,7 @@
     <h1>{{ dll.website.hero.title }}<br><em>{{ dll.website.hero.titleEmphasis }}</em></h1>
     <p class="dll-intro">{{ dll.website.hero.description }}</p>
     <div class="dll-version">
-      <strong>VERSION {{ dll.release.version }}</strong>
+      <strong>{{ dll.website.hero.versionPrefix }} {{ dll.release.version }}</strong>
       <span>{{ dll.website.hero.versionLabel }}</span>
     </div>
   </section>
@@ -44,7 +44,7 @@
             {% for dependency_pair in extension.dependencies %}
               {% assign dependency = dependency_pair[1] %}
               {% if dependency.id == dll.id %}
-                <a href="{{ '/extensions/' | append: extension.slug | append: '/' | relative_url }}">{{ extension.name }} v{{ extension.version }} →</a>
+                <a href="{{ '/extensions/' | append: extension.slug | append: '/' | relative_url }}">{{ extension.name }} v{{ extension.version }} {{ dll.website.usedBy.linkSuffix }}</a>
               {% endif %}
             {% endfor %}
           {% endif %}
@@ -61,8 +61,8 @@
         <li>{{ step }}</li>
         {% endfor %}
       </ol>
-      <div class="dll-note"><strong>Important:</strong> {{ dll.website.installation.note }}</div>
-      <a class="button dll-download" href="{{ dll.release.downloadUrl }}">{{ dll.website.installation.downloadLabel }} <span>↓</span></a>
+      <div class="dll-note"><strong>{{ dll.website.installation.noteLabel }}</strong> {{ dll.website.installation.note }}</div>
+      <a class="button dll-download" href="{{ dll.release.downloadUrl }}">{{ dll.website.installation.downloadLabel }} <span>{{ dll.website.installation.downloadSuffix }}</span></a>
     </aside>
   </section>
 </main>
