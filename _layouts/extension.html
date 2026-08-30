@@ -69,7 +69,7 @@ layout: default
       </article>
       {% endif %}
       {% if extension_content.demo %}
-      <article class="extension-card demo-card" data-demo-autoplay="{{ extension_content.demo.autoplay | default: false }}" data-demo-interval="{{ extension_content.demo.interval | default: 5000 }}">
+      <article class="extension-card demo-card" data-demo-items='{{ extension_content.demo.media | jsonify | escape }}' data-demo-autoplay="{{ extension_content.demo.autoplay | default: false }}" data-demo-interval="{{ extension_content.demo.interval | default: 5000 }}">
         <div class="section-kicker rts-format">{{ extension_content.demo.kicker | default: "PRODUCT DEMO" }}</div>
         <h2 class="rts-format">{{ extension_content.demo.title | default: "See it in action." }}</h2>
         <div class="demo-player" data-demo-player>
