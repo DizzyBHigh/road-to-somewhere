@@ -74,15 +74,15 @@ layout: default
         <div class="section-kicker rts-format">{{ extension_content.demo.kicker | default: "PRODUCT DEMO" }}</div>
         <h2 class="rts-format">{{ extension_content.demo.title | default: "See it in action." }}</h2>
         <div class="demo-player" data-demo-player>
-          <div class="demo-media" data-demo-media></div>
           <button class="demo-nav demo-nav-prev" type="button" data-demo-prev aria-label="Previous demo item">‹</button>
+          <div class="demo-media" data-demo-media></div>
           <button class="demo-nav demo-nav-next" type="button" data-demo-next aria-label="Next demo item">›</button>
-          <div class="demo-caption" data-demo-caption></div>
         </div>
         <div class="demo-controls">
           <div class="demo-dots" data-demo-dots aria-label="Demo slides"></div>
           <span class="demo-counter" data-demo-counter></span>
         </div>
+        <div class="demo-caption" data-demo-caption></div>
       </article>
       {% elsif extension_content.video %}
       <article class="extension-card video-card">
