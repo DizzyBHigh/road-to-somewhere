@@ -172,6 +172,10 @@ def import_extension(entry: dict) -> None:
     if not isinstance(description, str):
         fail(f"{manifest_path}: description must be a string")
 
+    content = manifest.get("content")
+    if content is not None and not isinstance(content, dict):
+        fail(f"{manifest_path}: content must be an object when present")
+
     public_manifest = json.loads(json.dumps(manifest))
     publish = public_manifest.pop("publish", {})
 
