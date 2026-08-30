@@ -869,7 +869,7 @@ footer {
 	content: "Ban / Timeout Widget turns moderation into part of the show. Bans arrive as complete animated events, while timeout cells run independently and stack without holding up the ban queue.";
 	display: block;
 	font-size: 15px;
-	color: var(--muted);
+	color: var(--body);
 	max-width: 680px
 }
 
@@ -880,14 +880,14 @@ footer {
 
 .setup-guide-list li>div>strong {
 	display: block;
-	color: var(--text);
+	color: var(--body);
 	font-size: 13px;
 	margin-bottom: 3px
 }
 
 .setup-guide-list li>div>span {
 	display: block;
-	color: var(--muted);
+	color: var(--body);
 	font-size: 13px
 }
 
