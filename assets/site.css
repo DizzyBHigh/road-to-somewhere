@@ -80,7 +80,7 @@ html {
 body {
 	margin: 0;
 	background: radial-gradient(circle at 75% 8%, rgba(242, 185, 0, .12), transparent 30%), var(--bg);
-	color: var(--text);
+	color: var(--body);
 	font-family: var(--body) !important;
 	line-height: 1.5;
 	transition: background .25s, color .25s
@@ -173,7 +173,7 @@ nav {
 	display: flex;
 	gap: 22px;
 	font: 400 9px var(--mono);
-	color: var(--muted);
+	color: var(--body);
 	text-transform: uppercase
 }
 
