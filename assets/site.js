@@ -11,7 +11,7 @@ if (fontPicker) {
   fontPicker.value = root.dataset.font;
   fontPicker.addEventListener('change', () => {
     root.dataset.font = fontPicker.value;
-    localStorage.setItem('rts-font', fontPicker.value);
+    localStorage.setItem('rts-font', root.dataset.font);
   });
 }
 
@@ -90,6 +90,14 @@ function appendFormattedText(parent, text) {
             parent.appendChild(span);
           } else if (tag === 'code' || tag === 'overlay') {
             parent.appendChild(makeCopyButton(value, tag));
+          } else if (tag === 'overlayzip') {
+            const link = document.createElement('a');
+            link.className = 'rts-content-link';
+            const overlayZipRoot = document.querySelector('[data-overlay-zip-url]');
+            const overlayZipUrl = overlayZipRoot?.dataset.overlayZipUrl;
+            link.href = overlayZipUrl || '#';
+            appendFormattedText(link, value);
+            parent.appendChild(link);
           } else if (tag === 'dll') {
             const link = document.createElement('a');
             link.className = 'rts-content-link';
