@@ -46,25 +46,19 @@ function setCopyState(button, label) {
   window.setTimeout(() => { button.textContent = `${label} ⧉`; button.classList.remove('copied'); }, 1600);
 }
 
-function appendInlineMarkup(parent, text) {
-  const source = String(text).replace(/\r\n/g, '\n');
-  let i = 0;
-  while (i < source.length) {
-    if (source[i] === '\n') { parent.appendChild(document.createElement('br')); i++; continue; }
-    if (source[i] === '\\' && source[i + 1] === 'n') { parent.appendChild(document.createElement('br')); i += 2; continue; }
-    if (source[i] === '*' && source[i + 1] === '*') {
-      const end = source.indexOf('**', i + 2);
-      if (end !== -1) { const strong = document.createElement('strong'); appendFormattedText(strong, source.slice(i + 2, end)); parent.appendChild(strong); i = end + 2; continue; }
-    }
-    parent.appendChild(document.createTextNode(source[i]));
-    i++;
-  }
-}
-
 function siteRootPath() {
   const stylesheet = document.querySelector('link[href*="/assets/site.css"]');
   if (!stylesheet) return '';
   return new URL(stylesheet.href, window.location.href).pathname.replace(/\/assets\/site\.css$/, '');
+}
+
+function findMatchingToken(source, start) {
+  let depth = 1;
+  for (let i = start; i < source.length - 1; i++) {
+    if (source[i] === '[' && source[i + 1] === '[') { depth++; i++; }
+    else if (source[i] === ']' && source[i + 1] === ']') { depth--; if (depth === 0) return i; i++; }
+  }
+  return -1;
 }
 
 function makeCopyButton(label, kind) {
@@ -75,15 +69,6 @@ function makeCopyButton(label, kind) {
   appendFormattedText(button, label);
   button.appendChild(document.createTextNode(' ⧉'));
   return button;
-}
-
-function findMatchingToken(source, start) {
-  let depth = 1;
-  for (let i = start; i < source.length - 1; i++) {
-    if (source[i] === '[' && source[i + 1] === '[') { depth++; i++; }
-    else if (source[i] === ']' && source[i + 1] === ']') { depth--; if (depth === 0) return i; i++; }
-  }
-  return -1;
 }
 
 function appendFormattedText(parent, text) {
@@ -136,7 +121,13 @@ function appendFormattedText(parent, text) {
     }
     if (source[i] === '*' && source[i + 1] === '*') {
       const end = source.indexOf('**', i + 2);
-      if (end !== -1) { const strong = document.createElement('strong'); appendFormattedText(strong, source.slice(i + 2, end)); parent.appendChild(strong); i = end + 2; continue; }
+      if (end !== -1) {
+        const strong = document.createElement('strong');
+        appendFormattedText(strong, source.slice(i + 2, end));
+        parent.appendChild(strong);
+        i = end + 2;
+        continue;
+      }
     }
     if (source[i] === '\n') { parent.appendChild(document.createElement('br')); i++; continue; }
     if (source[i] === '\\' && source[i + 1] === 'n') { parent.appendChild(document.createElement('br')); i += 2; continue; }
@@ -146,29 +137,27 @@ function appendFormattedText(parent, text) {
 }
 
 function formatRtsContent() {
-  const formatted = document.querySelectorAll('.rts-format');
-  if (!formatted.length) return;
-  formatted.forEach(element => {
+  document.querySelectorAll('.rts-format').forEach(element => {
     if (element.dataset.rtsFormatted === 'true') return;
     const source = element.textContent || '';
     element.textContent = '';
     appendFormattedText(element, source);
     element.dataset.rtsFormatted = 'true';
   });
+}
+
+function initFormattedCopyButtons() {
   document.querySelectorAll('.rts-copy-token').forEach(button => {
     if (button.dataset.rtsBound === 'true') return;
     button.dataset.rtsBound = 'true';
     const label = button.textContent.replace(/\s*⧉\s*$/, '');
     button.addEventListener('click', async () => {
       try {
-        let text;
-        if (button.dataset.copyKind === 'overlay') text = new URL('overlay/', window.location.href).href;
-        else {
-          const importUrl = document.body.dataset.importUrl;
-          if (!importUrl) throw new Error('Import URL unavailable');
-          if (!window.rtsImportCodePromise) window.rtsImportCodePromise = fetch(importUrl).then(r => { if (!r.ok) throw new Error('Import file unavailable'); return r.text(); });
-          text = await window.rtsImportCodePromise;
-        }
+        const importRoot = document.querySelector('[data-import-url]');
+        const importUrl = importRoot?.dataset.importUrl;
+        const text = button.dataset.copyKind === 'overlay'
+          ? new URL('overlay/', window.location.href).href
+          : await fetch(importUrl).then(response => { if (!response.ok) throw new Error('Import file unavailable'); return response.text(); });
         await copyText(text.trim());
         setCopyState(button, label);
       } catch {
@@ -177,6 +166,50 @@ function formatRtsContent() {
       }
     });
   });
+}
+
+function initExtensionCopyButtons() {
+  const rootElement = document.querySelector('[data-import-url]');
+  if (!rootElement) return;
+  const importUrl = rootElement.dataset.importUrl;
+  const copyImport = document.getElementById('copyImport');
+  const copyOverlay = document.getElementById('copyOverlayUrl');
+
+  if (copyImport && copyImport.dataset.rtsBound !== 'true') {
+    copyImport.dataset.rtsBound = 'true';
+    const label = copyImport.textContent.replace(/\s*⧉\s*$/, '').trim();
+    const code = document.getElementById('importCode');
+    if (code && importUrl) {
+      fetch(importUrl)
+        .then(response => { if (!response.ok) throw new Error('Import file unavailable'); return response.text(); })
+        .then(text => { code.textContent = text; })
+        .catch(() => { code.textContent = 'Unable to load the current import code. Use the versioned download link below.'; });
+    }
+    copyImport.addEventListener('click', async () => {
+      try {
+        const text = code?.textContent || await fetch(importUrl).then(response => response.text());
+        await copyText(text.trim());
+        setCopyState(copyImport, label);
+      } catch {
+        copyImport.textContent = 'Copy failed';
+        window.setTimeout(() => { copyImport.textContent = `${label} ⧉`; }, 1600);
+      }
+    });
+  }
+
+  if (copyOverlay && copyOverlay.dataset.rtsBound !== 'true') {
+    copyOverlay.dataset.rtsBound = 'true';
+    const label = copyOverlay.textContent.replace(/\s*⧉\s*$/, '').trim();
+    copyOverlay.addEventListener('click', async () => {
+      try {
+        await copyText(new URL('overlay/', window.location.href).href);
+        setCopyState(copyOverlay, label);
+      } catch {
+        copyOverlay.textContent = 'Copy failed';
+        window.setTimeout(() => { copyOverlay.textContent = `${label} ⧉`; }, 1600);
+      }
+    });
+  }
 }
 
 function initCollapseToggles() {
@@ -194,29 +227,9 @@ function initCollapseToggles() {
   });
 }
 
-/* Extension product-page layout */
 document.addEventListener('DOMContentLoaded', () => {
   formatRtsContent();
+  initFormattedCopyButtons();
+  initExtensionCopyButtons();
   initCollapseToggles();
-  const quickCard = document.querySelector('.quick-access-card');
-  const quickContent = quickCard?.querySelector('.quick-access-content');
-  const downloadStack = quickCard?.querySelector('.download-stack');
-  const dependency = quickCard?.querySelector('.dependency');
-  const importSection = document.querySelector('#import');
-  const importBox = importSection?.querySelector('.import-box');
-  if (quickCard && quickContent && downloadStack && importBox) {
-    quickContent.appendChild(importBox); importBox.classList.add('quick-import-box'); importBox.querySelector('.section-kicker:not(.import-title-kicker)')?.remove();
-    if (dependency) quickCard.appendChild(dependency);
-    if (importSection) importSection.remove();
-    const overlayButton = downloadStack.querySelector('a[href="overlay/"]');
-    if (overlayButton) {
-      const label = overlayButton.firstChild; if (label) label.textContent = 'Open Overlay in Browser ';
-      const copyOverlayButton = document.createElement('button'); copyOverlayButton.type = 'button'; copyOverlayButton.className = 'copy-button'; copyOverlayButton.innerHTML = 'Copy Overlay URL';
-      copyOverlayButton.addEventListener('click', async () => { const overlayUrl = new URL(overlayButton.href, window.location.href).href; try { await copyText(overlayUrl); copyOverlayButton.textContent = 'Overlay URL Copied'; copyOverlayButton.classList.add('copied'); setTimeout(() => { copyOverlayButton.textContent = 'Copy Overlay URL'; copyOverlayButton.classList.remove('copied'); }, 1600); } catch { copyOverlayButton.textContent = 'Copy Failed'; } });
-      overlayButton.insertAdjacentElement('afterend', copyOverlayButton);
-    }
-    const importDownload = downloadStack.querySelector('a[href*="Import Code"]');
-    if (importDownload) { const label = importDownload.firstChild; if (label) label.textContent = 'Download Overlay files for local use '; }
-    const style = document.createElement('style'); style.textContent = `.quick-access-content{grid-template-columns:minmax(190px,.65fr) minmax(0,1.35fr);align-items:start}.quick-import-box{margin-top:0;min-width:0}.quick-import-box .import-code{height:${Math.max(downloadStack.offsetHeight,120)}px;max-height:none}.quick-access-card>.dependency{margin-top:22px;width:100%}.quick-access-card .download-stack .secondary-button{width:100%;box-sizing:border-box}.quick-access-card .download-stack .copy-button{width:100%;box-sizing:border-box}@media(max-width:760px){.quick-access-content{grid-template-columns:1fr}.quick-import-box{margin-top:0}.quick-import-box .import-code{height:180px}}`; document.head.appendChild(style);
-  }
 });
