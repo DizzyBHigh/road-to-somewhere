@@ -8,7 +8,7 @@
   z-index: 1;
   pointer-events: none;
   overflow: hidden;
-  background-image: url('/assets/images/rts-front-page-graphic-computer.png');
+  background-image: url('images/rts-front-page-graphic-computer.png');
   background-repeat: no-repeat;
   background-position: right center;
   background-size: contain;
