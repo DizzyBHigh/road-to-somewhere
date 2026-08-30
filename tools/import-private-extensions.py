@@ -79,7 +79,7 @@ def versioned_import_filename(filename: str, version: str) -> str:
     return f"{stem}{suffix}"
 
 
-def rewrite_published_image_paths(value, slug: str):
+def rewrite_published_asset_paths(value, slug: str):
     """Rewrite extension-owned asset paths to their public imported location.
 
     Shared site assets use absolute /assets/... paths and are left untouched.
@@ -92,13 +92,13 @@ def rewrite_published_image_paths(value, slug: str):
                 if key == "src"
                 and isinstance(item, str)
                 and item.startswith("assets/")
-                else rewrite_published_image_paths(item, slug)
+                else rewrite_published_asset_paths(item, slug)
             )
             for key, item in value.items()
         }
 
     if isinstance(value, list):
-        return [rewrite_published_image_paths(item, slug) for item in value]
+        return [rewrite_published_asset_paths(item, slug) for item in value]
 
     return value
 
@@ -199,17 +199,17 @@ def import_extension(entry: dict) -> None:
         assets_source_path = safe_relative(repo_dir, assets_source)
         assets_destination = public_extension_dir / "assets"
 
-        if assets_destination.exists():
-            shutil.rmtree(assets_destination)
-
-        if assets_source_path.is_dir():
-            if any(assets_source_path.iterdir()):
-                copy_tree(assets_source_path, assets_destination)
-                public_manifest = rewrite_published_image_paths(public_manifest, slug)
-            else:
-                print(f"Skipping optional extension assets: {assets_source} (directory is empty)")
-        else:
+        if not assets_source_path.is_dir():
             print(f"Skipping optional extension assets: {assets_source} (directory does not exist)")
+        else:
+            asset_items = list(assets_source_path.iterdir())
+            if not asset_items:
+                print(f"Skipping optional extension assets: {assets_source} (directory is empty)")
+            else:
+                if assets_destination.exists():
+                    shutil.rmtree(assets_destination)
+                copy_tree(assets_source_path, assets_destination)
+                public_manifest = rewrite_published_asset_paths(public_manifest, slug)
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     data_path = DATA_DIR / f"{slug}.json"
