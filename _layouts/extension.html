@@ -1,0 +1,135 @@
+---
+layout: default
+---
+{% assign extension = site.data[page.extension_data] %}
+{% assign content = extension.content %}
+<body data-import-url="{{ extension.website.importFilename | relative_url }}">
+  <main class="extension-page">
+    <section class="extension-hero">
+      <div class="extension-hero-main">
+        <div class="section-kicker rts-format">{{ content.hero.kicker }}</div>
+        <h1 class="rts-format">{{ content.hero.title }}<br><em class="rts-format">{{ content.hero.titleAccent }}</em></h1>
+        <p class="extension-hero-copy rts-format">{{ extension.description }}</p>
+        <div class="release-line">
+          <span class="version">v{{ extension.version }} / {{ extension.status | upcase }}</span>
+          {% for platform in extension.runtime.platforms %}<span>{{ platform }}</span>{% endfor %}
+        </div>
+      </div>
+      {% if content.hero.showRoad %}<div class="extension-road" aria-hidden="true"></div>{% endif %}
+    </section>
+
+    <section class="extension-grid">
+      {% if content.experience or content.video %}
+      <div class="experience-row">
+        {% if content.experience %}
+        <article class="extension-card">
+          <div class="section-kicker rts-format">{{ content.experience.kicker }}</div>
+          <h2 class="rts-format">{{ content.experience.title }}</h2>
+          <p class="rts-format">{{ content.experience.text }}</p>
+          {% if content.experience.features %}
+          <div class="feature-list">
+            {% for feature in content.experience.features %}
+            <div class="feature">
+              <strong class="rts-format">{{ feature.title }}</strong>
+              <span class="rts-format">{{ feature.text }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </article>
+        {% endif %}
+
+        {% if content.video %}
+        <article class="extension-card video-card">
+          <div class="section-kicker rts-format">{{ content.video.kicker }}</div>
+          <h2 class="rts-format">{{ content.video.title }}</h2>
+          <div class="video-frame">
+            <div>
+              <strong class="rts-format">{{ content.video.message }}</strong>
+              <span class="rts-format">{{ content.video.text }}</span>
+            </div>
+          </div>
+        </article>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if content.quickAccess %}
+      <article class="extension-card quick-access-card">
+        <div class="section-kicker rts-format">{{ content.quickAccess.kicker }}</div>
+        <h2 class="rts-format">{{ content.quickAccess.title }}</h2>
+        <div class="quick-access-content">
+          <div class="quick-access-left">
+            <div class="download-stack">
+              <a class="secondary-button" href="{{ extension.website.overlayUrl | relative_url }}"><span class="rts-format">{{ content.quickAccess.openOverlayLabel }}</span><span class="button-icon">↗</span></a>
+              <button class="secondary-button" id="copyOverlayUrl" type="button"><span class="rts-format">{{ content.quickAccess.copyOverlayLabel }}</span><span class="button-icon">⧉</span></button>
+              <a class="secondary-button" href="#install"><span class="rts-format">{{ content.quickAccess.installLabel }}</span><span class="button-icon">↓</span></a>
+              <a class="secondary-button" href="{{ extension.website.overlayUrl | relative_url }}"><span class="rts-format">{{ content.quickAccess.downloadOverlayLabel }}</span><span class="button-icon">↓</span></a>
+            </div>
+            <div class="dependency">
+              <strong class="rts-format">{{ content.quickAccess.dependencyTitle }}</strong>
+              <p class="rts-format">{{ extension.dependencies.rtsUiDll.name }} is required by this extension. Minimum version: <strong>{{ extension.dependencies.rtsUiDll.minimumVersion }}</strong>.</p>
+              <a href="{{ '/dll/' | relative_url }}" class="rts-format">{{ content.quickAccess.dependencyLinkLabel }}</a>
+            </div>
+          </div>
+
+          <div class="import-box" id="import">
+            <div class="import-header">
+              <div>
+                <div class="section-kicker rts-format">{{ content.quickAccess.importKicker }}</div>
+                <div class="import-meta rts-format">{{ content.quickAccess.importMeta }}</div>
+              </div>
+              <button class="copy-button" id="copyImport" type="button"><span class="rts-format">{{ content.quickAccess.copyImportLabel }}</span> <span class="copy-icon">⧉</span></button>
+            </div>
+            <pre class="import-code" id="importCode">{{ content.quickAccess.importLoading }}</pre>
+            <p class="import-help rts-format">{{ content.quickAccess.importHelp }}</p>
+            <div class="import-links">
+              <a href="{{ extension.website.importFilename | relative_url }}" class="rts-format">{{ content.quickAccess.downloadImportLabel }}</a>
+              <a href="#install" class="rts-format">{{ content.quickAccess.installStepsLabel }}</a>
+            </div>
+          </div>
+        </div>
+      </article>
+      {% endif %}
+    </section>
+
+    {% include extension-setup-guide.html data=extension %}
+
+    {% if content.settings %}
+    <section class="settings-section" id="settings">
+      <article class="extension-card">
+        <div class="section-heading-row">
+          <div class="section-kicker rts-format">{{ content.settings.kicker }}</div>
+          <button class="collapse-toggle" type="button" data-toggle="settingsContent" aria-expanded="true">Collapse</button>
+        </div>
+        <div class="collapsible-content" id="settingsContent">
+          <h2 class="setup-title rts-format">{{ content.settings.title }}</h2>
+          <p class="settings-intro rts-format">{{ content.settings.intro }}</p>
+          <div class="settings-groups">
+            {% for group in content.settings.groups %}
+            <div class="settings-group">
+              <h3 class="rts-format">{{ group.title }}</h3>
+              {% for setting in group.settings %}
+              <div class="setting-row">
+                <strong class="rts-format">{{ setting.title }}</strong>
+                <span class="rts-format">{{ setting.description }}</span>
+                {% if setting.range %}<div class="setting-range rts-format">{{ setting.range }}</div>{% endif %}
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </article>
+    </section>
+    {% endif %}
+
+    {% if content.meta %}
+    <div class="meta-row">
+      <span class="rts-format">{{ extension.name | upcase }}</span>
+      <span>v{{ extension.version }}</span>
+      <a href="{{ extension.repository }}" class="rts-format">{{ content.meta.sourceLabel }}</a>
+    </div>
+    {% endif %}
+  </main>
+</body>
