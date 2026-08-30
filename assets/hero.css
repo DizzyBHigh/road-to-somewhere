@@ -1,7 +1,7 @@
 /* Homepage hero artwork integration */
 .hero-road-art {
   position: absolute;
-  right: -28px;
+  /* right: -28px; */
   top: 0;
   width: min(54vw, 650px);
   height: 100%;
@@ -10,7 +10,7 @@
   overflow: hidden;
   background-image: url('images/rts-front-page-graphic-computer.png');
   background-repeat: no-repeat;
-  background-position: right center;
+  /* background-position: right center; */
   background-size: contain;
   opacity: .96;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 13%, #000 30%, #000 100%);
