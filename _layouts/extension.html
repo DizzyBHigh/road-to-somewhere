@@ -3,7 +3,7 @@ layout: default
 ---
 {% assign extension = site.data[page.extension_data] %}
 {% assign extension_content = extension.content %}
-<main class="extension-page" data-import-url="{{ extension.website.importFilename | relative_url }}">
+<main class="extension-page" data-import-url="{{ extension.website.importFilename | relative_url }}" data-overlay-zip-url="{{ extension.website.overlayZipFilename | relative_url }}">
   <section class="extension-hero">
     <div class="extension-hero-main">
       <div class="section-kicker rts-format">{{ extension_content.hero.kicker }}</div>
@@ -63,7 +63,7 @@ layout: default
             <a class="secondary-button" href="{{ extension.website.overlayUrl | relative_url }}"><span class="rts-format">{{ extension_content.quickAccess.openOverlayLabel }}</span><span class="button-icon">↗</span></a>
             <button class="secondary-button" id="copyOverlayUrl" type="button"><span class="rts-format">{{ extension_content.quickAccess.copyOverlayLabel }}</span><span class="button-icon">⧉</span></button>
             <a class="secondary-button" href="#install"><span class="rts-format">{{ extension_content.quickAccess.installLabel }}</span><span class="button-icon">↓</span></a>
-            <a class="secondary-button" href="{{ extension.website.overlayUrl | relative_url }}"><span class="rts-format">{{ extension_content.quickAccess.downloadOverlayLabel }}</span><span class="button-icon">↓</span></a>
+            <a class="secondary-button" href="{{ extension.website.overlayZipFilename | relative_url }}"><span class="rts-format">{{ extension_content.quickAccess.downloadOverlayLabel }}</span><span class="button-icon">↓</span></a>
           </div>
           <div class="dependency">
             <strong class="rts-format">{{ extension_content.quickAccess.dependencyTitle }}</strong>
