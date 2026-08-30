@@ -86,11 +86,11 @@ def versioned_import_filename(filename: str, version: str) -> str:
 
 
 def rewrite_published_asset_paths(value, slug: str):
-    """Rewrite extension-owned asset paths to their public imported location."""
+    """Rewrite extension-owned asset paths to paths relative to the extension page."""
     if isinstance(value, dict):
         return {
             key: (
-                f"/extensions/{slug}/{item}"
+                f"extensions/{slug}/{item}"
                 if key == "src"
                 and isinstance(item, str)
                 and item.startswith("assets/")
@@ -258,8 +258,6 @@ def main() -> None:
         return
 
     for entry in entries:
-        if "checkoutPath" not in entry:
-            fail("Importer requires checkoutPath for each source")
         import_extension(entry)
 
 
