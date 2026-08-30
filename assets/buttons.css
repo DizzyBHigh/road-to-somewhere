@@ -1,0 +1,23 @@
+/* Shared RTS button component. Use .button with a colour modifier. */
+.button {
+  margin-right: 10px;
+}
+
+.button--blue {
+  background: #0384CB;
+  color: #fff;
+  border: 1px solid #0384CB;
+}
+
+.button--blue:hover {
+  filter: brightness(1.08);
+}
+
+.button:last-child {
+  margin-right: 0;
+}
+
+.download-stack .button {
+  width: 100%;
+  justify-content: space-between;
+}
