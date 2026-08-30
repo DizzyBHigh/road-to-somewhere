@@ -58,7 +58,7 @@
       <p>{{ dll.website.installation.description }}</p>
       <ol class="dll-steps">
         {% for step in dll.website.installation.steps %}
-        <li>{{ step }}</li>
+        <li><span class="dll-step-text">{{ step }}</span></li>
         {% endfor %}
       </ol>
       <div class="dll-note"><strong>{{ dll.website.installation.noteLabel }}</strong> {{ dll.website.installation.note }}</div>
