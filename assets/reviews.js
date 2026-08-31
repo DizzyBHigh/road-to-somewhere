@@ -14,8 +14,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.addEventListener('rts-auth-state', () => resolve(window.rtsSupabase), { once: true });
   });
   if (!client) return;
-  const escape = value => String(value ?? '').replace(/[&<>\'"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
+  const escape = value => String(value ?? '').replace(/[&<>\'\"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
   const starText = rating => '★'.repeat(Number(rating)) + '☆'.repeat(5 - Number(rating));
+  const displayName = (user, profile) => {
+    const metadata = user?.user_metadata || {};
+    const discord = user?.identities?.find(identity => identity.provider === 'discord')?.identity_data || {};
+    return discord.global_name || metadata.global_name || discord.name || metadata.name ||
+      discord.username || metadata.user_name || metadata.full_name || profile?.display_name || 'RTS user';
+  };
   const { data: extension, error: extensionError } = await client.from('extensions').select('id').eq('slug', root.dataset.extensionSlug).single();
   if (extensionError) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
 
@@ -47,9 +53,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     signin.hidden = true;
     const { data: profile } = await client.from('profiles').select('display_name, avatar_url').eq('id', user.id).maybeSingle();
-    const displayName = profile?.display_name || user.user_metadata?.global_name || 'RTS user';
+    const name = displayName(user, profile);
     const avatarUrl = profile?.avatar_url || user.user_metadata?.avatar_url || '';
-    state.innerHTML = `<span class="review-signed-in"><img src="${escape(avatarUrl)}" alt=""><span>Signed in as <strong>${escape(displayName)}</strong></span></span>`;
+    state.innerHTML = `<span class="review-signed-in"><img src="${escape(avatarUrl)}" alt=""><span>Signed in as <strong>${escape(name)}</strong></span></span>`;
     const { data: own } = await client.from('reviews').select('id,rating,body,status').eq('extension_id', extension.id).eq('user_id', user.id).maybeSingle();
     form.hidden = false;
     if (own) {
