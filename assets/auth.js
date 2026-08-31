@@ -33,8 +33,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   login.addEventListener('click', async () => {
+    const redirectTo = `${window.location.origin}${window.location.pathname}${window.location.search}`;
     const { error } = await client.auth.signInWithOAuth({
-      provider: 'discord', options: { redirectTo: window.location.href }
+      provider: 'discord', options: { redirectTo }
     });
     if (error) console.error('RTS Discord sign-in failed:', error);
   });
