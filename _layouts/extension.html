@@ -5,137 +5,34 @@ layout: default
 {% assign extension_content = extension.content %}
 <link rel="stylesheet" href="{{ '/assets/extension-release.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/reviews.css' | relative_url }}">
 <main class="extension-page" data-import-url="{{ extension.website.importFilename | relative_url }}" data-overlay-zip-url="{{ extension.website.overlayZipFilename | relative_url }}">
   <section class="extension-hero">
     <div class="extension-hero-main">
       <div class="section-kicker rts-format">{{ extension.listing.type | default: extension_content.hero.kicker }}</div>
       <h1><span class="rts-format">{{ extension_content.hero.title }}</span><br><em class="rts-format">{{ extension_content.hero.titleAccent }}</em></h1>
       <p class="extension-hero-copy rts-format">{{ extension.description }}</p>
-      <div class="release-line">
-        <span class="version">v{{ extension.version }} / {{ extension.status | upcase }}</span>
-        {% for platform in extension.runtime.platforms %}<span>{{ platform }}</span>{% endfor %}
-      </div>
+      <div class="release-line"><span class="version">v{{ extension.version }} / {{ extension.status | upcase }}</span>{% for platform in extension.runtime.platforms %}<span>{{ platform }}</span>{% endfor %}</div>
     </div>
-
     {% if extension_content.release or extension.website.overlayZipFilename or extension.website.importFilename %}
     <aside class="extension-release-card">
       <div class="section-kicker rts-format">{{ extension_content.release.kicker | default: "LATEST RELEASE" }}</div>
       <div class="extension-release-version">{{ extension.version }}</div>
-
-      {% if extension.website.importFilename %}
-      <div class="extension-release-import">
-        <div class="extension-release-import-header">
-          <div>
-            <div class="extension-release-label rts-format">{{ extension_content.release.importKicker | default: "ACTION IMPORT CODE" }}</div>
-            <div class="extension-release-meta rts-format">{{ extension_content.release.importMeta | default: "Copy this code into Streamer.bot → Import" }}</div>
-          </div>
-          <button class="copy-button" id="copyImport" type="button"><span class="rts-format">{{ extension_content.release.copyImportLabel | default: "Copy Import" }}</span> <span class="copy-icon">⧉</span></button>
-        </div>
-        <pre class="import-code" id="importCode">{{ extension_content.release.importLoading | default: "Loading release import…" }}</pre>
-      </div>
-      {% endif %}
-
-      <div class="extension-release-actions">
-        {% if extension.website.overlayUrl %}
-        <button class="button button--blue" id="copyOverlayUrl" type="button"><span class="rts-format">{{ extension_content.release.copyOverlayLabel | default: "Copy Overlay URL" }}</span><span class="button-icon">⧉</span></button>
-        {% endif %}
-        {% if extension.website.overlayZipFilename %}
-        <a class="button button--gold" href="{{ site.rts_services_url }}/functions/v1/download?extension={{ extension.slug | uri_escape }}"><span class="rts-format">{{ extension_content.release.downloadOverlayLabel | default: "Download Overlay" }}</span><span class="button-icon">↓</span></a>
-        {% endif %}
-      </div>
+      {% if extension.website.importFilename %}<div class="extension-release-import"><div class="extension-release-import-header"><div><div class="extension-release-label rts-format">{{ extension_content.release.importKicker | default: "ACTION IMPORT CODE" }}</div><div class="extension-release-meta rts-format">{{ extension_content.release.importMeta | default: "Copy this code into Streamer.bot → Import" }}</div></div><button class="copy-button" id="copyImport" type="button"><span class="rts-format">{{ extension_content.release.copyImportLabel | default: "Copy Import" }}</span> <span class="copy-icon">⧉</span></button></div><pre class="import-code" id="importCode">{{ extension_content.release.importLoading | default: "Loading release import…" }}</pre></div>{% endif %}
+      <div class="extension-release-actions">{% if extension.website.overlayUrl %}<button class="button button--blue" id="copyOverlayUrl" type="button"><span class="rts-format">{{ extension_content.release.copyOverlayLabel | default: "Copy Overlay URL" }}</span><span class="button-icon">⧉</span></button>{% endif %}{% if extension.website.overlayZipFilename %}<a class="button button--gold" href="{{ site.rts_services_url }}/functions/v1/download?extension={{ extension.slug | uri_escape }}"><span class="rts-format">{{ extension_content.release.downloadOverlayLabel | default: "Download Overlay" }}</span><span class="button-icon">↓</span></a>{% endif %}</div>
     </aside>
     {% endif %}
-
     {% if extension_content.hero.showRoad %}<div class="extension-road" aria-hidden="true"></div>{% endif %}
   </section>
-
   <section class="extension-grid">
-    {% if extension_content.experience or extension_content.demo or extension_content.video %}
-    <div class="experience-row">
-      {% if extension_content.experience %}
-      <article class="extension-card">
-        <div class="section-kicker rts-format">{{ extension_content.experience.kicker }}</div>
-        <h2 class="rts-format">{{ extension_content.experience.title }}</h2>
-        <p class="rts-format">{{ extension_content.experience.text }}</p>
-        {% if extension_content.experience.features %}
-        <div class="feature-list">
-          {% for feature in extension_content.experience.features %}
-          <div class="feature">
-            <strong class="rts-format">{{ feature.title }}</strong>
-            <span class="rts-format">{{ feature.text }}</span>
-          </div>
-          {% endfor %}
-        </div>
-        {% endif %}
-      </article>
-      {% endif %}
-      {% if extension_content.demo %}
-      <article class="extension-card demo-card" data-demo-items='{{ extension_content.demo.media | jsonify | escape }}' data-demo-autoplay="{{ extension_content.demo.autoplay | default: false }}" data-demo-interval="{{ extension_content.demo.interval | default: 5000 }}">
-        <div class="section-kicker rts-format">{{ extension_content.demo.kicker | default: "PRODUCT DEMO" }}</div>
-        <h2 class="rts-format">{{ extension_content.demo.title | default: "See it in action." }}</h2>
-        <div class="demo-player" data-demo-player>
-          <div class="demo-stage">
-            <button class="demo-nav demo-nav-prev" type="button" data-demo-prev aria-label="Previous demo item">‹</button>
-            <div class="demo-media" data-demo-media></div>
-            <button class="demo-nav demo-nav-next" type="button" data-demo-next aria-label="Next demo item">›</button>
-          </div>
-          <div class="demo-controls">
-            <div class="demo-dots" data-demo-dots aria-label="Demo slides"></div>
-            <span class="demo-counter" data-demo-counter></span>
-          </div>
-          <div class="demo-caption" data-demo-caption></div>
-        </div>
-      </article>
-      {% elsif extension_content.video %}
-      <article class="extension-card video-card">
-        <div class="section-kicker rts-format">{{ extension_content.video.kicker }}</div>
-        <h2 class="rts-format">{{ extension_content.video.title }}</h2>
-        <div class="video-frame">
-          <div>
-            <strong class="rts-format">{{ extension_content.video.message }}</strong>
-            <span class="rts-format">{{ extension_content.video.text }}</span>
-          </div>
-        </div>
-      </article>
-      {% endif %}
-    </div>
-    {% endif %}
+    {% if extension_content.experience or extension_content.demo or extension_content.video %}<div class="experience-row">
+      {% if extension_content.experience %}<article class="extension-card"><div class="section-kicker rts-format">{{ extension_content.experience.kicker }}</div><h2 class="rts-format">{{ extension_content.experience.title }}</h2><p class="rts-format">{{ extension_content.experience.text }}</p>{% if extension_content.experience.features %}<div class="feature-list">{% for feature in extension_content.experience.features %}<div class="feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.text }}</span></div>{% endfor %}</div>{% endif %}</article>{% endif %}
+      {% if extension_content.demo %}<article class="extension-card demo-card" data-demo-items='{{ extension_content.demo.media | jsonify | escape }}' data-demo-autoplay="{{ extension_content.demo.autoplay | default: false }}" data-demo-interval="{{ extension_content.demo.interval | default: 5000 }}"><div class="section-kicker rts-format">{{ extension_content.demo.kicker | default: "PRODUCT DEMO" }}</div><h2 class="rts-format">{{ extension_content.demo.title | default: "See it in action." }}</h2><div class="demo-player" data-demo-player><div class="demo-stage"><button class="demo-nav demo-nav-prev" type="button" data-demo-prev aria-label="Previous demo item">‹</button><div class="demo-media" data-demo-media></div><button class="demo-nav demo-nav-next" type="button" data-demo-next aria-label="Next demo item">›</button></div><div class="demo-controls"><div class="demo-dots" data-demo-dots aria-label="Demo slides"></div><span class="demo-counter" data-demo-counter></span></div><div class="demo-caption" data-demo-caption></div></div></article>{% elsif extension_content.video %}<article class="extension-card video-card"><div class="section-kicker rts-format">{{ extension_content.video.kicker }}</div><h2 class="rts-format">{{ extension_content.video.title }}</h2><div class="video-frame"><div><strong class="rts-format">{{ extension_content.video.message }}</strong><span class="rts-format">{{ extension_content.video.text }}</span></div></div></article>{% endif %}
+    </div>{% endif %}
   </section>
-
   {% include extension-setup-guide.html data=extension %}
-  {% if extension_content.settings %}
-  <section class="settings-section" id="settings">
-    <article class="extension-card">
-      <div class="section-heading-row">
-        <div class="section-kicker rts-format">{{ extension_content.settings.kicker }}</div>
-        <button class="collapse-toggle" type="button" data-toggle="settingsContent" aria-expanded="true">Collapse</button>
-      </div>
-      <div class="collapsible-content" id="settingsContent">
-        <h2 class="setup-title rts-format">{{ extension_content.settings.title }}</h2>
-        <p class="settings-intro rts-format">{{ extension_content.settings.intro }}</p>
-        <div class="settings-groups">
-          {% for group in extension_content.settings.groups %}
-          <div class="settings-group">
-            <h3 class="rts-format">{{ group.title }}</h3>
-            {% for setting in group.settings %}
-            <div class="setting-row">
-              <strong class="rts-format">{{ setting.title }}</strong>
-              <span class="rts-format">{{ setting.description }}</span>
-              {% if setting.range %}<div class="setting-range rts-format">{{ setting.range }}</div>{% endif %}
-            </div>
-            {% endfor %}
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </article>
-  </section>
-  {% endif %}
-  {% if extension_content.meta %}
-  <div class="meta-row">
-    <span class="rts-format">{{ extension.name | upcase }}</span>
-    <span>v{{ extension.version }}</span>
-    {% unless extension.listing.type == "STREAMER.BOT EXTENSION" %}<a href="{{ extension.repository }}" class="rts-format">{{ extension_content.meta.sourceLabel }}</a>{% endunless %}
-  </div>
-  {% endif %}
+  {% if extension_content.settings %}<section class="settings-section" id="settings"><article class="extension-card"><div class="section-heading-row"><div class="section-kicker rts-format">{{ extension_content.settings.kicker }}</div><button class="collapse-toggle" type="button" data-toggle="settingsContent" aria-expanded="true">Collapse</button></div><div class="collapsible-content" id="settingsContent"><h2 class="setup-title rts-format">{{ extension_content.settings.title }}</h2><p class="settings-intro rts-format">{{ extension_content.settings.intro }}</p><div class="settings-groups">{% for group in extension_content.settings.groups %}<div class="settings-group"><h3 class="rts-format">{{ group.title }}</h3>{% for setting in group.settings %}<div class="setting-row"><strong class="rts-format">{{ setting.title }}</strong><span class="rts-format">{{ setting.description }}</span>{% if setting.range %}<div class="setting-range rts-format">{{ setting.range }}</div>{% endif %}</div>{% endfor %}</div>{% endfor %}</div></div></article></section>{% endif %}
+  {% include extension-reviews.html data=extension %}
+  {% if extension_content.meta %}<div class="meta-row"><span class="rts-format">{{ extension.name | upcase }}</span><span>v{{ extension.version }}</span>{% unless extension.listing.type == "STREAMER.BOT EXTENSION" %}<a href="{{ extension.repository }}" class="rts-format">{{ extension_content.meta.sourceLabel }}</a>{% endunless %}</div>{% endif %}
 </main>
+<script src="{{ '/assets/reviews.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
