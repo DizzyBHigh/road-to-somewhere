@@ -12,35 +12,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   window.rtsSupabase = client;
 
-  const cleanDiscordName = value => String(value || '').split('#')[0].trim();
+  const cleanLegacyName = value => String(value || '').split('#')[0].trim();
   const publishAuth = session => {
     window.rtsAuthSession = session;
     window.dispatchEvent(new CustomEvent('rts-auth-state', { detail: session }));
   };
-
   const setSignedOut = () => {
     login.hidden = false;
     account.hidden = true;
     menu.hidden = true;
     publishAuth(null);
   };
-
   const setSignedIn = async session => {
     const user = session?.user;
     if (!user) return setSignedOut();
-    const { data: profile } = await client.from('profiles')
-      .select('display_name, avatar_url').eq('id', user.id).maybeSingle();
+    const { data: profile } = await client.from('profiles').select('display_name, avatar_url').eq('id', user.id).maybeSingle();
     const metadata = user.user_metadata || {};
     const discord = user.identities?.find(identity => identity.provider === 'discord')?.identity_data || {};
-    const displayName = cleanDiscordName(discord.global_name || metadata.global_name || discord.name || metadata.name ||
-      discord.username || metadata.user_name || metadata.full_name || profile?.display_name || 'Account');
+    const globalName = discord.global_name || metadata.global_name;
+    const fallbackName = discord.name || metadata.name || discord.username || metadata.user_name || metadata.full_name || profile?.display_name;
+    const displayName = globalName || cleanLegacyName(fallbackName) || 'Account';
     const avatarUrl = discord.avatar_url || metadata.avatar_url || profile?.avatar_url || '';
-
     if (profile && (profile.display_name !== displayName || profile.avatar_url !== avatarUrl)) {
-      await client.from('profiles').update({ display_name: displayName, avatar_url: avatarUrl })
-        .eq('id', user.id);
+      await client.from('profiles').update({ display_name: displayName, avatar_url: avatarUrl }).eq('id', user.id);
     }
-
     name.textContent = displayName;
     avatar.src = avatarUrl;
     avatar.alt = `${displayName} avatar`;
@@ -48,31 +43,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     account.hidden = false;
     publishAuth(session);
   };
-
   login.addEventListener('click', async () => {
     const redirectTo = `${window.location.origin}${window.location.pathname}${window.location.search}`;
     const { error } = await client.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo } });
     if (error) console.error('RTS Discord sign-in failed:', error);
   });
-
   account.addEventListener('click', () => {
     const open = !menu.hidden;
     menu.hidden = open;
     account.setAttribute('aria-expanded', String(!open));
   });
-
   signout.addEventListener('click', async () => {
     await client.auth.signOut();
     setSignedOut();
   });
-
   document.addEventListener('click', event => {
     if (!root.contains(event.target)) {
       menu.hidden = true;
       account.setAttribute('aria-expanded', 'false');
     }
   });
-
   client.auth.onAuthStateChange((_event, session) => setSignedIn(session));
   const { data } = await client.auth.getSession();
   await setSignedIn(data.session);
