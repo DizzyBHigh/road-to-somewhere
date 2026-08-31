@@ -77,12 +77,12 @@ jobs:
 
       - name: Sync extensions with RTS Services
         env:
-          RTS_SERVICES_URL: ${{ secrets.RTS_SERVICES_URL }}
-          RTS_SYNC_KEY: ${{ secrets.RTS_SYNC_KEY }}
+          RTS_SERVICES_URL: ${{ vars.RTS_SERVICES_URL }}
+          RTS_SERVICES_SYNC_KEY: ${{ secrets.RTS_SERVICES_SYNC_KEY }}
         run: |
           set -euo pipefail
           test -n "$RTS_SERVICES_URL" || { echo "RTS_SERVICES_URL is not configured"; exit 1; }
-          test -n "$RTS_SYNC_KEY" || { echo "RTS_SYNC_KEY is not configured"; exit 1; }
+          test -n "$RTS_SERVICES_SYNC_KEY" || { echo "RTS_SERVICES_SYNC_KEY is not configured"; exit 1; }
           while IFS= read -r entry; do
             path=$(echo "$entry" | jq -r '.checkoutPath')
             manifest="$path/site/extension.json"
@@ -90,7 +90,7 @@ jobs:
             jq -c '{slug: .slug, name: .name, active: true}' "$manifest" \
               | curl --fail-with-body -sS -X POST \
                   -H "Content-Type: application/json" \
-                  -H "X-RTS-Sync-Key: $RTS_SYNC_KEY" \
+                  -H "apikey: $RTS_SERVICES_SYNC_KEY" \
                   --data-binary @- \
                   "$RTS_SERVICES_URL/functions/v1/sync-extension"
             echo
