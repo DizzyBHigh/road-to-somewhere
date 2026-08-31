@@ -1,0 +1,17 @@
+---
+layout: default
+title: Review Moderation
+extra_css: /assets/admin-reviews.css
+---
+<main class="admin-page" data-admin-page>
+  <header class="admin-heading">
+    <div class="section-kicker">ADMIN</div>
+    <h1>Review Moderation</h1>
+    <p>Review submissions awaiting moderation.</p>
+  </header>
+  <section class="admin-panel">
+    <div class="admin-status" data-admin-status>Checking administrator access…</div>
+    <div class="admin-reviews" data-admin-reviews></div>
+  </section>
+</main>
+<script src="{{ '/assets/admin-reviews.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
