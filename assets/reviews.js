@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const escape = value => String(value ?? '').replace(/[&<>\'\"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
   const cleanLegacyName = value => String(value || '').split('#')[0].trim();
   const starText = rating => '★'.repeat(Number(rating)) + '☆'.repeat(5 - Number(rating));
-  const formatDate = value => new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value));
+  const ordinal = day => { const n = Number(day); return `${n}${n % 100 >= 11 && n % 100 <= 13 ? 'th' : ({1:'st',2:'nd',3:'rd'}[n % 10] || 'th')}`; };
+  const formatDate = value => { const date = new Date(value); return `${ordinal(date.getDate())} ${date.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}`; };
   const displayName = (user, profile) => {
     const metadata = user?.user_metadata || {};
     const discord = user?.identities?.find(identity => identity.provider === 'discord')?.identity_data || {};
