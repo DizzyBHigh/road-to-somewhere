@@ -2,6 +2,8 @@
 .reviews-section .section-heading-row { display:flex; justify-content:space-between; align-items:end; gap:30px; margin-bottom:18px; }
 .reviews-section h2 { margin:5px 0 0; font-family:var(--heading); font-size:clamp(30px,4vw,44px); line-height:.92; letter-spacing:-.045em; }
 .reviews-summary { color:var(--accent); font:600 11px var(--mono); text-transform:uppercase; white-space:nowrap; }
+.reviews-summary__stars { display:inline-block; color:var(--accent); font:normal 22px/1 Arial,sans-serif; letter-spacing:2px; margin-right:10px; }
+.reviews-summary__count { color:var(--muted); vertical-align:3px; }
 .reviews-layout { display:grid; grid-template-columns:1.4fr .8fr; gap:24px; align-items:start; }
 .reviews-list-column { min-width:0; }
 .reviews-list { display:grid; gap:12px; }
