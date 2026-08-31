@@ -1,0 +1,95 @@
+.admin-page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 80px 30px;
+}
+
+.admin-heading {
+  border-bottom: 1px solid #303030;
+  padding-bottom: 32px;
+  margin-bottom: 32px;
+}
+
+.admin-heading h1 {
+  margin: 8px 0;
+}
+
+.admin-heading p,
+.admin-status {
+  color: #aaa;
+}
+
+.admin-panel {
+  border: 1px solid #303030;
+  padding: 28px;
+}
+
+.admin-status {
+  margin-bottom: 24px;
+}
+
+.admin-review {
+  border: 1px solid #303030;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.admin-review__top,
+.admin-review__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.admin-review__author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-review__author img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.admin-review__rating {
+  letter-spacing: 2px;
+}
+
+.admin-review__body {
+  color: #ddd;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 20px 0;
+}
+
+.admin-review__meta {
+  color: #888;
+  font-size: .8rem;
+}
+
+.admin-review__actions {
+  justify-content: flex-start;
+  margin-top: 18px;
+}
+
+.admin-review__actions button {
+  cursor: pointer;
+}
+
+.admin-review__actions .is-danger {
+  border-color: #754040;
+}
+
+.admin-empty {
+  color: #aaa;
+}
+
+@media (max-width: 700px) {
+  .admin-page { padding: 50px 18px; }
+  .admin-panel { padding: 18px; }
+  .admin-review__top { align-items: flex-start; flex-direction: column; }
+}
