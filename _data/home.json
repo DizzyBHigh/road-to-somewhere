@@ -18,6 +18,16 @@
     "about",
     "support"
   ],
+  "extensions": {
+    "kicker": "THE WORKSHOP",
+    "title": "Streamer.bot Extensions",
+    "text": "Built to be installed easily, configured clearly, and seen on stream."
+  },
+  "obsPlugins": {
+    "kicker": "OBS STUDIO",
+    "title": "OBS Plugins",
+    "text": "Native OBS tools for building more capable scenes, workflows, and interactions."
+  },
   "about": {
     "kicker": "THE IDEA",
     "title": "Tools and Widgets with a purpose.",
