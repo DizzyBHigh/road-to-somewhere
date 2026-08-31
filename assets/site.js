@@ -26,3 +26,9 @@ themeButton?.addEventListener('click', () => {
   localStorage.setItem('rts-theme', theme);
   updateThemeLabel();
 });
+
+document.addEventListener('click', (event) => {
+  if (event.target.closest('.rts-auth__login')) {
+    window.history.replaceState({}, document.title, `${window.location.origin}${window.location.pathname}`);
+  }
+}, true);
