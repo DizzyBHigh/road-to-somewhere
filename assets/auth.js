@@ -13,16 +13,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   window.rtsSupabase = client;
 
+  const publishAuth = session => {
+    window.rtsAuthSession = session;
+    window.dispatchEvent(new CustomEvent('rts-auth-state', { detail: session }));
+  };
+
   const setSignedOut = () => {
     login.hidden = false;
     account.hidden = true;
     menu.hidden = true;
+    publishAuth(null);
   };
 
-  const setSignedIn = async (session) => {
+  const setSignedIn = async session => {
     const user = session?.user;
     if (!user) return setSignedOut();
-
     const { data: profile } = await client.from('profiles')
       .select('display_name, avatar_url').eq('id', user.id).maybeSingle();
     name.textContent = profile?.display_name || user.user_metadata?.global_name || 'Account';
@@ -30,13 +35,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     avatar.alt = `${name.textContent} avatar`;
     login.hidden = true;
     account.hidden = false;
+    publishAuth(session);
   };
 
   login.addEventListener('click', async () => {
     const redirectTo = `${window.location.origin}${window.location.pathname}${window.location.search}`;
-    const { error } = await client.auth.signInWithOAuth({
-      provider: 'discord', options: { redirectTo }
-    });
+    const { error } = await client.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo } });
     if (error) console.error('RTS Discord sign-in failed:', error);
   });
 
@@ -51,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setSignedOut();
   });
 
-  document.addEventListener('click', (event) => {
+  document.addEventListener('click', event => {
     if (!root.contains(event.target)) {
       menu.hidden = true;
       account.setAttribute('aria-expanded', 'false');
