@@ -1,0 +1,16 @@
+.reviews-section { max-width: var(--max); margin: auto; padding: 24px 28px 40px; border-top: 1px solid var(--line); }
+.reviews-section .section-heading-row { display:flex; justify-content:space-between; align-items:end; gap:30px; margin-bottom:18px; }
+.reviews-section h2 { margin:5px 0 0; font-family:var(--heading); font-size:clamp(30px,4vw,44px); line-height:.92; letter-spacing:-.045em; }
+.reviews-summary { color:var(--accent); font:600 11px var(--mono); text-transform:uppercase; white-space:nowrap; }
+.reviews-layout { display:grid; grid-template-columns:1.4fr .8fr; gap:24px; }
+.reviews-list { display:grid; gap:12px; }
+.review-card, .review-form-card { border:1px solid var(--line); background:rgba(255,255,255,.02); padding:18px; }
+.review-card__top { display:flex; justify-content:space-between; gap:16px; color:var(--muted); font:500 10px var(--mono); text-transform:uppercase; }
+.review-card__top span { color:var(--accent); letter-spacing:2px; }
+.review-card h3 { margin:10px 0 5px; font-size:20px; }
+.review-card p { margin:0; color:var(--body); white-space:pre-wrap; }
+.review-form-card label { display:block; margin:0 0 12px; color:var(--muted); font:500 9px var(--mono); text-transform:uppercase; letter-spacing:.08em; }
+.review-form-card input, .review-form-card textarea, .review-form-card select { width:100%; margin-top:6px; padding:10px; border:1px solid var(--line); background:var(--surface); color:var(--text); font:inherit; }
+.review-form-card textarea { resize:vertical; }
+.review-form-message, .reviews-empty { color:var(--muted); font-size:13px; }
+@media(max-width:760px) { .reviews-section { padding:20px; } .reviews-layout { grid-template-columns:1fr; } .reviews-section .section-heading-row { align-items:start; flex-direction:column; gap:8px; } }
