@@ -85,9 +85,10 @@ jobs:
           test -n "$RTS_SERVICES_SYNC_KEY" || { echo "RTS_SERVICES_SYNC_KEY is not configured"; exit 1; }
           while IFS= read -r entry; do
             path=$(echo "$entry" | jq -r '.checkoutPath')
-            manifest="$path/site/extension.json"
-            test -f "$manifest" || { echo "Missing extension manifest: $manifest"; exit 1; }
-            jq -c '{slug: .slug, name: .name, active: true}' "$manifest" \
+            slug=$(echo "$entry" | jq -r '.repository | split("/")[1]' | tr '[:upper:]' '[:lower:]')
+            manifest="_data/$slug.json"
+            test -f "$manifest" || { echo "Missing generated extension data: $manifest"; exit 1; }
+            jq -c '{slug: .slug, name: .name, active: true, version: .version, downloadPath: .website.overlayZipFilename}' "$manifest" \
               | curl --fail-with-body -sS -X POST \
                   -H "Content-Type: application/json" \
                   -H "apikey: $RTS_SERVICES_SYNC_KEY" \
