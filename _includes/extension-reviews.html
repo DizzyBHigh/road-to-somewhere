@@ -1,0 +1,23 @@
+<section class="reviews-section" id="reviews" data-extension-slug="{{ extension.slug }}">
+  <div class="section-heading-row">
+    <div>
+      <div class="section-kicker">REVIEWS</div>
+      <h2>What people think.</h2>
+    </div>
+    <div class="reviews-summary" data-review-summary>—</div>
+  </div>
+  <div class="reviews-layout">
+    <div class="reviews-list" data-review-list><p class="reviews-empty">Loading reviews…</p></div>
+    <div class="review-form-card">
+      <div class="section-kicker">YOUR REVIEW</div>
+      <div data-review-form-state>Checking sign-in…</div>
+      <form data-review-form hidden>
+        <label>Rating<select name="rating" required><option value="">Select a rating</option><option value="5">★★★★★ 5</option><option value="4">★★★★☆ 4</option><option value="3">★★★☆☆ 3</option><option value="2">★★☆☆☆ 2</option><option value="1">★☆☆☆☆ 1</option></select></label>
+        <label>Title<input name="title" maxlength="120" required></label>
+        <label>Review<textarea name="body" rows="6" maxlength="2000" required></textarea></label>
+        <button class="button button--blue" type="submit">Submit review</button>
+        <p class="review-form-message" data-review-message aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
