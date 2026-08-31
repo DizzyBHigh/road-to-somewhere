@@ -1,6 +1,21 @@
 {
   "sections": [
     "extensions",
-    "obs-plugins"
-  ]
+    "obs-plugins",
+    "about",
+    "support"
+  ],
+  "about": {
+    "kicker": "THE IDEA",
+    "title": "Tools and Widgets with a purpose.",
+    "paragraphs": [
+      "The Road to Somewhere is a collection of tools designed to help you **REACT** to **EVENTS** and **INTERACTIONS** from your **AUDIENCE** and streaming **PLATFORMS** to help make your stream more **ENGAGING**.",
+      "Each project is designed as a complete experience: polished visuals, useful configuration, clear documentation, and sensible installation."
+    ]
+  },
+  "support": {
+    "kicker": "NEED A HAND?",
+    "title": "Every project comes with documentation that tells you what to do — and why.",
+    "text": "Installation steps, settings references, troubleshooting, and release notes will live alongside each product."
+  }
 }
