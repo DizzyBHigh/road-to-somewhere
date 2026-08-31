@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const profile = review.profiles || {};
       const avatar = profile.avatar_url || '';
       const name = cleanLegacyName(profile.display_name || 'RTS user');
-      return `<article class="review-card"><div class="review-card__top"><div class="review-card__identity">${avatar ? `<img src="${escape(avatar)}" alt="" class="review-card__avatar">` : ''}<strong>${escape(name)}</strong></div><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`;
+      return `<article class="review-card"><div class="review-card__top"><div class="review-card__identity"><img src="${escape(avatar)}" alt="" class="review-card__avatar" onerror="this.style.display='none'"><strong>${escape(name)}</strong></div><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`;
     }).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
   };
   const showUser = async user => {
