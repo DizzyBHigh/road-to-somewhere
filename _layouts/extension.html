@@ -40,7 +40,7 @@ layout: default
         <button class="button button--blue" id="copyOverlayUrl" type="button"><span class="rts-format">{{ extension_content.release.copyOverlayLabel | default: "Copy Overlay URL" }}</span><span class="button-icon">⧉</span></button>
         {% endif %}
         {% if extension.website.overlayZipFilename %}
-        <a class="button button--gold" href="{{ extension.website.overlayZipFilename | relative_url }}"><span class="rts-format">{{ extension_content.release.downloadOverlayLabel | default: "Download Overlay" }}</span><span class="button-icon">↓</span></a>
+        <a class="button button--gold" href="{{ site.rts_services_url }}/functions/v1/download?extension={{ extension.slug | uri_escape }}"><span class="rts-format">{{ extension_content.release.downloadOverlayLabel | default: "Download Overlay" }}</span><span class="button-icon">↓</span></a>
         {% endif %}
       </div>
     </aside>
