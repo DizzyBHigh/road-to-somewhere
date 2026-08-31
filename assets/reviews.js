@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const message = root.querySelector('[data-review-message]');
   const client = await new Promise(resolve => {
     if (window.rtsSupabase) return resolve(window.rtsSupabase);
-    window.addEventListener('rts-auth-ready', () => resolve(window.rtsSupabase), { once: true });
+    window.addEventListener('rts-auth-state', () => resolve(window.rtsSupabase), { once: true });
   });
   if (!client) return;
   const escape = value => String(value ?? '').replace(/[&<>\'"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!payload.rating || payload.rating < 1 || payload.rating > 5) { message.textContent = 'Please select a rating.'; return; }
       const result = own ? await client.from('reviews').update(payload).eq('id', own.id).eq('user_id', user.id) : await client.from('reviews').insert(payload);
       message.textContent = result.error ? `Could not save review: ${result.error.message}` : 'Review submitted for moderation.';
-      if (!result.error) { state.querySelector('span:last-child').textContent = 'Your review is awaiting moderation.'; await loadReviews(); }
+      if (!result.error) await loadReviews();
     };
   };
 
