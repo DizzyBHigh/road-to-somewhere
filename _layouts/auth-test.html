@@ -1,0 +1,15 @@
+---
+layout: default
+---
+<main class="site-section auth-test" data-supabase-url="https://osiuynezqmocapioekoa.supabase.co">
+  <section class="extension-card">
+    <div class="section-kicker">AUTHENTICATION TEST</div>
+    <h1>Discord sign-in</h1>
+    <p>Temporary test for RTS Discord authentication and profile creation.</p>
+    <button class="button button--blue" id="discordLogin" type="button">Continue with Discord</button>
+    <button class="button button--gold" id="discordLogout" type="button" hidden>Sign out</button>
+    <div id="authStatus" aria-live="polite">Checking authentication…</div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="{{ '/assets/auth-test.js' | relative_url }}"></script>
