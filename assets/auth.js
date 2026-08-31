@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const root = document.querySelector('.rts-auth[data-supabase-url]');
   if (!root || !window.supabase) return;
-
   const login = root.querySelector('.rts-auth__login');
   const account = root.querySelector('.rts-auth__account');
   const menu = root.querySelector('.rts-auth__menu');
@@ -30,9 +29,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!user) return setSignedOut();
     const { data: profile } = await client.from('profiles')
       .select('display_name, avatar_url').eq('id', user.id).maybeSingle();
-    name.textContent = profile?.display_name || user.user_metadata?.global_name || 'Account';
-    avatar.src = profile?.avatar_url || user.user_metadata?.avatar_url || '';
-    avatar.alt = `${name.textContent} avatar`;
+    const metadata = user.user_metadata || {};
+    const discord = user.identities?.find(identity => identity.provider === 'discord')?.identity_data || {};
+    const displayName = discord.global_name || metadata.global_name || discord.name || metadata.name ||
+      discord.username || metadata.user_name || metadata.full_name || profile?.display_name || 'Account';
+    const avatarUrl = discord.avatar_url || metadata.avatar_url || profile?.avatar_url || '';
+    name.textContent = displayName;
+    avatar.src = avatarUrl;
+    avatar.alt = `${displayName} avatar`;
     login.hidden = true;
     account.hidden = false;
     publishAuth(session);
