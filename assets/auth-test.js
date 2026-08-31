@@ -14,6 +14,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const { createClient } = window.supabase;
   const supabase = createClient(root.dataset.supabaseUrl, key);
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.has('code')) {
+    status.textContent = 'Completing Discord sign-in…';
+    const { error } = await supabase.auth.exchangeCodeForSession(params.get('code'));
+    if (error) {
+      status.textContent = `OAuth callback failed: ${error.message}`;
+      return;
+    }
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 
   const update = async (session) => {
     if (!session?.user) {
