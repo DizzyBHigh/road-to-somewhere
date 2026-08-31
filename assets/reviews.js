@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const escape = value => String(value ?? '').replace(/[&<>\'\"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
   const cleanLegacyName = value => String(value || '').split('#')[0].trim();
   const starText = rating => '★'.repeat(Number(rating)) + '☆'.repeat(5 - Number(rating));
+  const formatDate = value => new Intl.DateTimeFormat(undefined, { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value));
   const displayName = (user, profile) => {
     const metadata = user?.user_metadata || {};
     const discord = user?.identities?.find(identity => identity.provider === 'discord')?.identity_data || {};
@@ -48,7 +49,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const profile = review.profiles || {};
       const avatar = profile.avatar_url || '';
       const name = cleanLegacyName(profile.display_name || 'RTS user');
-      return `<article class="review-card"><div class="review-card__top"><div class="review-card__identity"><img src="${escape(avatar)}" alt="" class="review-card__avatar" onerror="this.style.display='none'"><strong>${escape(name)}</strong></div><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`;
+      const date = review.created_at ? formatDate(review.created_at) : '';
+      return `<article class="review-card"><div class="review-card__top"><div class="review-card__identity"><img src="${escape(avatar)}" alt="" class="review-card__avatar" onerror="this.style.display='none'"><div class="review-card__details"><strong>${escape(name)}</strong>${date ? `<span class="review-card__date">${escape(date)}</span>` : ''}</div></div><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`;
     }).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
   };
   const showUser = async user => {
