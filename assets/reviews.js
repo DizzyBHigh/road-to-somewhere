@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const starsInput = form?.querySelector('[name="rating"]');
   const stars = [...root.querySelectorAll('.review-star')];
   const message = root.querySelector('[data-review-message]');
-  const client = window.supabase.createClient('https://osiuynezqmocapioekoa.supabase.co', 'sb_publishable_84QJd8PHmw-79UJmVwz05g_u0exvb9w');
+  const client = window.rtsSupabase || window.supabase.createClient('https://osiuynezqmocapioekoa.supabase.co', 'sb_publishable_84QJd8PHmw-79UJmVwz05g_u0exvb9w');
   const escape = value => String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const starText = rating => '★'.repeat(Number(rating)) + '☆'.repeat(5 - Number(rating));
   const cleanUrl = () => `${window.location.origin}${window.location.pathname}${window.location.search}`;
