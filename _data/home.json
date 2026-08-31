@@ -1,13 +1,13 @@
 {
   "hero": {
-    "brand": "DuhBuhHuh",
+    "brand": "",
     "tagline": "THE JOURNEY IS THE GOAL",
-    "eyebrow": "STREAMER TOOLS",
+    "eyebrow": "Stuff for Streamers",
     "title": "Make your stream",
     "titleAccent": "come alive.",
-    "copy": "The Road to Somewhere builds polished tools and visual experiences for streamers who want more than a collection of default widgets.",
+    "copy": "The Road to Somewhere builds tools and visual experiences for streamers who want to provide visual responses to events that happen on their streams, and content to engage their viewers.",
     "primaryAction": "Explore extensions",
-    "primaryHref": "#extensions",
+    "primaryHref": "/extensions/",
     "secondaryAction": "Explore OBS plugins",
     "secondaryHref": "/obs-plugins/",
     "routeLabel": "KEEP GOING →"
