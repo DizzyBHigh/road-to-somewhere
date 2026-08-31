@@ -20,6 +20,7 @@
 .review-star:focus-visible { outline:1px solid var(--accent); outline-offset:4px; }
 .review-form-message, .reviews-empty { color:var(--muted); font-size:13px; }
 .review-signin { margin-top:14px; }
+.review-signin[hidden] { display:none !important; }
 .review-signed-in { display:flex; align-items:center; gap:10px; margin:10px 0 16px; color:var(--body); font-size:14px; }
 .review-signed-in img { width:32px; height:32px; border-radius:50%; object-fit:cover; }
 .review-signed-in strong { color:var(--text); }
