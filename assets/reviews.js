@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const client = window.rtsSupabase || window.supabase.createClient('https://osiuynezqmocapioekoa.supabase.co', 'sb_publishable_84QJd8PHmw-79UJmVwz05g_u0exvb9w');
   const escape = value => String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const starText = rating => '★'.repeat(Number(rating)) + '☆'.repeat(5 - Number(rating));
-  const cleanUrl = () => `${window.location.origin}${window.location.pathname}${window.location.search}`;
   const { data: extension, error: extensionError } = await client.from('extensions').select('id').eq('slug', root.dataset.extensionSlug).single();
   if (extensionError) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
 
@@ -54,11 +53,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   signin.addEventListener('click', async () => {
-    const { error } = await client.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo: cleanUrl() } });
+    sessionStorage.setItem('rts-review-return', '1');
+    const redirectTo = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+    const { error } = await client.auth.signInWithOAuth({ provider: 'discord', options: { redirectTo } });
     if (error) message.textContent = `Sign-in failed: ${error.message}`;
   });
   client.auth.onAuthStateChange((_event, session) => showUser(session?.user));
   const { data } = await client.auth.getSession();
   await showUser(data.session?.user);
   await loadReviews();
+  if (data.session?.user && sessionStorage.getItem('rts-review-return')) {
+    sessionStorage.removeItem('rts-review-return');
+    document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 });
