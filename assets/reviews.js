@@ -15,12 +15,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   if (!client) return;
   const escape = value => String(value ?? '').replace(/[&<>\'\"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
+  const cleanDiscordName = value => String(value || '').split('#')[0].trim();
   const starText = rating => '★'.repeat(Number(rating)) + '☆'.repeat(5 - Number(rating));
   const displayName = (user, profile) => {
     const metadata = user?.user_metadata || {};
     const discord = user?.identities?.find(identity => identity.provider === 'discord')?.identity_data || {};
-    return discord.global_name || metadata.global_name || discord.name || metadata.name ||
-      discord.username || metadata.user_name || metadata.full_name || profile?.display_name || 'RTS user';
+    return cleanDiscordName(discord.global_name || metadata.global_name || discord.name || metadata.name ||
+      discord.username || metadata.user_name || metadata.full_name || profile?.display_name || 'RTS user');
   };
   const { data: extension, error: extensionError } = await client.from('extensions').select('id').eq('slug', root.dataset.extensionSlug).single();
   if (extensionError) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (error) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
     const average = data.length ? data.reduce((sum, r) => sum + Number(r.rating), 0) / data.length : 0;
     summary.textContent = data.length ? `${average.toFixed(1)} / 5 · ${data.length} review${data.length === 1 ? '' : 's'}` : 'No reviews yet';
-    list.innerHTML = data.length ? data.map(review => `<article class="review-card"><div class="review-card__top"><strong>${escape(review.profiles?.display_name || 'RTS user')}</strong><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
+    list.innerHTML = data.length ? data.map(review => `<article class="review-card"><div class="review-card__top"><strong>${escape(cleanDiscordName(review.profiles?.display_name || 'RTS user'))}</strong><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
   };
 
   const showUser = async user => {
