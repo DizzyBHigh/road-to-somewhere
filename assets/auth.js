@@ -34,6 +34,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const displayName = discord.global_name || metadata.global_name || discord.name || metadata.name ||
       discord.username || metadata.user_name || metadata.full_name || profile?.display_name || 'Account';
     const avatarUrl = discord.avatar_url || metadata.avatar_url || profile?.avatar_url || '';
+
+    if (profile && (profile.display_name !== displayName || profile.avatar_url !== avatarUrl)) {
+      await client.from('profiles').update({ display_name: displayName, avatar_url: avatarUrl })
+        .eq('id', user.id);
+    }
+
     name.textContent = displayName;
     avatar.src = avatarUrl;
     avatar.alt = `${displayName} avatar`;
