@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const avatar = profile.avatar_url || '';
       const name = cleanLegacyName(profile.display_name || 'RTS user');
       const date = review.created_at ? formatDate(review.created_at) : '';
-      return `<article class="review-card"><div class="review-card__top"><div class="review-card__identity"><img src="${escape(avatar)}" alt="" class="review-card__avatar" onerror="this.style.display='none'"><div class="review-card__details"><strong>${escape(name)}</strong>${date ? `<span class="review-card__date">${escape(date)}</span>` : ''}</div></div><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`;
+      const avatarStyle = 'width:40px;height:40px;max-width:40px;max-height:40px;min-width:40px;min-height:40px;flex:0 0 40px;border-radius:50%;object-fit:cover;';
+      return `<article class="review-card"><div class="review-card__top"><div class="review-card__identity"><img src="${escape(avatar)}" alt="" class="review-card__avatar" style="${avatarStyle}" onerror="this.style.display='none'"><div class="review-card__details"><strong>${escape(name)}</strong>${date ? `<span class="review-card__date">${escape(date)}</span>` : ''}</div></div><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`;
     }).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
   };
   const showUser = async user => {
