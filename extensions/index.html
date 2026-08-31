@@ -1,0 +1,28 @@
+---
+layout: default
+title: Streamer.bot Extensions — The Road to Somewhere
+description: Streamer.bot extensions from The Road to Somewhere.
+---
+{% assign extension = site.data["rts-ban-timeout-widget"] %}
+<main>
+  <section class="section">
+    <div class="section-kicker">THE WORKSHOP</div>
+    <div class="section-heading">
+      <h3>Streamer.bot Extensions</h3>
+      <p>Tools for building more capable Streamer.bot setups.</p>
+    </div>
+    <article class="product-card">
+      <div class="product-art">
+        {% if extension.home.image %}<img src="{{ extension.home.image | relative_url }}" alt="{{ extension.name }}" class="product-image">{% else %}<div class="product-badge">01 / {{ extension.status }}</div><div class="van-lockup"><span class="crown">♛</span><span class="van">DUHBUH</span></div>{% endif %}
+      </div>
+      <div class="product-info">
+        <div class="product-type">STREAMER.BOT EXTENSION</div>
+        <h3>{{ extension.name }}</h3>
+        <p>{{ extension.description }}</p>
+        <div class="tags">{% for tag in extension.tags %}<span>{{ tag }}</span>{% endfor %}</div>
+        <div class="product-actions"><a class="button" href="{{ '/extensions/' | append: extension.slug | append: '/' | relative_url }}">View extension <span>→</span></a><span class="status">v{{ extension.version }}</span></div>
+      </div>
+      <div class="product-card-footer"><span>01</span><strong>{{ extension.website.footerLabel }}</strong><span>v{{ extension.version }}</span></div>
+    </article>
+  </section>
+</main>
