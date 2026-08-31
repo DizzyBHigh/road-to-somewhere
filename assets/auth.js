@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
   window.rtsSupabase = client;
 
+  const cleanDiscordName = value => String(value || '').split('#')[0].trim();
   const publishAuth = session => {
     window.rtsAuthSession = session;
     window.dispatchEvent(new CustomEvent('rts-auth-state', { detail: session }));
@@ -31,8 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       .select('display_name, avatar_url').eq('id', user.id).maybeSingle();
     const metadata = user.user_metadata || {};
     const discord = user.identities?.find(identity => identity.provider === 'discord')?.identity_data || {};
-    const displayName = discord.global_name || metadata.global_name || discord.name || metadata.name ||
-      discord.username || metadata.user_name || metadata.full_name || profile?.display_name || 'Account';
+    const displayName = cleanDiscordName(discord.global_name || metadata.global_name || discord.name || metadata.name ||
+      discord.username || metadata.user_name || metadata.full_name || profile?.display_name || 'Account');
     const avatarUrl = discord.avatar_url || metadata.avatar_url || profile?.avatar_url || '';
 
     if (profile && (profile.display_name !== displayName || profile.avatar_url !== avatarUrl)) {
