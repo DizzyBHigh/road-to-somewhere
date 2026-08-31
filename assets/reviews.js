@@ -39,13 +39,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!user) { state.textContent = 'Sign in with Discord to leave a review.'; signin.hidden = false; form.hidden = true; return; }
     signin.hidden = true;
     const { data: own } = await client.from('reviews').select('id,rating,body,status').eq('extension_id', extension.id).eq('user_id', user.id).maybeSingle();
-    state.textContent = own ? (own.status === 'pending' ? 'Your review is awaiting moderation.' : 'Edit your review.') : 'Share your experience.';
+    state.textContent = own ? (own.status === 'hidden' ? 'Your review is awaiting moderation.' : 'Edit your review.') : 'Share your experience.';
     form.hidden = false;
     if (own) { setRating(own.rating); form.body.value = own.body || ''; form.querySelector('button[type="submit"]').textContent = 'Update review'; }
     form.onsubmit = async event => {
       event.preventDefault(); message.textContent = 'Saving…';
       const values = Object.fromEntries(new FormData(form));
-      const payload = { extension_id: extension.id, user_id: user.id, rating: Number(values.rating), body: values.body.trim(), status: 'pending' };
+      const payload = { extension_id: extension.id, user_id: user.id, rating: Number(values.rating), body: values.body.trim(), status: 'hidden' };
       if (!payload.rating || payload.rating < 1 || payload.rating > 5) { message.textContent = 'Please select a rating.'; return; }
       const result = own ? await client.from('reviews').update(payload).eq('id', own.id).eq('user_id', user.id) : await client.from('reviews').insert(payload);
       message.textContent = result.error ? `Could not save review: ${result.error.message}` : 'Review submitted for moderation.';
