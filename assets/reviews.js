@@ -9,8 +9,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   const starsInput = form?.querySelector('[name="rating"]');
   const stars = [...root.querySelectorAll('.review-star')];
   const message = root.querySelector('[data-review-message]');
-  const client = window.rtsSupabase || window.supabase.createClient('https://osiuynezqmocapioekoa.supabase.co', 'sb_publishable_84QJd8PHmw-79UJmVwz05g_u0exvb9w');
-  const escape = value => String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const client = await new Promise(resolve => {
+    if (window.rtsSupabase) return resolve(window.rtsSupabase);
+    window.addEventListener('rts-auth-ready', () => resolve(window.rtsSupabase), { once: true });
+  });
+  if (!client) return;
+  const escape = value => String(value ?? '').replace(/[&<>\'"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[c]));
   const starText = rating => '★'.repeat(Number(rating)) + '☆'.repeat(5 - Number(rating));
   const { data: extension, error: extensionError } = await client.from('extensions').select('id').eq('slug', root.dataset.extensionSlug).single();
   if (extensionError) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
@@ -35,12 +39,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   const showUser = async user => {
-    if (!user) { state.textContent = 'Sign in with Discord to leave a review.'; signin.hidden = false; form.hidden = true; return; }
+    if (!user) {
+      state.textContent = 'Sign in with Discord to leave a review.';
+      signin.hidden = false;
+      form.hidden = true;
+      return;
+    }
     signin.hidden = true;
+    const { data: profile } = await client.from('profiles').select('display_name, avatar_url').eq('id', user.id).maybeSingle();
+    const displayName = profile?.display_name || user.user_metadata?.global_name || 'RTS user';
+    const avatarUrl = profile?.avatar_url || user.user_metadata?.avatar_url || '';
+    state.innerHTML = `<span class="review-signed-in"><img src="${escape(avatarUrl)}" alt=""><span>Signed in as <strong>${escape(displayName)}</strong></span></span>`;
     const { data: own } = await client.from('reviews').select('id,rating,body,status').eq('extension_id', extension.id).eq('user_id', user.id).maybeSingle();
-    state.textContent = own ? (own.status === 'hidden' ? 'Your review is awaiting moderation.' : 'Edit your review.') : 'Share your experience.';
     form.hidden = false;
-    if (own) { setRating(own.rating); form.body.value = own.body || ''; form.querySelector('button[type="submit"]').textContent = 'Update review'; }
+    if (own) {
+      setRating(own.rating);
+      form.body.value = own.body || '';
+      form.querySelector('button[type="submit"]').textContent = 'Update review';
+    }
     form.onsubmit = async event => {
       event.preventDefault(); message.textContent = 'Saving…';
       const values = Object.fromEntries(new FormData(form));
@@ -48,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!payload.rating || payload.rating < 1 || payload.rating > 5) { message.textContent = 'Please select a rating.'; return; }
       const result = own ? await client.from('reviews').update(payload).eq('id', own.id).eq('user_id', user.id) : await client.from('reviews').insert(payload);
       message.textContent = result.error ? `Could not save review: ${result.error.message}` : 'Review submitted for moderation.';
-      if (!result.error) { state.textContent = 'Your review is awaiting moderation.'; await loadReviews(); }
+      if (!result.error) { state.querySelector('span:last-child').textContent = 'Your review is awaiting moderation.'; await loadReviews(); }
     };
   };
 
