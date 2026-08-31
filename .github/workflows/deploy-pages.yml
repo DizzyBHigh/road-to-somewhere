@@ -75,6 +75,27 @@ jobs:
       - name: Import private extension manifests and public assets
         run: python3 tools/import-private-extensions.py
 
+      - name: Sync extensions with RTS Services
+        env:
+          RTS_SERVICES_URL: ${{ secrets.RTS_SERVICES_URL }}
+          RTS_SYNC_KEY: ${{ secrets.RTS_SYNC_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$RTS_SERVICES_URL" || { echo "RTS_SERVICES_URL is not configured"; exit 1; }
+          test -n "$RTS_SYNC_KEY" || { echo "RTS_SYNC_KEY is not configured"; exit 1; }
+          while IFS= read -r entry; do
+            path=$(echo "$entry" | jq -r '.checkoutPath')
+            manifest="$path/site/extension.json"
+            test -f "$manifest" || { echo "Missing extension manifest: $manifest"; exit 1; }
+            jq -c '{slug: .slug, name: .name, active: true}' "$manifest" \
+              | curl --fail-with-body -sS -X POST \
+                  -H "Content-Type: application/json" \
+                  -H "X-RTS-Sync-Key: $RTS_SYNC_KEY" \
+                  --data-binary @- \
+                  "$RTS_SERVICES_URL/functions/v1/sync-extension"
+            echo
+          done < <(jq -c '.extensions[]' extensions/sources.json)
+
       - name: Import OBS plugin manifests and public assets
         run: python3 tools/import-obs-plugins.py
 
