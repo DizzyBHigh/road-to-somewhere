@@ -44,7 +44,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     summary.innerHTML = data.length
       ? `<span class="reviews-summary__stars" aria-label="Average rating ${average.toFixed(1)} out of 5">${'★'.repeat(rounded)}${'☆'.repeat(5 - rounded)}</span><span class="reviews-summary__count">${data.length} review${data.length === 1 ? '' : 's'}</span>`
       : 'No reviews yet';
-    list.innerHTML = data.length ? data.map(review => `<article class="review-card"><div class="review-card__top"><strong>${escape(cleanLegacyName(review.profiles?.display_name || 'RTS user'))}</strong><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
+    list.innerHTML = data.length ? data.map(review => {
+      const profile = review.profiles || {};
+      const avatar = profile.avatar_url || '';
+      const name = cleanLegacyName(profile.display_name || 'RTS user');
+      return `<article class="review-card"><div class="review-card__top"><div class="review-card__identity">${avatar ? `<img src="${escape(avatar)}" alt="" class="review-card__avatar">` : ''}<strong>${escape(name)}</strong></div><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`;
+    }).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
   };
   const showUser = async user => {
     if (!user) {
