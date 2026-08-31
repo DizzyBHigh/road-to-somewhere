@@ -9,7 +9,7 @@ layout: default
 <main class="extension-page" data-import-url="{{ extension.website.importFilename | relative_url }}" data-overlay-zip-url="{{ extension.website.overlayZipFilename | relative_url }}">
   <section class="extension-hero">
     <div class="extension-hero-main">
-      <div class="section-kicker rts-format">{{ extension.name }}</div>
+      <div class="section-kicker">{{ extension.name }}</div>
       <h1><span class="rts-format">{{ extension_content.hero.title }}</span><br><em class="rts-format">{{ extension_content.hero.titleAccent }}</em></h1>
       <p class="extension-hero-copy rts-format">{{ extension.description }}</p>
       <div class="release-line"><span class="version">v{{ extension.version }} / {{ extension.status | upcase }}</span>{% for platform in extension.runtime.platforms %}<span>{{ platform }}</span>{% endfor %}</div>
