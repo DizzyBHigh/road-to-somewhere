@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const client = window.supabase.createClient(root.dataset.supabaseUrl, root.dataset.supabaseKey, {
     auth: { detectSessionInUrl: true, persistSession: true }
   });
+  window.rtsSupabase = client;
 
   const setSignedOut = () => {
     login.hidden = false;
