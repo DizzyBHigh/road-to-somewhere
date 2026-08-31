@@ -1,0 +1,15 @@
+.rts-auth { position: relative; flex: 0 0 auto; }
+.rts-auth__login, .rts-auth__account, .rts-auth__signout {
+  border: 1px solid var(--line); border-radius: 4px; background: var(--panel);
+  color: var(--text); cursor: pointer; font: 400 8px var(--mono);
+  text-transform: uppercase;
+}
+.rts-auth__login { padding: 6px 9px; }
+.rts-auth__account { display: flex; align-items: center; gap: 7px; padding: 4px 7px 4px 4px; }
+.rts-auth__avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+.rts-auth__name { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rts-auth__login:hover, .rts-auth__account:hover, .rts-auth__signout:hover { border-color: var(--accent); }
+.rts-auth__menu { position: absolute; right: 0; top: calc(100% + 6px); padding: 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); box-shadow: 0 8px 20px rgba(0,0,0,.2); }
+.rts-auth__signout { padding: 6px 9px; white-space: nowrap; }
+@media(max-width:900px) { .rts-auth__name { max-width: 70px; } }
+@media(max-width:760px) { .rts-auth__name { display: none; } .rts-auth__account { padding-right: 4px; } }
