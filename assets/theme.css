@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Barlow+Condensed:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Kanit:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Titillium+Web:wght@400;600;700&family=Urbanist:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #090a0b;
+  --panel: #111415;
+  --panel2: #0d0f10;
+  --line: #303331;
+  --body: #ffffff;
+  --text: #1d86e8;
+  --muted: #a9aca5;
+  --accent: #f2b900;
+  --accent2: #1d86e8;
+  --button-text: #11100a;
+  --max: 1180px;
+  --heading: 'Rajdhani', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+
+html[data-theme="light"] {
+  --bg: #f5f6f4;
+  --panel: #fff;
+  --panel2: #edf1f3;
+  --line: #cbd2d6;
+  --text: #101820;
+  --muted: #58636b;
+  --accent: #116ed0;
+  --accent2: #e8a900;
+  --button-text: #fff;
+}
+
+html[data-font="trailhead"] { --heading: 'Space Grotesk', sans-serif; --font-body: 'DM Sans', sans-serif; }
+html[data-font="waypoint"] { --heading: 'Barlow Condensed', sans-serif; --font-body: 'Barlow', sans-serif; }
+html[data-font="highway"] { --heading: 'Oswald', sans-serif; --font-body: 'Inter', sans-serif; }
+html[data-font="outpost"] { --heading: 'Kanit', sans-serif; --font-body: 'Manrope', sans-serif; }
+html[data-font="roam"] { --heading: 'Rajdhani', sans-serif; --font-body: 'Inter', sans-serif; }
+html[data-font="summit"] { --heading: 'Archivo', sans-serif; --font-body: 'DM Sans', sans-serif; }
+html[data-font="frontier"] { --heading: 'Titillium Web', sans-serif; --font-body: 'Barlow', sans-serif; }
+html[data-font="journal"] { --heading: 'Urbanist', sans-serif; --font-body: 'Manrope', sans-serif; }
