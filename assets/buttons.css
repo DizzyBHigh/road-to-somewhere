@@ -1,23 +1,22 @@
 /* Shared RTS button component. Use .button with a colour modifier. */
 .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 20px;
+  width: max-content;
+  padding: 9px 13px;
+  background: var(--accent);
+  color: var(--button-text);
+  border: 1px solid var(--accent);
+  font: 600 9px var(--mono);
+  text-transform: uppercase;
+  transition: transform .2s, filter .2s;
+  border-radius: 4px;
+  cursor: pointer;
   margin-right: 10px;
 }
-
-.button--blue {
-  background: #0384CB;
-  color: #fff;
-  border: 1px solid #0384CB;
-}
-
-.button--blue:hover {
-  filter: brightness(1.08);
-}
-
-.button:last-child {
-  margin-right: 0;
-}
-
-.download-stack .button {
-  width: 100%;
-  justify-content: space-between;
-}
+.button:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.button--gold { background: var(--accent); color: var(--button-text); border-color: var(--accent); }
+.button--blue { background: #0384CB; color: #fff; border-color: #0384CB; }
+.button:last-child { margin-right: 0; }
+.download-stack .button { width: 100%; justify-content: space-between; }
