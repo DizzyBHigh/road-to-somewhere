@@ -40,7 +40,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const { data, error } = await client.from('reviews').select('id,user_id,rating,body,created_at,status,profiles(display_name,avatar_url)').eq('extension_id', extension.id).eq('status', 'published').order('created_at', { ascending: false });
     if (error) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
     const average = data.length ? data.reduce((sum, r) => sum + Number(r.rating), 0) / data.length : 0;
-    summary.textContent = data.length ? `${average.toFixed(1)} / 5 · ${data.length} review${data.length === 1 ? '' : 's'}` : 'No reviews yet';
+    const rounded = Math.round(average);
+    summary.innerHTML = data.length
+      ? `<span class="reviews-summary__stars" aria-label="Average rating ${average.toFixed(1)} out of 5">${'★'.repeat(rounded)}${'☆'.repeat(5 - rounded)}</span><span class="reviews-summary__count">${data.length} review${data.length === 1 ? '' : 's'}</span>`
+      : 'No reviews yet';
     list.innerHTML = data.length ? data.map(review => `<article class="review-card"><div class="review-card__top"><strong>${escape(cleanLegacyName(review.profiles?.display_name || 'RTS user'))}</strong><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
   };
   const showUser = async user => {
