@@ -1,4 +1,5 @@
 .rts-auth { position: relative; flex: 0 0 auto; }
+.rts-auth [hidden] { display: none !important; }
 .rts-auth__login, .rts-auth__account, .rts-auth__signout {
   border: 1px solid var(--line); border-radius: 4px; background: var(--panel);
   color: var(--text); cursor: pointer; font: 400 8px var(--mono);
