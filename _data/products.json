@@ -2,6 +2,9 @@
   "extensions": [
     "rts-ban-timeout-widget"
   ],
+  "shared": [
+    "rts-ui-dll"
+  ],
   "other": [
     "move-workflow"
   ]
