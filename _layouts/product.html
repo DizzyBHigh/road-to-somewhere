@@ -1,0 +1,23 @@
+---
+layout: default
+---
+{% assign product = site.data[page.product_data] %}
+{% assign website = product.website %}
+<main class="product-page product-page--{{ product.type }}">
+  <section class="product-hero">
+    <div class="section-kicker rts-format">{{ website.sectionKicker | default: product.name }}</div>
+    <h1 class="rts-format">{{ website.hero.title }}<br><em class="rts-format">{{ website.hero.titleEmphasis }}</em></h1>
+    <p class="product-intro rts-format">{{ website.hero.description | default: product.description }}</p>
+    {% if product.release.version %}<div class="product-version"><strong>{{ website.hero.versionPrefix | default: "VERSION" }} {{ product.release.version }}</strong><span>{{ website.hero.versionLabel }}</span></div>{% endif %}
+  </section>
+  {% if website.whatItDoes %}<section class="product-grid">
+    <article class="product-card product-card--content">
+      <div class="section-kicker rts-format">{{ website.whatItDoes.kicker }}</div>
+      <h2 class="rts-format">{{ website.whatItDoes.title }}</h2>
+      <p class="rts-format">{{ website.whatItDoes.description }}</p>
+      {% if website.whatItDoes.features %}<div class="feature-list">{% for feature in website.whatItDoes.features %}<div class="feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description }}</span></div>{% endfor %}</div>{% endif %}
+      {% if website.usedBy %}<div class="product-usedby"><div class="section-kicker rts-format">{{ website.usedBy.kicker }}</div>{% for pair in site.data %}{% assign candidate = pair[1] %}{% if candidate.dependencies %}{% for dependency_pair in candidate.dependencies %}{% assign dependency = dependency_pair[1] %}{% if dependency.id == product.id %}<a href="{{ '/extensions/' | append: candidate.slug | append: '/' | relative_url }}">{{ candidate.name }} v{{ candidate.version }} {{ website.usedBy.linkSuffix }}</a>{% endif %}{% endfor %}{% endif %}{% endfor %}</div>{% endif %}
+    </article>
+    {% include product-installation.html product=product %}
+  </section>{% endif %}
+</main>
