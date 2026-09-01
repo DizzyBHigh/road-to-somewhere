@@ -8,14 +8,14 @@
     "copy": "The Road to Somewhere builds tools and visual experiences for streamers who want to provide visual responses to events that happen on their streams, and content to engage their viewers.",
     "primaryAction": "Explore extensions",
     "primaryHref": "/extensions/",
-    "secondaryAction": "Explore OBS plugins",
-    "secondaryHref": "/obs-plugins/",
+    "secondaryAction": "Explore tools",
+    "secondaryHref": "/other-tools/",
     "routeLabel": "KEEP GOING →"
   },
   "sections": [
     "extensions",
     "shared",
-    "other",
+    "other-tools",
     "about",
     "support"
   ],
@@ -29,7 +29,7 @@
     "title": "Shared components for the extension family.",
     "text": "Core components used by The Road to Somewhere extensions."
   },
-  "other": {
+  "other-tools": {
     "kicker": "OTHER TOOLS",
     "title": "Tools for your streaming setup.",
     "text": "Useful tools for OBS and the wider streaming workflow."
