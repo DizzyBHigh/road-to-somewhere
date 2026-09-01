@@ -1,0 +1,33 @@
+---
+layout: default
+title: Other Tools — The Road to Somewhere
+description: Other tools from The Road to Somewhere.
+---
+{% assign products = site.data.products %}
+<main>
+  <section class="section">
+    <div class="section-kicker">OTHER TOOLS</div>
+    <div class="section-heading">
+      <h3>Tools for your streaming setup.</h3>
+      <p>Useful tools for OBS and the wider streaming workflow.</p>
+    </div>
+    {% for slug in products.other %}
+      {% assign tool = site.data[slug] %}
+      {% if tool %}
+      <article class="product-card">
+        <div class="product-art">
+          {% if tool.home.image %}<img src="{{ tool.home.image | relative_url }}" alt="{{ tool.name }}" class="product-image">{% else %}<div class="product-badge">{{ tool.version }}</div><div class="van-lockup"><span class="van">{{ tool.name }}</span></div>{% endif %}
+        </div>
+        <div class="product-info">
+          <div class="product-type">OTHER TOOL</div>
+          <h3>{{ tool.name }}</h3>
+          <p class="rts-format">{{ tool.description }}</p>
+          <div class="tags">{% for tag in tool.tags %}<span>{{ tag }}</span>{% endfor %}</div>
+          <div class="product-actions"><a class="button" href="{{ '/other/' | append: slug | append: '/' | relative_url }}">View tool <span>→</span></a><span class="status">v{{ tool.version }}</span></div>
+        </div>
+        <div class="product-card-footer"><span>{{ forloop.index | prepend: '0' }}</span><strong>{{ tool.website.footerLabel }}</strong><span>v{{ tool.version }}</span></div>
+      </article>
+      {% endif %}
+    {% endfor %}
+  </section>
+</main>
