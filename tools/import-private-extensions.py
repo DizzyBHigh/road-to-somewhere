@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Import the publishable surface of private RTS extension repositories.
-
-The private repository remains the source of truth. Only the extension manifest,
-explicitly published assets, and a tiny generated page stub are copied into the
-public Jekyll tree. Page content stays in the private manifest.
-"""
+"""Import the publishable surface of private RTS product repositories."""
 from __future__ import annotations
 import json
 import shutil
@@ -17,9 +12,11 @@ SOURCES = ROOT / "extensions" / "sources.json"
 DATA_DIR = ROOT / "_data"
 EXT_DIR = ROOT / "extensions"
 
+
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
     raise SystemExit(1)
+
 
 def load_json(path: Path) -> dict:
     try:
@@ -27,12 +24,14 @@ def load_json(path: Path) -> dict:
     except Exception as exc:
         fail(f"Could not read JSON {path}: {exc}")
 
+
 def safe_relative(root: Path, relative: str) -> Path:
     candidate = (root / relative).resolve()
     root_resolved = root.resolve()
     if candidate != root_resolved and root_resolved not in candidate.parents:
         fail(f"Path escapes source repository: {relative}")
     return candidate
+
 
 def copy_tree(source: Path, destination: Path) -> bool:
     if not source.exists():
@@ -46,12 +45,14 @@ def copy_tree(source: Path, destination: Path) -> bool:
             shutil.copy2(item, target)
     return True
 
+
 def copy_file(source: Path, destination: Path) -> bool:
     if not source.is_file():
         return False
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
     return True
+
 
 def create_overlay_zip(overlay_source: Path, destination: Path) -> None:
     """Create a ZIP containing the complete contents of the published overlay."""
@@ -60,6 +61,7 @@ def create_overlay_zip(overlay_source: Path, destination: Path) -> None:
         for item in sorted(overlay_source.rglob("*")):
             if item.is_file():
                 archive.write(item, item.relative_to(overlay_source).as_posix())
+
 
 def versioned_import_filename(filename: str, version: str) -> str:
     """Insert the extension version into the published import filename."""
@@ -72,6 +74,7 @@ def versioned_import_filename(filename: str, version: str) -> str:
     else:
         stem = f"{stem} v{version}"
     return f"{stem}{suffix}"
+
 
 def rewrite_published_asset_paths(value, slug: str):
     """Rewrite extension-owned asset paths to paths relative to the extension page."""
@@ -87,6 +90,7 @@ def rewrite_published_asset_paths(value, slug: str):
     if isinstance(value, list):
         return [rewrite_published_asset_paths(item, slug) for item in value]
     return value
+
 
 def populate_dependency_information(manifest: dict) -> None:
     """Populate generated dependency text from the dependency definition."""
@@ -113,6 +117,7 @@ def populate_dependency_information(manifest: dict) -> None:
         fail(f"dependency {dependency_id}: minimumVersion is required")
     dll_info["text"] = f"This extension requires {name} {minimum_version} or newer."
 
+
 def write_page_stub(public_extension_dir: Path, slug: str, name: str, version: str, description: str) -> None:
     """Generate the minimal Jekyll product page stub."""
     page = (
@@ -126,12 +131,13 @@ def write_page_stub(public_extension_dir: Path, slug: str, name: str, version: s
     )
     (public_extension_dir / "index.html").write_text(page, encoding="utf-8")
 
+
 def import_extension(entry: dict) -> None:
     repository = entry.get("repository", "")
     if not isinstance(repository, str) or "/" not in repository:
-        fail("Extension source requires repository")
+        fail("Product source requires repository")
     repo_dir = (ROOT / entry.get("checkoutPath", f".import-src/{repository.rsplit('/', 1)[-1]}")).resolve()
-    manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/extension.json"))
+    manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/rts.json"))
     manifest = load_json(manifest_path)
     if manifest.get("schemaVersion") != 1:
         fail(f"{manifest_path}: unsupported schemaVersion")
@@ -200,16 +206,18 @@ def import_extension(entry: dict) -> None:
     write_page_stub(public_extension_dir, slug, name, version, description)
     print(f"Imported {name} v{version} -> {slug}")
 
+
 def main() -> None:
     registry = load_json(SOURCES)
     if registry.get("schemaVersion") != 1:
         fail("Unsupported extensions/sources.json schemaVersion")
     entries = registry.get("extensions", [])
     if not entries:
-        print("No private extension sources configured.")
+        print("No private product sources configured.")
         return
     for entry in entries:
         import_extension(entry)
+
 
 if __name__ == "__main__":
     main()
