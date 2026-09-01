@@ -1,0 +1,11 @@
+{% assign installation = include.product.website.installation %}
+{% if installation %}
+<aside class="product-card product-card--installation" id="installation">
+  <div class="section-kicker rts-format">{{ installation.kicker }}</div>
+  <h2 class="rts-format">{{ installation.title }}</h2>
+  <p class="rts-format">{{ installation.description }}</p>
+  {% if installation.steps %}<ol class="product-steps">{% for step in installation.steps %}<li><span class="product-step-text rts-format">{{ step }}</span></li>{% endfor %}</ol>{% endif %}
+  {% if installation.note %}<div class="product-note"><strong class="rts-format">{{ installation.noteLabel }}</strong> <span class="rts-format">{{ installation.note }}</span></div>{% endif %}
+  {% if include.product.release.downloadUrl %}<a class="button product-download" href="{{ include.product.release.downloadUrl }}">{{ installation.downloadLabel | default: "Download" }} <span>{{ installation.downloadSuffix }}</span></a>{% endif %}
+</aside>
+{% endif %}
