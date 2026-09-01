@@ -46,6 +46,39 @@ def latest_release(repository: str) -> dict:
         fail(f"Could not retrieve latest release for {repository}: {exc}")
 
 
+def normalise_website(product: dict) -> None:
+    website = product.get("website", {})
+    hero = website.get("hero", {})
+    what_it_does = website.get("whatItDoes", {})
+    installation = website.get("installation", {})
+
+    product["hero"] = {
+        "kicker": website.get("sectionKicker", product.get("name", "")),
+        "title": hero.get("title", product.get("name", "")),
+        "titleEmphasis": hero.get("titleEmphasis"),
+        "intro": hero.get("description", product.get("description", "")),
+    }
+    product["content"] = {
+        "experience": {
+            "kicker": what_it_does.get("kicker", "WHAT IT DOES"),
+            "title": what_it_does.get("title", "What it does."),
+            "text": what_it_does.get("description", ""),
+            "features": what_it_does.get("features", []),
+        },
+        "usedBy": website.get("usedBy"),
+    }
+    if installation:
+        product["setup"] = {
+            "title": installation.get("title", "Installation"),
+            "intro": installation.get("description", ""),
+            "steps": [
+                {"number": index + 1, "title": step}
+                if isinstance(step, str) else step
+                for index, step in enumerate(installation.get("steps", []))
+            ],
+        }
+
+
 def write_page_stub(product: dict) -> None:
     page_url = product.get("page", {}).get("url", "/dll/").strip("/")
     page_dir = ROOT / page_url
@@ -86,8 +119,18 @@ def import_dll(entry: dict) -> None:
         fail(f"Latest release for {repository} does not contain asset {release['asset']}")
     public_manifest = json.loads(json.dumps(manifest))
     version = tag[1:] if tag.startswith("v") else tag
+    download_url = asset.get("browser_download_url", "")
     public_manifest["version"] = version
-    public_manifest["release"] = {**release, "version": version, "tag": tag, "downloadUrl": asset.get("browser_download_url"), "releaseUrl": release_data.get("html_url")}
+    public_manifest["release"] = {
+        **release,
+        "version": version,
+        "tag": tag,
+        "downloadUrl": download_url,
+        "releaseUrl": release_data.get("html_url"),
+        "assets": [{"name": asset.get("name", release["asset"]), "downloadUrl": download_url}],
+    }
+    public_manifest["releaseUrl"] = release_data.get("html_url", "")
+    normalise_website(public_manifest)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     (DATA_DIR / f"{slug}.json").write_text(json.dumps(public_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     write_page_stub(public_manifest)
