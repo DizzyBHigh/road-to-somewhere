@@ -3,21 +3,80 @@ layout: default
 ---
 {% assign product = site.data[page.product_data] %}
 {% assign website = product.website %}
-<main class="product-page product-page--{{ product.type }}">
+{% assign hero = product.hero | default: website.hero %}
+<main class="product-page product-page--{{ product.type | default: product.category }}">
   <section class="product-hero">
-    <div class="section-kicker rts-format">{{ website.sectionKicker | default: product.name }}</div>
-    <h1 class="rts-format">{{ website.hero.title }}<br><em class="rts-format">{{ website.hero.titleEmphasis }}</em></h1>
-    <p class="product-intro rts-format">{{ website.hero.description | default: product.description }}</p>
-    {% if product.release.version %}<div class="product-version"><strong>{{ website.hero.versionPrefix | default: "VERSION" }} {{ product.release.version }}</strong><span>{{ website.hero.versionLabel }}</span></div>{% endif %}
+    <div class="product-hero-main">
+      <div class="section-kicker rts-format">{{ hero.kicker | default: website.sectionKicker | default: product.name }}</div>
+      <h1 class="rts-format">{{ hero.title | default: product.name }}{% if hero.titleEmphasis %}<br><em>{{ hero.titleEmphasis }}</em>{% endif %}</h1>
+      <p class="product-intro rts-format">{{ hero.intro | default: hero.description | default: product.description }}</p>
+      <div class="product-meta">
+        <span>v{{ product.version | default: product.release.version }}</span>
+        {% if product.category %}<span>{{ product.category }}</span>{% endif %}
+        {% if product.author %}<span>{{ product.author }}</span>{% endif %}
+      </div>
+    </div>
+    {% if product.release %}
+    <aside class="product-release">
+      <div>
+        <div class="section-kicker">LATEST RELEASE</div>
+        <h2>{{ product.version | default: product.release.tag }}</h2>
+        <p>Download the current release directly from GitHub.</p>
+      </div>
+      <div class="product-downloads">
+        {% for asset in product.release.assets %}
+          {% if asset.downloadUrl != '' %}
+          <a class="product-download" href="{{ asset.downloadUrl }}"><span>{{ asset.name }}</span><small>DOWNLOAD ↓</small></a>
+          {% endif %}
+        {% endfor %}
+        {% if product.releaseUrl %}<a class="secondary-button" href="{{ product.releaseUrl }}">View release on GitHub ↗</a>{% endif %}
+      </div>
+    </aside>
+    {% endif %}
   </section>
-  {% if website.whatItDoes %}<section class="product-grid">
+
+  <section class="product-section">
     <article class="product-card product-card--content">
-      <div class="section-kicker rts-format">{{ website.whatItDoes.kicker }}</div>
-      <h2 class="rts-format">{{ website.whatItDoes.title }}</h2>
-      <p class="rts-format">{{ website.whatItDoes.description }}</p>
-      {% if website.whatItDoes.features %}<div class="feature-list">{% for feature in website.whatItDoes.features %}<div class="feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description }}</span></div>{% endfor %}</div>{% endif %}
-      {% if website.usedBy %}<div class="product-usedby"><div class="section-kicker rts-format">{{ website.usedBy.kicker }}</div>{% for pair in site.data %}{% assign candidate = pair[1] %}{% if candidate.dependencies %}{% for dependency_pair in candidate.dependencies %}{% assign dependency = dependency_pair[1] %}{% if dependency.id == product.id %}<a href="{{ '/extensions/' | append: candidate.slug | append: '/' | relative_url }}">{{ candidate.name }} v{{ candidate.version }} {{ website.usedBy.linkSuffix }}</a>{% endif %}{% endfor %}{% endif %}{% endfor %}</div>{% endif %}
+      <div class="section-kicker">WHAT IT DOES</div>
+      <h2>{{ website.whatItDoes.title | default: "What it does." }}</h2>
+      <p class="product-intro rts-format">{{ website.whatItDoes.description | default: product.description }}</p>
+      {% if product.features %}
+      <div class="product-features">
+        {% for feature in product.features %}
+        <article class="product-feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description }}</span></article>
+        {% endfor %}
+      </div>
+      {% elsif website.whatItDoes.features %}
+      <div class="product-features">
+        {% for feature in website.whatItDoes.features %}
+        <article class="product-feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description }}</span></article>
+        {% endfor %}
+      </div>
+      {% endif %}
     </article>
-    {% include product-installation.html product=product %}
-  </section>{% endif %}
+  </section>
+
+  {% if product.requirements %}
+  <section class="product-section"><article class="product-card">
+    <div class="section-kicker">REQUIREMENTS</div>
+    <h2>Before you install.</h2>
+    <ul class="product-list">{% for requirement in product.requirements %}<li class="rts-format">{{ requirement }}</li>{% endfor %}</ul>
+  </article></section>
+  {% endif %}
+
+  {% if product.setup %}{% include product-guide.html data=product.setup id="install" kicker="INSTALLATION" %}{% endif %}
+  {% if product.gettingStarted %}{% include product-guide.html data=product.gettingStarted id="getting-started" kicker="GETTING STARTED" %}{% endif %}
+
+  {% if product.notes or product.links %}
+  <section class="product-section"><article class="product-card">
+    <div class="section-kicker">IMPORTANT NOTES</div>
+    {% if product.notes %}<ul class="product-list">{% for note in product.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}
+    <div class="product-links">
+      {% if product.repository %}<a class="secondary-button" href="{{ product.repository }}">Source repository ↗</a>{% endif %}
+      {% for link in product.links %}<a class="secondary-button" href="{{ link[1] }}">{{ link[0] }} ↗</a>{% endfor %}
+    </div>
+  </article></section>
+  {% endif %}
+
+  <div class="product-page-footer"><span>{{ product.name | upcase }}</span><span>v{{ product.version }}</span><span>{{ website.footerLabel }}</span></div>
 </main>
