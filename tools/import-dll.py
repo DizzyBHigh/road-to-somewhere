@@ -95,7 +95,7 @@ def import_dll(entry: dict) -> None:
     if not isinstance(repository, str) or "/" not in repository:
         fail("Shared product source requires repository")
     repo_dir = (ROOT / entry.get("checkoutPath", f".import-src/{repository.rsplit('/', 1)[-1]}")).resolve()
-    manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/dll.json"))
+    manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/rts.json"))
     manifest = load_json(manifest_path)
     if manifest.get("schemaVersion") != 1:
         fail(f"{manifest_path}: unsupported schemaVersion")
