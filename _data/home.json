@@ -14,7 +14,7 @@
   },
   "sections": [
     "extensions",
-    "obs-plugins",
+    "other",
     "about",
     "support"
   ],
@@ -23,10 +23,10 @@
     "title": "Streamer.bot Extensions",
     "text": "Built to be installed easily, configured clearly, and seen on stream."
   },
-  "obsPlugins": {
-    "kicker": "OBS STUDIO",
-    "title": "OBS Plugins",
-    "text": "Native OBS tools for building more capable scenes, workflows, and interactions."
+  "other": {
+    "kicker": "OTHER TOOLS",
+    "title": "Tools for your streaming setup.",
+    "text": "Useful tools for OBS and the wider streaming workflow."
   },
   "about": {
     "kicker": "THE IDEA",
