@@ -10,6 +10,7 @@ layout: default
 {% assign features = product.features | default: content.experience.features %}
 {% if content.demo %}<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}">{% endif %}
 {% if content.settings %}<link rel="stylesheet" href="{{ '/assets/extension.css' | relative_url }}">{% endif %}
+{% if product.category == 'extension' %}<link rel="stylesheet" href="{{ '/assets/reviews.css' | relative_url }}">{% endif %}
 <link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
 <main class="product-page product-page--{{ product.type | default: product.category }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}" data-overlay-zip-url="{{ product.website.overlayZipFilename | relative_url }}">
   <section class="product-hero">
@@ -31,5 +32,6 @@ layout: default
   {% if getting_started %}{% include product-guide.html data=getting_started id="getting-started" kicker="GETTING STARTED" %}{% endif %}
   {% if content.settings %}{% include product-settings.html data=content.settings id="settings" %}{% endif %}
   {% if product.notes or product.links %}<section class="product-section"><article class="product-content-card"><div class="section-kicker">IMPORTANT NOTES</div>{% if product.notes %}<ul class="product-list">{% for note in product.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}<div class="product-links">{% if product.repository %}<a class="secondary-button" href="{{ product.repository }}">Source repository ↗</a>{% endif %}{% for link in product.links %}<a class="secondary-button" href="{{ link[1] }}">{{ link[0] }} ↗</a>{% endfor %}</div></article></section>{% endif %}
+  {% if product.category == 'extension' %}{% include product-reviews.html product=product %}<script src="{{ '/assets/product-reviews.js' | relative_url }}" defer></script>{% endif %}
   <div class="product-page-footer"><span>{{ product.name | upcase }}</span><span>v{{ product.version }}</span><span>{{ product.website.footerLabel }}</span></div>
 </main>
