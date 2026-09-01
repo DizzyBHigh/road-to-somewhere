@@ -4,16 +4,14 @@
     {
       "repository": "DizzyBHigh/RTS-Ban-Timeout-Widget",
       "ref": "main",
-      "manifest": "site/extension.json",
-      "checkoutPath": ".import-src/rts-ban-timeout-widget"
+      "manifest": "site/extension.json"
     }
   ],
   "dlls": [
     {
       "repository": "DizzyBHigh/RTS-UI-Dll",
       "ref": "main",
-      "manifest": "site/dll.json",
-      "checkoutPath": ".import-src/rts-ui-dll"
+      "manifest": "site/dll.json"
     }
   ]
 }
