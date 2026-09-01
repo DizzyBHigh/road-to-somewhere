@@ -1,0 +1,30 @@
+<section class="product-guide" id="{{ include.id | default: 'guide' }}">
+  <article class="product-card">
+    <div class="product-guide-heading">
+      <div class="section-kicker">{{ include.kicker | default: 'GUIDE' }}</div>
+      <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}Content" aria-expanded="true">Collapse</button>
+    </div>
+    <div class="collapsible-content" id="{{ include.id }}Content">
+      <h2 class="rts-format">{{ include.data.title }}</h2>
+      {% if include.data.intro %}<p class="product-guide-intro rts-format">{{ include.data.intro }}</p>{% endif %}
+      <ol class="product-guide-list">
+        {% for step in include.data.steps %}
+        <li class="product-guide-step">
+          <div class="product-step-heading"><span>{{ step.number }}</span><strong class="rts-format">{{ step.title }}</strong></div>
+          {% if step.description %}<p class="product-step-description rts-format">{{ step.description }}</p>{% endif %}
+          {% if step.substeps and step.substeps.size > 0 %}
+          <div class="product-substeps">
+            {% for substep in step.substeps %}
+            <article class="product-substep">
+              <div><span>{{ substep.number }}</span><h3 class="rts-format">{{ substep.title }}</h3>{% if substep.text %}<p class="rts-format">{{ substep.text }}</p>{% endif %}</div>
+              {% if substep.images and substep.images.size > 0 %}<div class="product-substep-images">{% for image in substep.images %}<figure><img src="{{ image.src | relative_url }}" alt="{{ image.alt }}" loading="lazy"></figure>{% endfor %}</div>{% endif %}
+            </article>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </article>
+</section>
