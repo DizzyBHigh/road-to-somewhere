@@ -1,0 +1,18 @@
+{% assign experience = include.data %}
+{% assign features = include.features | default: experience.features %}
+{% if experience or features %}
+<section class="product-section">
+  <article class="product-card product-card--content">
+    <div class="section-kicker rts-format">{{ experience.kicker | default: "WHAT IT DOES" }}</div>
+    <h2 class="rts-format">{{ experience.title | default: "What it does." }}</h2>
+    <p class="product-intro rts-format">{{ experience.text | default: include.description }}</p>
+    {% if features %}
+    <div class="product-features">
+      {% for feature in features %}
+      <article class="product-feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description | default: feature.text }}</span></article>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </article>
+</section>
+{% endif %}
