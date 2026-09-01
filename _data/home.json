@@ -14,6 +14,7 @@
   },
   "sections": [
     "extensions",
+    "shared",
     "other",
     "about",
     "support"
@@ -22,6 +23,11 @@
     "kicker": "THE WORKSHOP",
     "title": "Streamer.bot Extensions",
     "text": "Built to be installed easily, configured clearly, and seen on stream."
+  },
+  "shared": {
+    "kicker": "SHARED",
+    "title": "Shared components for the extension family.",
+    "text": "Core components used by The Road to Somewhere extensions."
   },
   "other": {
     "kicker": "OTHER TOOLS",
