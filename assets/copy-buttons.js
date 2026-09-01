@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = document.querySelector('[data-import-url], [data-overlay-url]');
   if (!page) return;
 
-  const copyText = async (button, text, label) => {
-    if (!text || text === window.location.href || text.endsWith('/')) return;
+  const copyText = async (button, text) => {
+    if (!text) return;
     await navigator.clipboard.writeText(text);
     const original = button.innerHTML;
     button.textContent = 'Copied ✓';
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     importButton.addEventListener('click', async () => {
       try {
         const response = await fetch(page.dataset.importUrl);
-        await copyText(importButton, await response.text(), 'Copy Import');
+        await copyText(importButton, await response.text());
       } catch (error) {
         console.error('Could not copy import code:', error);
       }
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (overlayButton && page.dataset.overlayUrl) {
     overlayButton.addEventListener('click', async () => {
       try {
-        await copyText(overlayButton, new URL(page.dataset.overlayUrl, window.location.origin).href, 'Copy Overlay URL');
+        await copyText(overlayButton, new URL(page.dataset.overlayUrl, window.location.origin).href);
       } catch (error) {
         console.error('Could not copy overlay URL:', error);
       }
