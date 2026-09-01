@@ -9,6 +9,8 @@ layout: default
 {% assign release = product.release | default: content.release %}
 {% assign features = product.features | default: content.experience.features %}
 <link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
+{% if content.demo %}<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}">{% endif %}
+{% if content.settings %}<link rel="stylesheet" href="{{ '/assets/extension.css' | relative_url }}">{% endif %}
 {% if content.demo %}<script src="{{ '/assets/demo-player.js' | relative_url }}"></script>{% endif %}
 <main class="product-page product-page--{{ product.type | default: product.category }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}">
   <section class="product-hero">
@@ -21,15 +23,7 @@ layout: default
     {% include product-release.html data=release product=product %}
   </section>
 
-  {% if product.features or content.experience %}
-  <section class="product-section"><article class="product-card product-card--content">
-    <div class="section-kicker rts-format">{{ content.experience.kicker | default: "WHAT IT DOES" }}</div>
-    <h2 class="rts-format">{{ content.experience.title | default: "What it does." }}</h2>
-    <p class="product-intro rts-format">{{ content.experience.text | default: product.description }}</p>
-    {% if features %}<div class="product-features">{% for feature in features %}<article class="product-feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description | default: feature.text }}</span></article>{% endfor %}</div>{% endif %}
-  </article></section>
-  {% endif %}
-
+  {% include product-experience.html data=content.experience features=features description=product.description %}
   {% if content.demo %}{% include product-demo.html data=content.demo %}{% endif %}
   {% if content.video and content.demo == nil %}<section class="product-section"><article class="product-card"><div class="section-kicker rts-format">{{ content.video.kicker }}</div><h2 class="rts-format">{{ content.video.title }}</h2><p class="product-intro rts-format">{{ content.video.message }}</p><p class="rts-format">{{ content.video.text }}</p></article></section>{% endif %}
   {% if product.requirements %}<section class="product-section"><article class="product-card"><div class="section-kicker">REQUIREMENTS</div><h2>Before you install.</h2><ul class="product-list">{% for item in product.requirements %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul></article></section>{% endif %}
