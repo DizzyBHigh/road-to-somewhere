@@ -123,40 +123,46 @@ def import_extension(entry: dict) -> None:
     content = manifest.get("content")
     if content is not None and not isinstance(content, dict):
         fail(f"{manifest_path}: content must be an object when present")
-    try:
-        release = latest_release(repository)
-        version = release_version(release)
-        overlay_asset = find_asset(release, "overlay")
-        import_asset = find_asset(release, "import")
-    except RuntimeError as exc:
-        fail(str(exc))
     public_manifest = json.loads(json.dumps(manifest))
     publish = public_manifest.pop("publish", {})
     populate_dependency_information(public_manifest)
-    public_manifest["version"] = version
     website = public_manifest.setdefault("website", {})
     public_extension_dir = EXT_DIR / slug
     public_extension_dir.mkdir(parents=True, exist_ok=True)
-    if publish.get("overlay"):
-        overlay_zip_name = f"overlay {version}.zip"
-        for old in public_extension_dir.glob("overlay *.zip"):
-            old.unlink()
-        overlay_zip_destination = public_extension_dir / overlay_zip_name
+    release = None
+    if publish.get("overlay") or publish.get("importFile"):
         try:
+            release = latest_release(repository)
+            version = release_version(release)
+        except RuntimeError as exc:
+            fail(str(exc))
+        public_manifest["version"] = version
+    else:
+        version = public_manifest.get("version", "")
+    if publish.get("overlay"):
+        try:
+            overlay_asset = find_asset(release, "overlay")
+            overlay_zip_name = f"overlay {version}.zip"
+            for old in public_extension_dir.glob("overlay *.zip"):
+                old.unlink()
+            overlay_zip_destination = public_extension_dir / overlay_zip_name
             download_asset(overlay_asset, overlay_zip_destination)
-            if (public_extension_dir / "overlay").exists():
-                shutil.rmtree(public_extension_dir / "overlay")
+            overlay_destination = public_extension_dir / "overlay"
+            if overlay_destination.exists():
+                shutil.rmtree(overlay_destination)
+            overlay_destination.mkdir(parents=True)
             with zipfile.ZipFile(overlay_zip_destination) as archive:
-                archive.extractall(public_extension_dir / "overlay")
+                archive.extractall(overlay_destination)
         except (OSError, zipfile.BadZipFile, RuntimeError) as exc:
             fail(f"Could not publish overlay from latest release: {exc}")
         website["overlayUrl"] = f"/extensions/{slug}/overlay/"
         website["overlayZipFilename"] = f"extensions/{slug}/{overlay_zip_name}"
     if publish.get("importFile"):
-        for old in public_extension_dir.glob("*Import Code*.txt"):
-            old.unlink()
-        published_name = versioned_import_filename(publish["importFile"], version)
         try:
+            import_asset = find_asset(release, "import")
+            for old in public_extension_dir.glob("*Import Code*.txt"):
+                old.unlink()
+            published_name = versioned_import_filename(publish["importFile"], version)
             download_asset(import_asset, public_extension_dir / published_name)
         except RuntimeError as exc:
             fail(str(exc))
