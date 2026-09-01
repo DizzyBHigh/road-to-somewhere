@@ -18,19 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
       input.remove();
     }
 
-    const label = button.querySelector('.rts-format');
+    const label = button.querySelector('.copy-button-label') || button.querySelector('.rts-format');
     const originalLabel = label ? label.textContent : button.textContent.replace('⧉', '').trim();
-    const originalWidth = button.offsetWidth;
-    button.style.width = `${originalWidth}px`;
-    button.style.minWidth = `${originalWidth}px`;
     if (label) label.textContent = 'Copied';
     button.classList.add('copied');
 
     window.setTimeout(() => {
       if (label) label.textContent = originalLabel;
       button.classList.remove('copied');
-      button.style.width = '';
-      button.style.minWidth = '';
     }, 1600);
   };
 
