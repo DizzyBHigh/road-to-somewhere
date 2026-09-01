@@ -11,7 +11,7 @@
     {
       "repository": "DizzyBHigh/RTS-UI-Dll",
       "ref": "main",
-      "manifest": "site/dll.json"
+      "manifest": "site/rts.json"
     }
   ]
 }
