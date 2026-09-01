@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Import the public RTS presentation surface of OBS plugin repositories.
-
-OBS plugins remain independent projects. Their buildspec.json and README.md
-are not modified for RTS; this importer reads build metadata, the RTS-specific
-site/rts.json contract, public release information, and optional site images.
-"""
+"""Import the public RTS presentation surface of OBS plugin repositories."""
 
 from __future__ import annotations
 
@@ -18,7 +13,7 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = ROOT / "obs-plugins" / "sources.json"
 DATA_DIR = ROOT / "_data"
-PLUGIN_DIR = ROOT / "obs-plugins"
+PRODUCT_DIR = ROOT / "other-tools"
 
 
 def fail(message: str) -> None:
@@ -97,12 +92,12 @@ def latest_release(repository: str) -> dict:
     }
 
 
-def rewrite_image_paths(value, slug: str):
+def rewrite_image_paths(value, slug: str) -> object:
     if isinstance(value, dict):
         result = {}
         for key, item in value.items():
             if key == "src" and isinstance(item, str) and item.startswith("images/"):
-                result[key] = f"/obs-plugins/{slug}/assets/{item.removeprefix('images/')}"
+                result[key] = f"/other-tools/{slug}/assets/{item.removeprefix('images/')}"
             else:
                 result[key] = rewrite_image_paths(item, slug)
         return result
@@ -149,11 +144,10 @@ def import_plugin(entry: dict) -> None:
     public_data["releaseUrl"] = release.get("url") or f"https://github.com/{repository}/releases/tag/{release_tag}"
     public_data["website"] = public_data.get("website") if isinstance(public_data.get("website"), dict) else {}
     public_data["website"]["footerLabel"] = public_data["website"].get("footerLabel", "The road is open.")
-
     public_data = rewrite_image_paths(public_data, slug)
 
-    public_plugin_dir = PLUGIN_DIR / slug
-    assets_destination = public_plugin_dir / "assets"
+    public_product_dir = PRODUCT_DIR / slug
+    assets_destination = public_product_dir / "assets"
     if assets_destination.exists():
         shutil.rmtree(assets_destination)
 
@@ -165,7 +159,7 @@ def import_plugin(entry: dict) -> None:
     data_path = DATA_DIR / f"{slug}.json"
     data_path.write_text(json.dumps(public_data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    print(f"Imported {name} v{version} -> {slug} (release {release_tag})")
+    print(f"Imported {name} v{version} -> other-tools/{slug} (release {release_tag})")
 
 
 def main() -> None:
