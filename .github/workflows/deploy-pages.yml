@@ -36,8 +36,9 @@ jobs:
           while IFS= read -r entry; do
             repo=$(echo "$entry" | jq -r '.repository')
             ref=$(echo "$entry" | jq -r '.ref // "main"')
-            path=$(echo "$entry" | jq -r '.checkoutPath')
-            test -n "$repo" && test -n "$path"
+            path=$(echo "$entry" | jq -r '.checkoutPath // empty')
+            path="${path:-.import-src/${repo##*/}}"
+            test -n "$repo"
             rm -rf "$path"
             mkdir -p "$(dirname "$path")"
             git -c "http.extraheader=AUTHORIZATION: basic $auth" \
@@ -51,8 +52,9 @@ jobs:
           while IFS= read -r entry; do
             repo=$(echo "$entry" | jq -r '.repository')
             ref=$(echo "$entry" | jq -r '.ref // "main"')
-            path=$(echo "$entry" | jq -r '.checkoutPath')
-            test -n "$repo" && test -n "$path"
+            path=$(echo "$entry" | jq -r '.checkoutPath // empty')
+            path="${path:-.import-src/${repo##*/}}"
+            test -n "$repo"
             rm -rf "$path"
             mkdir -p "$(dirname "$path")"
             git clone --depth 1 --branch "$ref" "https://github.com/$repo.git" "$path"
@@ -65,8 +67,9 @@ jobs:
           while IFS= read -r entry; do
             repo=$(echo "$entry" | jq -r '.repository')
             ref=$(echo "$entry" | jq -r '.ref // "main"')
-            path=$(echo "$entry" | jq -r '.checkoutPath')
-            test -n "$repo" && test -n "$path"
+            path=$(echo "$entry" | jq -r '.checkoutPath // empty')
+            path="${path:-.import-src/${repo##*/}}"
+            test -n "$repo"
             rm -rf "$path"
             mkdir -p "$(dirname "$path")"
             git clone --depth 1 --branch "$ref" "https://github.com/$repo.git" "$path"
@@ -84,7 +87,6 @@ jobs:
           test -n "$RTS_SERVICES_URL" || { echo "RTS_SERVICES_URL is not configured"; exit 1; }
           test -n "$RTS_SERVICES_SYNC_KEY" || { echo "RTS_SERVICES_SYNC_KEY is not configured"; exit 1; }
           while IFS= read -r entry; do
-            path=$(echo "$entry" | jq -r '.checkoutPath')
             slug=$(echo "$entry" | jq -r '.repository | split("/")[1]' | tr '[:upper:]' '[:lower:]')
             manifest="_data/$slug.json"
             test -f "$manifest" || { echo "Missing generated extension data: $manifest"; exit 1; }
