@@ -1,22 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="{{ page.description }}">
-  <title>The Road to Somewhere — {{ page.title }}</title>
-  <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/buttons.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/background.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/collapse.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/hero.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/header.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/auth.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/dll.css' | relative_url }}">
-</head>
-<body>
-{% include header.html %}
+---
+layout: default
+---
 {% assign dll = site.data[page.dll_data] %}
+<link rel="stylesheet" href="{{ '/assets/dll.css' | relative_url }}">
 <main>
   <section class="dll-hero">
     <div class="section-kicker">{{ dll.website.sectionKicker }}</div>
@@ -72,14 +58,3 @@
     </aside>
   </section>
 </main>
-{% include footer.html %}
-<script src="{{ '/assets/site.js' | relative_url }}"></script>
-<script src="{{ '/assets/formatting.js' | relative_url }}"></script>
-<script src="{{ '/assets/copy-buttons.js' | relative_url }}"></script>
-<script src="{{ '/assets/demo-player.js' | relative_url }}"></script>
-<script src="{{ '/assets/collapse.js' | relative_url }}"></script>
-<script src="{{ '/assets/extension-demo-paths.js' | relative_url }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="{{ '/assets/auth.js' | relative_url }}"></script>
-</body>
-</html>
