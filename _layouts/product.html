@@ -24,7 +24,7 @@ layout: default
   </section>
   <div class="product-feature-row">
     {% include product-experience.html data=content.experience features=features description=product.description %}
-    {% if content.demo %}{% include product-demo.html data=content.demo %}{% endif %}
+    {% include product-demo.html data=content.demo %}
   </div>
   {% if content.video and content.demo == nil %}<section class="product-section"><article class="product-content-card"><div class="section-kicker rts-format">{{ content.video.kicker }}</div><h2 class="rts-format">{{ content.video.title }}</h2><p class="product-intro rts-format">{{ content.video.message }}</p><p class="rts-format">{{ content.video.text }}</p></article></section>{% endif %}
   {% if product.requirements %}<section class="product-section"><article class="product-content-card"><div class="section-kicker">REQUIREMENTS</div><h2>Before you install.</h2><ul class="product-list">{% for item in product.requirements %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul></article></section>{% endif %}
