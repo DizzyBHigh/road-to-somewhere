@@ -9,9 +9,8 @@ layout: default
 {% assign release = product.release | default: content.release %}
 {% assign features = product.features | default: content.experience.features %}
 <link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
-{% if content.demo %}<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}">{% endif %}
+{% if content.demo %}<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}"><script src="{{ '/assets/demo-player.js' | relative_url }}"></script>{% endif %}
 {% if content.settings %}<link rel="stylesheet" href="{{ '/assets/extension.css' | relative_url }}">{% endif %}
-{% if content.demo %}<script src="{{ '/assets/demo-player.js' | relative_url }}"></script>{% endif %}
 <main class="product-page product-page--{{ product.type | default: product.category }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}">
   <section class="product-hero">
     <div class="product-hero-main">
@@ -22,7 +21,6 @@ layout: default
     </div>
     {% include product-release.html data=release product=product %}
   </section>
-
   {% include product-experience.html data=content.experience features=features description=product.description %}
   {% if content.demo %}{% include product-demo.html data=content.demo %}{% endif %}
   {% if content.video and content.demo == nil %}<section class="product-section"><article class="product-card"><div class="section-kicker rts-format">{{ content.video.kicker }}</div><h2 class="rts-format">{{ content.video.title }}</h2><p class="product-intro rts-format">{{ content.video.message }}</p><p class="rts-format">{{ content.video.text }}</p></article></section>{% endif %}
@@ -30,7 +28,6 @@ layout: default
   {% if setup %}{% include product-guide.html data=setup id="install" kicker="INSTALLATION" %}{% endif %}
   {% if getting_started %}{% include product-guide.html data=getting_started id="getting-started" kicker="GETTING STARTED" %}{% endif %}
   {% if content.settings %}{% include product-settings.html data=content.settings id="settings" %}{% endif %}
-
   {% if product.notes or product.links %}<section class="product-section"><article class="product-card"><div class="section-kicker">IMPORTANT NOTES</div>{% if product.notes %}<ul class="product-list">{% for note in product.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}<div class="product-links">{% if product.repository %}<a class="secondary-button" href="{{ product.repository }}">Source repository ↗</a>{% endif %}{% for link in product.links %}<a class="secondary-button" href="{{ link[1] }}">{{ link[0] }} ↗</a>{% endfor %}</div></article></section>{% endif %}
   <div class="product-page-footer"><span>{{ product.name | upcase }}</span><span>v{{ product.version }}</span><span>{{ product.website.footerLabel }}</span></div>
 </main>
