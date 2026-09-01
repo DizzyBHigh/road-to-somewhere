@@ -159,7 +159,10 @@ def write_page_stub(public_extension_dir: Path, slug: str, name: str, version: s
 
 
 def import_extension(entry: dict) -> None:
-    repo_dir = Path(entry["checkoutPath"]).resolve()
+    repository = entry.get("repository", "")
+    if not isinstance(repository, str) or "/" not in repository:
+        fail("Extension source requires repository")
+    repo_dir = (ROOT / entry.get("checkoutPath", f".import-src/{repository.rsplit('/', 1)[-1]}")).resolve()
     manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/extension.json"))
     manifest = load_json(manifest_path)
 
