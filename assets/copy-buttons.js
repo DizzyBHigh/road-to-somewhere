@@ -15,10 +15,20 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const importButton = document.getElementById('copyImport');
+  const importCode = document.getElementById('importCode');
   if (importButton && page.dataset.importUrl) {
+    fetch(page.dataset.importUrl)
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.text();
+      })
+      .then(text => { if (importCode) importCode.textContent = text; })
+      .catch(error => console.error('Could not load import code:', error));
+
     importButton.addEventListener('click', async () => {
       try {
         const response = await fetch(page.dataset.importUrl);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         await copyText(importButton, await response.text());
       } catch (error) {
         console.error('Could not copy import code:', error);
