@@ -2,81 +2,52 @@
 layout: default
 ---
 {% assign product = site.data[page.product_data] %}
-{% assign website = product.website %}
-{% assign hero = product.hero | default: website.hero %}
+{% assign content = product.content %}
+{% assign hero = product.hero | default: content.hero %}
+{% assign setup = product.setup | default: content.setup %}
+{% assign getting_started = product.gettingStarted | default: content.gettingStarted %}
+{% assign release = product.release | default: content.release %}
+{% assign features = product.features | default: content.experience.features %}
+<link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
+{% if content.demo %}<script src="{{ '/assets/demo-player.js' | relative_url }}"></script>{% endif %}
 <main class="product-page product-page--{{ product.type | default: product.category }}">
   <section class="product-hero">
     <div class="product-hero-main">
-      <div class="section-kicker rts-format">{{ hero.kicker | default: website.sectionKicker | default: product.name }}</div>
-      <h1 class="rts-format">{{ hero.title | default: product.name }}{% if hero.titleEmphasis %}<br><em>{{ hero.titleEmphasis }}</em>{% endif %}</h1>
+      <div class="section-kicker rts-format">{{ hero.kicker | default: product.name }}</div>
+      <h1 class="rts-format">{{ hero.title | default: product.name }}{% if hero.titleAccent %}<br><em>{{ hero.titleAccent }}</em>{% endif %}{% if hero.titleEmphasis %}<br><em>{{ hero.titleEmphasis }}</em>{% endif %}</h1>
       <p class="product-intro rts-format">{{ hero.intro | default: hero.description | default: product.description }}</p>
-      <div class="product-meta">
-        <span>v{{ product.version | default: product.release.version }}</span>
-        {% if product.category %}<span>{{ product.category }}</span>{% endif %}
-        {% if product.author %}<span>{{ product.author }}</span>{% endif %}
-      </div>
+      <div class="product-meta"><span>v{{ product.version }}</span>{% if product.category %}<span>{{ product.category }}</span>{% endif %}{% if product.author %}<span>{{ product.author }}</span>{% endif %}</div>
     </div>
-    {% if product.release %}
+    {% if release or product.releaseUrl %}
     <aside class="product-release">
-      <div>
-        <div class="section-kicker">LATEST RELEASE</div>
-        <h2>{{ product.version | default: product.release.tag }}</h2>
-        <p>Download the current release directly from GitHub.</p>
-      </div>
+      <div><div class="section-kicker">{{ release.kicker | default: "LATEST RELEASE" }}</div><h2>{{ product.version | default: release.version | default: release.tag }}</h2></div>
+      {% if product.website.importFilename %}<button class="button button--blue" id="copyImport" type="button">{{ release.copyImportLabel | default: "Copy Import" }} <span>⧉</span></button>{% endif %}
+      {% if product.website.overlayUrl %}<button class="button button--blue" id="copyOverlayUrl" type="button">{{ release.copyOverlayLabel | default: "Copy Overlay URL" }} <span>⧉</span></button>{% endif %}
       <div class="product-downloads">
-        {% for asset in product.release.assets %}
-          {% if asset.downloadUrl != '' %}
-          <a class="product-download" href="{{ asset.downloadUrl }}"><span>{{ asset.name }}</span><small>DOWNLOAD ↓</small></a>
-          {% endif %}
-        {% endfor %}
+        {% for asset in release.assets %}{% if asset.downloadUrl != '' %}<a class="product-download" href="{{ asset.downloadUrl }}"><span>{{ asset.name }}</span><small>DOWNLOAD ↓</small></a>{% endif %}{% endfor %}
+        {% if product.website.overlayZipFilename %}<a class="product-download" href="{{ product.website.overlayZipFilename | relative_url }}"><span>{{ release.downloadOverlayLabel | default: "Download Overlay" }}</span><small>DOWNLOAD ↓</small></a>{% endif %}
         {% if product.releaseUrl %}<a class="secondary-button" href="{{ product.releaseUrl }}">View release on GitHub ↗</a>{% endif %}
       </div>
     </aside>
     {% endif %}
   </section>
 
-  <section class="product-section">
-    <article class="product-card product-card--content">
-      <div class="section-kicker">WHAT IT DOES</div>
-      <h2>{{ website.whatItDoes.title | default: "What it does." }}</h2>
-      <p class="product-intro rts-format">{{ website.whatItDoes.description | default: product.description }}</p>
-      {% if product.features %}
-      <div class="product-features">
-        {% for feature in product.features %}
-        <article class="product-feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description }}</span></article>
-        {% endfor %}
-      </div>
-      {% elsif website.whatItDoes.features %}
-      <div class="product-features">
-        {% for feature in website.whatItDoes.features %}
-        <article class="product-feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description }}</span></article>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </article>
-  </section>
-
-  {% if product.requirements %}
-  <section class="product-section"><article class="product-card">
-    <div class="section-kicker">REQUIREMENTS</div>
-    <h2>Before you install.</h2>
-    <ul class="product-list">{% for requirement in product.requirements %}<li class="rts-format">{{ requirement }}</li>{% endfor %}</ul>
+  {% if product.features or content.experience %}
+  <section class="product-section"><article class="product-card product-card--content">
+    <div class="section-kicker rts-format">{{ content.experience.kicker | default: "WHAT IT DOES" }}</div>
+    <h2 class="rts-format">{{ content.experience.title | default: "What it does." }}</h2>
+    <p class="product-intro rts-format">{{ content.experience.text | default: product.description }}</p>
+    {% if features %}<div class="product-features">{% for feature in features %}<article class="product-feature"><strong class="rts-format">{{ feature.title }}</strong><span class="rts-format">{{ feature.description | default: feature.text }}</span></article>{% endfor %}</div>{% endif %}
   </article></section>
   {% endif %}
 
-  {% if product.setup %}{% include product-guide.html data=product.setup id="install" kicker="INSTALLATION" %}{% endif %}
-  {% if product.gettingStarted %}{% include product-guide.html data=product.gettingStarted id="getting-started" kicker="GETTING STARTED" %}{% endif %}
+  {% if content.demo %}{% include product-demo.html data=content.demo %}{% endif %}
+  {% if content.video and content.demo == nil %}<section class="product-section"><article class="product-card"><div class="section-kicker rts-format">{{ content.video.kicker }}</div><h2 class="rts-format">{{ content.video.title }}</h2><p class="product-intro rts-format">{{ content.video.message }}</p><p class="rts-format">{{ content.video.text }}</p></article></section>{% endif %}
+  {% if product.requirements %}<section class="product-section"><article class="product-card"><div class="section-kicker">REQUIREMENTS</div><h2>Before you install.</h2><ul class="product-list">{% for item in product.requirements %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul></article></section>{% endif %}
+  {% if setup %}{% include product-guide.html data=setup id="install" kicker="INSTALLATION" %}{% endif %}
+  {% if getting_started %}{% include product-guide.html data=getting_started id="getting-started" kicker="GETTING STARTED" %}{% endif %}
+  {% if content.settings %}{% include product-settings.html data=content.settings id="settings" %}{% endif %}
 
-  {% if product.notes or product.links %}
-  <section class="product-section"><article class="product-card">
-    <div class="section-kicker">IMPORTANT NOTES</div>
-    {% if product.notes %}<ul class="product-list">{% for note in product.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}
-    <div class="product-links">
-      {% if product.repository %}<a class="secondary-button" href="{{ product.repository }}">Source repository ↗</a>{% endif %}
-      {% for link in product.links %}<a class="secondary-button" href="{{ link[1] }}">{{ link[0] }} ↗</a>{% endfor %}
-    </div>
-  </article></section>
-  {% endif %}
-
-  <div class="product-page-footer"><span>{{ product.name | upcase }}</span><span>v{{ product.version }}</span><span>{{ website.footerLabel }}</span></div>
+  {% if product.notes or product.links %}<section class="product-section"><article class="product-card"><div class="section-kicker">IMPORTANT NOTES</div>{% if product.notes %}<ul class="product-list">{% for note in product.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}<div class="product-links">{% if product.repository %}<a class="secondary-button" href="{{ product.repository }}">Source repository ↗</a>{% endif %}{% for link in product.links %}<a class="secondary-button" href="{{ link[1] }}">{{ link[0] }} ↗</a>{% endfor %}</div></article></section>{% endif %}
+  <div class="product-page-footer"><span>{{ product.name | upcase }}</span><span>v{{ product.version }}</span><span>{{ product.website.footerLabel }}</span></div>
 </main>
