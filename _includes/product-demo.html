@@ -1,7 +1,7 @@
 {% assign demo = include.data %}
 {% if demo %}
 <section class="product-section">
-  <article class="product-card demo-card" data-demo-items='{{ demo.media | jsonify | escape }}' data-demo-autoplay="{{ demo.autoplay | default: false }}" data-demo-interval="{{ demo.interval | default: 5000 }}">
+  <article class="product-content-card demo-card" data-demo-items='{{ demo.media | jsonify | escape }}' data-demo-autoplay="{{ demo.autoplay | default: false }}" data-demo-interval="{{ demo.interval | default: 5000 }}">
     <div class="section-kicker rts-format">{{ demo.kicker | default: "PRODUCT DEMO" }}</div>
     <h2 class="rts-format">{{ demo.title | default: "See it in action." }}</h2>
     <div class="demo-player" data-demo-player>
