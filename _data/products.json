@@ -1,0 +1,8 @@
+{
+  "extensions": [
+    "rts-ban-timeout-widget"
+  ],
+  "other": [
+    "obs-move-workflow"
+  ]
+}
