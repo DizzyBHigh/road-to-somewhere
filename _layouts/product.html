@@ -8,9 +8,8 @@ layout: default
 {% assign getting_started = product.gettingStarted | default: content.gettingStarted %}
 {% assign release = product.release | default: content.release %}
 {% assign features = product.features | default: content.experience.features %}
-{% if content.demo %}<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}"><script src="{{ '/assets/demo-player.js' | relative_url }}"></script>{% endif %}
+{% if content.demo %}<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}">{% endif %}
 {% if content.settings %}<link rel="stylesheet" href="{{ '/assets/extension.css' | relative_url }}">{% endif %}
-{% if product.website.importFilename or product.website.overlayUrl %}<script src="{{ '/assets/copy-buttons.js' | relative_url }}"></script>{% endif %}
 <link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
 <main class="product-page product-page--{{ product.type | default: product.category }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}" data-overlay-zip-url="{{ product.website.overlayZipFilename | relative_url }}">
   <section class="product-hero">
