@@ -23,7 +23,7 @@ description: Other tools from The Road to Somewhere.
           <h3>{{ tool.name }}</h3>
           <p class="rts-format">{{ tool.description }}</p>
           <div class="tags">{% for tag in tool.tags %}<span>{{ tag }}</span>{% endfor %}</div>
-          <div class="product-actions"><a class="button" href="{{ '/obs-plugins/' | append: slug | append: '/' | relative_url }}">View tool <span>→</span></a><span class="status">v{{ tool.version }}</span></div>
+          <div class="product-actions"><a class="button" href="{{ '/other-tools/' | append: slug | append: '/' | relative_url }}">View tool <span>→</span></a><span class="status">v{{ tool.version }}</span></div>
         </div>
         <div class="product-card-footer"><span>{{ forloop.index | prepend: '0' }}</span><strong>{{ tool.website.footerLabel }}</strong><span>v{{ tool.version }}</span></div>
       </article>
