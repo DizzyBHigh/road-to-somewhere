@@ -1,0 +1,32 @@
+/* Shared site typography. */
+
+.section-kicker {
+  font: 600 22px/1 var(--mono);
+  letter-spacing: .08em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.section h3 {
+  font-family: var(--heading) !important;
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: -.04em;
+  line-height: .95;
+  margin: 5px 0;
+}
+
+.section-heading p,
+.copy p,
+.support p {
+  color: var(--muted);
+  max-width: 430px;
+}
+
+.copy p { font-size: 15px; margin: 0 0 11px; }
+.support h3 { max-width: 760px; }
+.support p { font-size: 14px; }
+
+@media(max-width:760px) {
+  .section h3 { font-size: 30px; }
+  .support h3 { font-size: 30px; }
+}
