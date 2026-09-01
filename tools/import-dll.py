@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import json
 import os
-import shutil
 import sys
 import urllib.error
 import urllib.request
@@ -71,7 +70,10 @@ def write_page_stub(slug: str, name: str, description: str) -> None:
 
 
 def import_dll(entry: dict) -> None:
-    repo_dir = Path(entry["checkoutPath"]).resolve()
+    repository = entry.get("repository", "")
+    if not isinstance(repository, str) or "/" not in repository:
+        fail("DLL source requires repository")
+    repo_dir = (ROOT / entry.get("checkoutPath", f".import-src/{repository.rsplit('/', 1)[-1]}")).resolve()
     manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/dll.json"))
     manifest = load_json(manifest_path)
 
@@ -101,10 +103,6 @@ def import_dll(entry: dict) -> None:
     asset_name = release.get("asset")
     if not isinstance(asset_name, str) or not asset_name.strip():
         fail(f"{manifest_path}: release.asset is required")
-
-    repository = entry.get("repository")
-    if not isinstance(repository, str) or not repository.strip():
-        fail("DLL source requires repository")
 
     release_data = latest_release(repository)
     tag = release_data.get("tag_name")
@@ -151,9 +149,6 @@ def main() -> None:
         return
 
     for entry in entries:
-        checkout = entry.get("checkoutPath")
-        if not checkout:
-            fail("DLL importer requires checkoutPath for each source")
         import_dll(entry)
 
 
