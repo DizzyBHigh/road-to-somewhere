@@ -1,0 +1,18 @@
+{% assign demo = include.data %}
+{% if demo %}
+<section class="product-section">
+  <article class="product-card demo-card" data-demo-items='{{ demo.media | jsonify | escape }}' data-demo-autoplay="{{ demo.autoplay | default: false }}" data-demo-interval="{{ demo.interval | default: 5000 }}">
+    <div class="section-kicker rts-format">{{ demo.kicker | default: "PRODUCT DEMO" }}</div>
+    <h2 class="rts-format">{{ demo.title | default: "See it in action." }}</h2>
+    <div class="demo-player" data-demo-player>
+      <div class="demo-stage">
+        <button class="demo-nav demo-nav-prev" type="button" data-demo-prev aria-label="Previous demo item">‹</button>
+        <div class="demo-media" data-demo-media></div>
+        <button class="demo-nav demo-nav-next" type="button" data-demo-next aria-label="Next demo item">›</button>
+      </div>
+      <div class="demo-controls"><div class="demo-dots" data-demo-dots aria-label="Demo slides"></div><span class="demo-counter" data-demo-counter></span></div>
+      <div class="demo-caption" data-demo-caption></div>
+    </div>
+  </article>
+</section>
+{% endif %}
