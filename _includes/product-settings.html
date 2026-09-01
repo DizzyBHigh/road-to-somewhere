@@ -1,0 +1,29 @@
+{% assign settings = include.data %}
+{% if settings %}
+<section class="product-section" id="settings">
+  <article class="product-card">
+    <div class="section-heading-row">
+      <div class="section-kicker rts-format">{{ settings.kicker | default: "SETTINGS" }}</div>
+      <button class="collapse-toggle" type="button" data-toggle="{{ include.id | default: 'settings' }}Content" aria-expanded="false">Expand +</button>
+    </div>
+    <div class="collapsible-content" id="{{ include.id | default: 'settings' }}Content" hidden>
+      <h2 class="setup-title rts-format">{{ settings.title }}</h2>
+      <p class="settings-intro rts-format">{{ settings.intro }}</p>
+      <div class="settings-groups">
+        {% for group in settings.groups %}
+        <div class="settings-group">
+          <h3 class="rts-format">{{ group.title }}</h3>
+          {% for setting in group.settings %}
+          <div class="setting-row">
+            <strong class="rts-format">{{ setting.title }}</strong>
+            <span class="rts-format">{{ setting.description }}</span>
+            {% if setting.range %}<div class="setting-range rts-format">{{ setting.range }}</div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </article>
+</section>
+{% endif %}
