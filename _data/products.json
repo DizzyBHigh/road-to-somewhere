@@ -5,7 +5,7 @@
   "shared": [
     "rts-ui-dll"
   ],
-  "obs_plugins": [
-    "obs-move-workflow"
+  "other-tools": [
+    "move-workflow"
   ]
 }
