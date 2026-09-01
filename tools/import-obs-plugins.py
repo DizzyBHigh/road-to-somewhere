@@ -41,6 +41,13 @@ def safe_relative(root: Path, relative: str) -> Path:
     return candidate
 
 
+def checkout_path(entry: dict) -> Path:
+    repository = entry.get("repository", "")
+    if not isinstance(repository, str) or "/" not in repository:
+        fail("OBS plugin source requires repository")
+    return ROOT / entry.get("checkoutPath", f".import-src/{repository.rsplit('/', 1)[-1]}")
+
+
 def copy_tree(source: Path, destination: Path) -> bool:
     if not source.is_dir():
         return False
@@ -105,7 +112,7 @@ def rewrite_image_paths(value, slug: str):
 
 
 def import_plugin(entry: dict) -> None:
-    repo_dir = Path(entry["checkoutPath"]).resolve()
+    repo_dir = checkout_path(entry).resolve()
     manifest_path = safe_relative(repo_dir, entry.get("manifest", "site/rts.json"))
     rts = load_json(manifest_path)
 
@@ -172,8 +179,6 @@ def main() -> None:
         return
 
     for entry in entries:
-        if "checkoutPath" not in entry:
-            fail("Importer requires checkoutPath for each source")
         import_plugin(entry)
 
 
