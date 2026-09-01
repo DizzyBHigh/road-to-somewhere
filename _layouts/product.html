@@ -8,21 +8,24 @@ layout: default
 {% assign getting_started = product.gettingStarted | default: content.gettingStarted %}
 {% assign release = product.release | default: content.release %}
 {% assign features = product.features | default: content.experience.features %}
-<link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
 {% if content.demo %}<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}"><script src="{{ '/assets/demo-player.js' | relative_url }}"></script>{% endif %}
 {% if content.settings %}<link rel="stylesheet" href="{{ '/assets/extension.css' | relative_url }}">{% endif %}
+{% if product.website.importFilename or product.website.overlayUrl %}<script src="{{ '/assets/copy-buttons.js' | relative_url }}"></script>{% endif %}
+<link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
 <main class="product-page product-page--{{ product.type | default: product.category }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}" data-overlay-zip-url="{{ product.website.overlayZipFilename | relative_url }}">
   <section class="product-hero">
     <div class="product-hero-main">
       <div class="section-kicker rts-format">{{ hero.kicker | default: product.name }}</div>
-      <h1 class="rts-format">{{ hero.title | default: product.name }}{% if hero.titleAccent %}<br><em>{{ hero.titleAccent }}</em>{% endif %}{% if hero.titleEmphasis %}<br><em>{{ hero.titleEmphasis }}</em>{% endif %}</h1>
+      <h1 class="rts-format">{{ hero.title | default: product.name }}{% if hero.titleAccent %}<br><em class="product-title-accent">{{ hero.titleAccent }}</em>{% endif %}{% if hero.titleEmphasis %}<br><em class="product-title-emphasis">{{ hero.titleEmphasis }}</em>{% endif %}</h1>
       <p class="product-intro rts-format">{{ hero.intro | default: hero.description | default: product.description }}</p>
       <div class="product-meta"><span>v{{ product.version }}</span>{% if product.category %}<span>{{ product.category }}</span>{% endif %}{% if product.author %}<span>{{ product.author }}</span>{% endif %}</div>
     </div>
     {% include product-release.html data=release product=product %}
   </section>
-  {% include product-experience.html data=content.experience features=features description=product.description %}
-  {% if content.demo %}{% include product-demo.html data=content.demo %}{% endif %}
+  <div class="product-feature-row">
+    {% include product-experience.html data=content.experience features=features description=product.description %}
+    {% if content.demo %}{% include product-demo.html data=content.demo %}{% endif %}
+  </div>
   {% if content.video and content.demo == nil %}<section class="product-section"><article class="product-content-card"><div class="section-kicker rts-format">{{ content.video.kicker }}</div><h2 class="rts-format">{{ content.video.title }}</h2><p class="product-intro rts-format">{{ content.video.message }}</p><p class="rts-format">{{ content.video.text }}</p></article></section>{% endif %}
   {% if product.requirements %}<section class="product-section"><article class="product-content-card"><div class="section-kicker">REQUIREMENTS</div><h2>Before you install.</h2><ul class="product-list">{% for item in product.requirements %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul></article></section>{% endif %}
   {% if setup %}{% include product-guide.html data=setup id="install" kicker="INSTALLATION" %}{% endif %}
