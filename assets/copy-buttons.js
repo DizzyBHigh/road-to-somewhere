@@ -4,46 +4,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const copyText = async (button, text) => {
     if (!text) return;
-    await navigator.clipboard.writeText(text);
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const input = document.createElement('textarea');
+      input.value = text;
+      input.setAttribute('readonly', '');
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      if (!document.execCommand('copy')) throw new Error('Copy failed');
+      input.remove();
+    }
     const original = button.innerHTML;
-    button.textContent = 'Copied ✓';
+    button.textContent = 'Copied';
     button.classList.add('copied');
-    setTimeout(() => {
+    window.setTimeout(() => {
       button.innerHTML = original;
       button.classList.remove('copied');
-    }, 1500);
+    }, 1600);
+  };
+
+  const bind = (button, getText) => {
+    if (!button || button.dataset.rtsBound === 'true') return;
+    button.dataset.rtsBound = 'true';
+    button.addEventListener('click', async () => {
+      try {
+        await copyText(button, await getText());
+      } catch (error) {
+        console.error('Could not copy:', error);
+      }
+    });
   };
 
   const importButton = document.getElementById('copyImport');
   const importCode = document.getElementById('importCode');
   if (importButton && page.dataset.importUrl) {
-    fetch(page.dataset.importUrl)
-      .then(response => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.text();
-      })
+    const getImport = async () => {
+      const response = await fetch(page.dataset.importUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.text();
+    };
+    getImport()
       .then(text => { if (importCode) importCode.textContent = text; })
       .catch(error => console.error('Could not load import code:', error));
-
-    importButton.addEventListener('click', async () => {
-      try {
-        const response = await fetch(page.dataset.importUrl);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        await copyText(importButton, await response.text());
-      } catch (error) {
-        console.error('Could not copy import code:', error);
-      }
-    });
+    bind(importButton, getImport);
   }
 
   const overlayButton = document.getElementById('copyOverlayUrl');
   if (overlayButton && page.dataset.overlayUrl) {
-    overlayButton.addEventListener('click', async () => {
-      try {
-        await copyText(overlayButton, new URL(page.dataset.overlayUrl, window.location.origin).href);
-      } catch (error) {
-        console.error('Could not copy overlay URL:', error);
-      }
-    });
+    bind(overlayButton, () => new URL(page.dataset.overlayUrl, window.location.origin).href);
   }
+
+  document.querySelectorAll('.rts-copy-token').forEach(button => {
+    bind(button, async () => {
+      if (button.dataset.copyKind === 'overlay') return new URL('overlay/', window.location.href).href;
+      const response = await fetch(page.dataset.importUrl);
+      if (!response.ok) throw new Error('Import file unavailable');
+      return response.text();
+    });
+  });
 });
