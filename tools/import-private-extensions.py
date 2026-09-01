@@ -6,6 +6,7 @@ import shutil
 import sys
 import zipfile
 from pathlib import Path
+from github_release import download_asset, find_asset, latest_release, release_version
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = ROOT / "extensions" / "sources.json"
@@ -46,28 +47,9 @@ def copy_tree(source: Path, destination: Path) -> bool:
     return True
 
 
-def copy_file(source: Path, destination: Path) -> bool:
-    if not source.is_file():
-        return False
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(source, destination)
-    return True
-
-
-def create_overlay_zip(overlay_source: Path, destination: Path) -> None:
-    """Create a ZIP containing the complete contents of the published overlay."""
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-        for item in sorted(overlay_source.rglob("*")):
-            if item.is_file():
-                archive.write(item, item.relative_to(overlay_source).as_posix())
-
-
 def versioned_import_filename(filename: str, version: str) -> str:
-    """Insert the extension version into the published import filename."""
     path = Path(filename)
-    stem = path.stem
-    suffix = path.suffix
+    stem, suffix = path.stem, path.suffix
     marker = " - Import Code"
     if marker in stem:
         stem = stem.replace(marker, f" v{version}{marker}", 1)
@@ -77,7 +59,6 @@ def versioned_import_filename(filename: str, version: str) -> str:
 
 
 def rewrite_published_asset_paths(value, slug: str):
-    """Rewrite extension-owned asset paths to paths relative to the extension page."""
     if isinstance(value, dict):
         return {
             key: (
@@ -93,7 +74,6 @@ def rewrite_published_asset_paths(value, slug: str):
 
 
 def populate_dependency_information(manifest: dict) -> None:
-    """Populate generated dependency text from the dependency definition."""
     setup = manifest.get("setup")
     if not isinstance(setup, dict):
         return
@@ -109,8 +89,7 @@ def populate_dependency_information(manifest: dict) -> None:
     dependency = next((item for item in dependencies.values() if isinstance(item, dict) and item.get("id") == dependency_id), None)
     if dependency is None:
         fail(f"setup.dllInformation references unknown dependency: {dependency_id}")
-    name = dependency.get("name")
-    minimum_version = dependency.get("minimumVersion")
+    name, minimum_version = dependency.get("name"), dependency.get("minimumVersion")
     if not isinstance(name, str) or not name.strip():
         fail(f"dependency {dependency_id}: name is required")
     if not isinstance(minimum_version, str) or not minimum_version.strip():
@@ -118,18 +97,13 @@ def populate_dependency_information(manifest: dict) -> None:
     dll_info["text"] = f"This extension requires {name} {minimum_version} or newer."
 
 
-def write_page_stub(public_extension_dir: Path, slug: str, name: str, version: str, description: str) -> None:
-    """Generate the minimal Jekyll product page stub."""
-    page = (
-        "---\n"
-        "layout: product\n"
-        f"product_data: {slug}\n"
-        f"title: {json.dumps(f'{name} v{version}', ensure_ascii=False)}\n"
-        f"description: {json.dumps(description, ensure_ascii=False)}\n"
-        "extra_css: /assets/product.css\n"
-        "---\n"
-    )
-    (public_extension_dir / "index.html").write_text(page, encoding="utf-8")
+def write_page_stub(directory: Path, slug: str, name: str, version: str, description: str) -> None:
+    page = "---\nlayout: product\n"
+    page += f"product_data: {slug}\n"
+    page += f"title: {json.dumps(f'{name} v{version}', ensure_ascii=False)}\n"
+    page += f"description: {json.dumps(description, ensure_ascii=False)}\n"
+    page += "extra_css: /assets/product.css\n---\n"
+    (directory / "index.html").write_text(page, encoding="utf-8")
 
 
 def import_extension(entry: dict) -> None:
@@ -141,50 +115,52 @@ def import_extension(entry: dict) -> None:
     manifest = load_json(manifest_path)
     if manifest.get("schemaVersion") != 1:
         fail(f"{manifest_path}: unsupported schemaVersion")
-    slug = manifest.get("slug")
+    slug, name = manifest.get("slug"), manifest.get("name")
     if not isinstance(slug, str) or not slug or "/" in slug or "\\" in slug or slug in {".", ".."}:
         fail(f"{manifest_path}: invalid slug")
-    name = manifest.get("name")
     if not isinstance(name, str) or not name.strip():
         fail(f"{manifest_path}: name is required")
-    version = manifest.get("version")
-    if not isinstance(version, str) or not version.strip():
-        fail(f"{manifest_path}: version is required for publishing")
-    description = manifest.get("description", "")
-    if not isinstance(description, str):
-        fail(f"{manifest_path}: description must be a string")
     content = manifest.get("content")
     if content is not None and not isinstance(content, dict):
         fail(f"{manifest_path}: content must be an object when present")
+    try:
+        release = latest_release(repository)
+        version = release_version(release)
+        overlay_asset = find_asset(release, "overlay")
+        import_asset = find_asset(release, "import")
+    except RuntimeError as exc:
+        fail(str(exc))
     public_manifest = json.loads(json.dumps(manifest))
     publish = public_manifest.pop("publish", {})
     populate_dependency_information(public_manifest)
+    public_manifest["version"] = version
     website = public_manifest.setdefault("website", {})
     public_extension_dir = EXT_DIR / slug
     public_extension_dir.mkdir(parents=True, exist_ok=True)
-    overlay_source = publish.get("overlay")
-    if overlay_source:
-        overlay_source_path = safe_relative(repo_dir, overlay_source)
-        overlay_destination = public_extension_dir / "overlay"
-        if overlay_destination.exists():
-            shutil.rmtree(overlay_destination)
-        if not copy_tree(overlay_source_path, overlay_destination):
-            fail(f"{manifest_path}: publish.overlay does not exist: {overlay_source}")
+    if publish.get("overlay"):
         overlay_zip_name = f"overlay {version}.zip"
+        for old in public_extension_dir.glob("overlay *.zip"):
+            old.unlink()
         overlay_zip_destination = public_extension_dir / overlay_zip_name
-        if overlay_zip_destination.exists():
-            overlay_zip_destination.unlink()
-        create_overlay_zip(overlay_source_path, overlay_zip_destination)
+        try:
+            download_asset(overlay_asset, overlay_zip_destination)
+            if (public_extension_dir / "overlay").exists():
+                shutil.rmtree(public_extension_dir / "overlay")
+            with zipfile.ZipFile(overlay_zip_destination) as archive:
+                archive.extractall(public_extension_dir / "overlay")
+        except (OSError, zipfile.BadZipFile, RuntimeError) as exc:
+            fail(f"Could not publish overlay from latest release: {exc}")
         website["overlayUrl"] = f"/extensions/{slug}/overlay/"
         website["overlayZipFilename"] = f"extensions/{slug}/{overlay_zip_name}"
-    import_source = publish.get("importFile")
-    if import_source:
-        import_source_path = safe_relative(repo_dir, import_source)
-        published_import_name = versioned_import_filename(import_source_path.name, version)
-        import_destination = public_extension_dir / published_import_name
-        if not copy_file(import_source_path, import_destination):
-            fail(f"{manifest_path}: publish.importFile does not exist: {import_source}")
-        website["importFilename"] = f"extensions/{slug}/{published_import_name}"
+    if publish.get("importFile"):
+        for old in public_extension_dir.glob("*Import Code*.txt"):
+            old.unlink()
+        published_name = versioned_import_filename(publish["importFile"], version)
+        try:
+            download_asset(import_asset, public_extension_dir / published_name)
+        except RuntimeError as exc:
+            fail(str(exc))
+        website["importFilename"] = f"extensions/{slug}/{published_name}"
     assets_source = publish.get("assets")
     if assets_source:
         assets_source_path = safe_relative(repo_dir, assets_source)
@@ -192,18 +168,13 @@ def import_extension(entry: dict) -> None:
         if not assets_source_path.is_dir():
             print(f"Skipping optional extension assets: {assets_source} (directory does not exist)")
         else:
-            asset_items = list(assets_source_path.iterdir())
-            if not asset_items:
-                print(f"Skipping optional extension assets: {assets_source} (directory is empty)")
-            else:
-                if assets_destination.exists():
-                    shutil.rmtree(assets_destination)
-                copy_tree(assets_source_path, assets_destination)
-                public_manifest = rewrite_published_asset_paths(public_manifest, slug)
+            if assets_destination.exists():
+                shutil.rmtree(assets_destination)
+            copy_tree(assets_source_path, assets_destination)
+            public_manifest = rewrite_published_asset_paths(public_manifest, slug)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    data_path = DATA_DIR / f"{slug}.json"
-    data_path.write_text(json.dumps(public_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    write_page_stub(public_extension_dir, slug, name, version, description)
+    (DATA_DIR / f"{slug}.json").write_text(json.dumps(public_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    write_page_stub(public_extension_dir, slug, name, version, manifest.get("description", ""))
     print(f"Imported {name} v{version} -> {slug}")
 
 
