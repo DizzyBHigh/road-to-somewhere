@@ -11,7 +11,7 @@ layout: default
 <link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
 {% if content.demo %}<link rel="stylesheet" href="{{ '/assets/extension-demo.css' | relative_url }}"><script src="{{ '/assets/demo-player.js' | relative_url }}"></script>{% endif %}
 {% if content.settings %}<link rel="stylesheet" href="{{ '/assets/extension.css' | relative_url }}">{% endif %}
-<main class="product-page product-page--{{ product.type | default: product.category }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}">
+<main class="product-page product-page--{{ product.type | default: product.category }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}" data-overlay-zip-url="{{ product.website.overlayZipFilename | relative_url }}">
   <section class="product-hero">
     <div class="product-hero-main">
       <div class="section-kicker rts-format">{{ hero.kicker | default: product.name }}</div>
