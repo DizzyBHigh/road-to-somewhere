@@ -4,7 +4,7 @@
     {
       "repository": "DizzyBHigh/RTS-Ban-Timeout-Widget",
       "ref": "main",
-      "manifest": "site/extension.json"
+      "manifest": "site/rts.json"
     }
   ],
   "dlls": [
