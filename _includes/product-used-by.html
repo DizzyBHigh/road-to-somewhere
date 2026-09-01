@@ -1,0 +1,14 @@
+{% assign used_by = include.data %}
+{% if used_by %}
+<section class="product-section">
+  <article class="product-content-card">
+    <div class="section-kicker">{{ used_by.kicker | default: "USED BY" }}</div>
+    <div class="product-links">
+      {% for slug in site.data.products.extensions %}
+        {% assign item = site.data[slug] %}
+        {% if item %}<a class="secondary-button" href="{{ '/extensions/' | append: slug | append: '/' | relative_url }}"><span>{{ item.name }}</span><span class="button-icon">{{ used_by.linkSuffix | default: '→' }}</span></a>{% endif %}
+      {% endfor %}
+    </div>
+  </article>
+</section>
+{% endif %}
