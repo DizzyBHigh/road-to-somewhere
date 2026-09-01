@@ -1,7 +1,7 @@
 /* Shared site typography. */
 
 .section-kicker {
-  font: 600 22px/1 var(--mono);
+  font: 600 30px/1 var(--mono);
   letter-spacing: .08em;
   color: var(--accent);
   text-transform: uppercase;
@@ -9,9 +9,9 @@
 
 .section h3 {
   font-family: var(--heading) !important;
-  font-size: clamp(26px, 3vw, 36px);
-  letter-spacing: -.04em;
-  line-height: .95;
+  font-size: clamp(30px, 4vw, 44px);
+  letter-spacing: -.045em;
+  line-height: .92;
   margin: 5px 0;
 }
 
@@ -43,8 +43,8 @@
 }
 
 @media(max-width:760px) {
-  .section h3,
-  .support h3 { font-size: 30px; }
+  .section h3 { font-size: 30px; }
+  .support h3 { font-size: 36px; }
   .hero h1 { font-size: 48px; }
   .product-info h3 { font-size: 28px; }
 }
