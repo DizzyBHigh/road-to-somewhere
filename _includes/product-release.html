@@ -1,0 +1,13 @@
+{% assign release = include.data %}
+{% if release or include.product.website.importFilename or include.product.website.overlayUrl %}
+<aside class="product-release">
+  <div><div class="section-kicker rts-format">{{ release.kicker | default: "LATEST RELEASE" }}</div><h2>{{ include.product.version | default: release.version | default: release.tag }}</h2></div>
+  {% if include.product.website.importFilename %}<button class="button button--blue" id="copyImport" type="button"><span class="rts-format">{{ release.copyImportLabel | default: "Copy Import" }}</span> <span>⧉</span></button>{% endif %}
+  {% if include.product.website.overlayUrl %}<button class="button button--blue" id="copyOverlayUrl" type="button"><span class="rts-format">{{ release.copyOverlayLabel | default: "Copy Overlay URL" }}</span> <span>⧉</span></button>{% endif %}
+  <div class="product-downloads">
+    {% for asset in release.assets %}{% if asset.downloadUrl != '' %}<a class="product-download" href="{{ asset.downloadUrl }}"><span>{{ asset.name }}</span><small>DOWNLOAD ↓</small></a>{% endif %}{% endfor %}
+    {% if include.product.website.overlayZipFilename %}<a class="product-download" href="{{ include.product.website.overlayZipFilename | relative_url }}"><span>{{ release.downloadOverlayLabel | default: "Download Overlay" }}</span><small>DOWNLOAD ↓</small></a>{% endif %}
+    {% if include.product.releaseUrl %}<a class="secondary-button" href="{{ include.product.releaseUrl }}">View release on GitHub ↗</a>{% endif %}
+  </div>
+</aside>
+{% endif %}
