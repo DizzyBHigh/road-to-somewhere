@@ -2,10 +2,9 @@
   "schemaVersion": 1,
   "plugins": [
     {
-      "repository": "DizzyBHigh/obs-move-workflow",
+      "repository": "DizzyBHigh/move-workflow",
       "ref": "main",
-      "manifest": "site/rts.json",
-      "checkoutPath": ".import-src/obs-move-workflow"
+      "manifest": "site/rts.json"
     }
   ]
 }
