@@ -3,7 +3,7 @@ import json
 import shutil
 import zipfile
 from product_paths import DATA_DIR, ROOT, copy_tree, fail, load_json, product_dir, rewrite_asset_paths, safe_relative
-from product_release import publish_extension_files, release_assets
+from product_release import publish_extension_files, publish_release_assets, release_assets
 from github_release import latest_release, release_version, repository_visibility
 
 
@@ -65,13 +65,14 @@ def import_product(entry: dict) -> None:
     release = latest_release(repository) if needs_release else None
     if release:
         version = release_version(release)
+        selected_assets = release_assets(release, policy) if policy else []
         public["version"] = version
         public["release"] = {
             **policy,
             "version": version,
             "tag": release.get("tag_name", ""),
             "releaseUrl": release.get("html_url", ""),
-            "assets": release_assets(release, policy) if policy else [],
+            "assets": selected_assets,
         }
         public["releaseUrl"] = release.get("html_url", "")
     public_dir = product_dir(public)
@@ -81,6 +82,11 @@ def import_product(entry: dict) -> None:
             publish_extension_files(public, release, public_dir)
         except (OSError, RuntimeError, zipfile.BadZipFile) as exc:
             fail(f"Could not publish extension release files: {exc}")
+    if release and selected_assets:
+        try:
+            public["release"]["assets"] = publish_release_assets(release, selected_assets, public_dir)
+        except (OSError, RuntimeError) as exc:
+            fail(f"Could not publish release assets: {exc}")
     publish = public.pop("publish", {})
     assets_source = publish.get("assets")
     if assets_source:
