@@ -4,9 +4,9 @@
   <article class="product-content-card">
     <div class="section-kicker">{{ used_by.kicker | default: "USED BY" }}</div>
     <div class="product-links">
-      {% for slug in site.data.products.extensions %}
+      {% for slug in used_by.items %}
         {% assign item = site.data[slug] %}
-        {% if item %}<a class="secondary-button" href="{{ '/extensions/' | append: slug | append: '/' | relative_url }}"><span>{{ item.name }}</span><span class="button-icon">{{ used_by.linkSuffix | default: '→' }}</span></a>{% endif %}
+        {% if item %}<a class="secondary-button" href="{{ item.page.url | default: '/' | relative_url }}"><span>{{ item.name }}</span><span class="button-icon">{{ used_by.linkSuffix | default: '→' }}</span></a>{% endif %}
       {% endfor %}
     </div>
   </article>
