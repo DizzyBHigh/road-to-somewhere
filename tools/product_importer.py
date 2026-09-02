@@ -47,7 +47,7 @@ def import_product(entry: dict) -> None:
     selected_assets = []
     if release:
         version = release_version(release)
-        selected_assets = release_assets(release, policy) if policy else []
+        selected_assets = release_assets(release, policy) if policy.get("assets") or policy.get("asset") else []
         public["version"] = version
         public["release"] = {**policy, "version": version, "tag": release.get("tag_name", ""), "releaseUrl": release.get("html_url", ""), "assets": selected_assets}
         public["releaseUrl"] = release.get("html_url", "")
