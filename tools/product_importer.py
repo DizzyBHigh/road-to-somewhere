@@ -1,5 +1,7 @@
 from __future__ import annotations
 import json
+import shutil
+import zipfile
 from product_paths import DATA_DIR, ROOT, copy_tree, fail, load_json, product_dir, rewrite_asset_paths, safe_relative
 from product_release import publish_extension_files, release_assets
 from github_release import latest_release, release_version
