@@ -13,33 +13,13 @@ def normalise_website(product: dict) -> None:
         return
     if "hero" not in product:
         hero = website.get("hero", {})
-        product["hero"] = {
-            "kicker": website.get("sectionKicker", product.get("name", "")),
-            "title": hero.get("title", product.get("name", "")),
-            "titleEmphasis": hero.get("titleEmphasis"),
-            "intro": hero.get("description", product.get("description", "")),
-        }
+        product["hero"] = {"kicker": website.get("sectionKicker", product.get("name", "")), "title": hero.get("title", product.get("name", "")), "titleEmphasis": hero.get("titleEmphasis"), "intro": hero.get("description", product.get("description", ""))}
     if "content" not in product:
         what = website.get("whatItDoes", {})
-        product["content"] = {
-            "experience": {
-                "kicker": what.get("kicker", "WHAT IT DOES"),
-                "title": what.get("title", "What it does."),
-                "text": what.get("description", product.get("description", "")),
-                "features": what.get("features", []),
-            },
-            "usedBy": website.get("usedBy"),
-        }
+        product["content"] = {"experience": {"kicker": what.get("kicker", "WHAT IT DOES"), "title": what.get("title", "What it does."), "text": what.get("description", product.get("description", "")), "features": what.get("features", [])}, "usedBy": website.get("usedBy")}
     installation = website.get("installation")
     if installation and "setup" not in product:
-        product["setup"] = {
-            "title": installation.get("title", "Installation"),
-            "intro": installation.get("description", ""),
-            "steps": [
-                {"number": index + 1, "title": step} if isinstance(step, str) else step
-                for index, step in enumerate(installation.get("steps", []))
-            ],
-        }
+        product["setup"] = {"title": installation.get("title", "Installation"), "intro": installation.get("description", ""), "steps": [{"number": index + 1, "title": step} if isinstance(step, str) else step for index, step in enumerate(installation.get("steps", []))]}
 
 
 def import_product(entry: dict) -> None:
@@ -58,22 +38,18 @@ def import_product(entry: dict) -> None:
     if not isinstance(name, str) or not name.strip():
         fail(f"{manifest_path}: name is required")
     public = json.loads(json.dumps(manifest))
+    public["slug"] = slug
     public["repositoryVisibility"] = repository_visibility(repository)
     policy = public.get("release") if isinstance(public.get("release"), dict) else {}
     publish = public.get("publish", {})
     needs_release = bool(publish.get("overlay") or publish.get("importFile") or policy)
     release = latest_release(repository) if needs_release else None
+    selected_assets = []
     if release:
         version = release_version(release)
         selected_assets = release_assets(release, policy) if policy else []
         public["version"] = version
-        public["release"] = {
-            **policy,
-            "version": version,
-            "tag": release.get("tag_name", ""),
-            "releaseUrl": release.get("html_url", ""),
-            "assets": selected_assets,
-        }
+        public["release"] = {**policy, "version": version, "tag": release.get("tag_name", ""), "releaseUrl": release.get("html_url", ""), "assets": selected_assets}
         public["releaseUrl"] = release.get("html_url", "")
     public_dir = product_dir(public)
     public_dir.mkdir(parents=True, exist_ok=True)
