@@ -46,6 +46,7 @@ jobs:
       - name: Import product manifests and release assets
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          RTS_EXTENSION_TOKEN: ${{ secrets.RTS_EXTENSION_TOKEN }}
         run: python3 tools/import-products.py
 
       - name: Sync extensions with RTS Services
