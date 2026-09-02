@@ -68,7 +68,7 @@ jobs:
             test -n "$slug" || { echo "Product manifest has no slug/id: $manifest"; exit 1; }
             generated="_data/$slug.json"
             test -f "$generated" || { echo "Missing generated product data: $generated"; exit 1; }
-            jq -c '{slug: .slug, name: .name, active: true, version: .version, downloadPath: (.website.overlayZipFilename // .release.assets[0].downloadUrl // null)}' "$generated" \
+            jq -c '{slug: (.slug // .id), name: .name, active: true, version: .version, downloadPath: (.website.overlayZipFilename // .release.assets[0].downloadUrl // null)}' "$generated" \
               | curl --fail-with-body -sS -X POST \
                   -H "Content-Type: application/json" \
                   -H "apikey: $RTS_SERVICES_SYNC_KEY" \
