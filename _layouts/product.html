@@ -18,7 +18,7 @@ layout: default
       <div class="section-kicker rts-format">{{ hero.kicker | default: product.name }}</div>
       <h1>{% if hero.title %}<span class="product-title-line rts-format">{{ hero.title }}</span>{% endif %}{% if hero.titleAccent %}<span class="product-title-accent rts-format">{{ hero.titleAccent }}</span>{% endif %}{% if hero.titleEmphasis %}<span class="product-title-emphasis rts-format">{{ hero.titleEmphasis }}</span>{% endif %}</h1>
       <p class="product-intro rts-format">{{ hero.intro | default: hero.description | default: product.description }}</p>
-      <div class="product-meta"><span>v{{ product.version }}</span>{% if product.category %}<span>{{ product.category }}</span>{% endif %}{% if product.author %}<span>{{ product.author }}</span>{% endif %}</div>
+      <div class="product-meta"><span>v{{ product.version }}</span>{% if product.category %}<span>{{ product.category }}</span>{% endif %}{% if product.author %}<span>{{ product.author }}</span>{% endif %}<span data-download-count>— downloads</span></div>
     </div>
     {% include product-release.html data=release product=product %}
   </section>
@@ -34,5 +34,6 @@ layout: default
   {% if content.settings %}{% include product-settings.html data=content.settings id="settings" %}{% endif %}
   {% if product.notes or product.links %}<section class="product-section"><article class="product-content-card"><div class="section-kicker">IMPORTANT NOTES</div>{% if product.notes %}<ul class="product-list">{% for note in product.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}<div class="product-links">{% if product.repository %}<a class="secondary-button" href="{{ product.repository }}">Source repository ↗</a>{% endif %}{% for link in product.links %}<a class="secondary-button" href="{{ link[1] }}">{{ link[0] }} ↗</a>{% endfor %}</div></article></section>{% endif %}
   {% if product.review != false %}{% include product-reviews.html product=product %}<script src="{{ '/assets/reviews.js' | relative_url }}" defer></script>{% endif %}
+  <script src="{{ '/assets/product-downloads.js' | relative_url }}" defer></script>
   <div class="product-page-footer"><span>{{ product.name | upcase }}</span><span>v{{ product.version }}</span><span>{{ product.website.footerLabel }}</span></div>
 </main>
