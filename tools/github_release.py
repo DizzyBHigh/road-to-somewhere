@@ -8,8 +8,11 @@ from pathlib import Path
 
 
 def github_request(repository: str, endpoint: str) -> dict:
+    url = f"https://api.github.com/repos/{repository}"
+    if endpoint:
+        url += f"/{endpoint}"
     request = urllib.request.Request(
-        f"https://api.github.com/repos/{repository}/{endpoint}",
+        url,
         headers={"Accept": "application/vnd.github+json", "User-Agent": "RTS-site-importer"},
     )
     token = os.environ.get("GITHUB_TOKEN")
