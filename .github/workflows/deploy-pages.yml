@@ -49,7 +49,7 @@ jobs:
           RTS_EXTENSION_TOKEN: ${{ secrets.RTS_EXTENSION_TOKEN }}
         run: python3 tools/import-products.py
 
-      - name: Sync extensions with RTS Services
+      - name: Sync products with RTS Services
         env:
           RTS_SERVICES_URL: ${{ vars.RTS_SERVICES_URL }}
           RTS_SERVICES_SYNC_KEY: ${{ secrets.RTS_SERVICES_SYNC_KEY }}
@@ -69,14 +69,14 @@ jobs:
             test -n "$slug" || { echo "Product manifest has no slug/id: $manifest"; exit 1; }
             generated="_data/$slug.json"
             test -f "$generated" || { echo "Missing generated product data: $generated"; exit 1; }
-            jq -c '{slug: .slug, name: .name, active: true, version: .version, downloadPath: .website.overlayZipFilename}' "$generated" \
+            jq -c '{slug: .slug, name: .name, active: true, version: .version, downloadPath: (.website.overlayZipFilename // null)}' "$generated" \
               | curl --fail-with-body -sS -X POST \
                   -H "Content-Type: application/json" \
                   -H "apikey: $RTS_SERVICES_SYNC_KEY" \
                   --data-binary @- \
                   "$RTS_SERVICES_URL/functions/v1/sync-extension"
             echo
-          done < <(jq -c '.products[] | select(.serviceSync == true)' products/sources.json)
+          done < <(jq -c '.products[] | select(.serviceSync == true or .review != false)' products/sources.json)
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
