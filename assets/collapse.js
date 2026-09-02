@@ -26,6 +26,12 @@ function saveCollapseState(toggle, expanded) {
   }
 }
 
+function toggleCollapse(toggle, target) {
+  const expanded = toggle.getAttribute('aria-expanded') === 'true';
+  setCollapseState(toggle, target, !expanded);
+  saveCollapseState(toggle, !expanded);
+}
+
 function initCollapseToggles() {
   document.querySelectorAll('.collapse-toggle[data-toggle]').forEach(toggle => {
     if (toggle.dataset.collapseBound === 'true') return;
@@ -35,11 +41,23 @@ function initCollapseToggles() {
     toggle.dataset.collapseBound = 'true';
     setCollapseState(toggle, target, loadCollapseState(toggle));
 
-    toggle.addEventListener('click', () => {
-      const expanded = toggle.getAttribute('aria-expanded') === 'true';
-      setCollapseState(toggle, target, !expanded);
-      saveCollapseState(toggle, !expanded);
-    });
+    const bar = toggle.closest('.product-guide-heading, .section-heading-row');
+    if (bar) {
+      bar.addEventListener('click', event => {
+        if (event.target.closest('.collapse-toggle')) return;
+        toggleCollapse(toggle, target);
+      });
+      bar.setAttribute('role', 'button');
+      bar.setAttribute('tabindex', '0');
+      bar.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        if (event.target.closest('.collapse-toggle')) return;
+        event.preventDefault();
+        toggleCollapse(toggle, target);
+      });
+    }
+
+    toggle.addEventListener('click', () => toggleCollapse(toggle, target));
   });
 }
 
