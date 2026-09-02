@@ -96,7 +96,8 @@ def import_product(entry: dict) -> None:
         if destination.exists():
             shutil.rmtree(destination)
         copy_tree(repo_dir / "site" / "images", destination)
-    public = rewrite_asset_paths(public, slug)
+    public_path = public_dir.relative_to(ROOT).as_posix()
+    public = rewrite_asset_paths(public, public_path, slug)
     normalise_website(public)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     (DATA_DIR / f"{slug}.json").write_text(json.dumps(public, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
