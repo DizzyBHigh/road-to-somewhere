@@ -18,7 +18,7 @@ layout: default
       <div class="section-kicker rts-format">{{ hero.kicker | default: product.name }}</div>
       <h1>{% if hero.title %}<span class="product-title-line rts-format">{{ hero.title }}</span>{% endif %}{% if hero.titleAccent %}<span class="product-title-accent rts-format">{{ hero.titleAccent }}</span>{% endif %}{% if hero.titleEmphasis %}<span class="product-title-emphasis rts-format">{{ hero.titleEmphasis }}</span>{% endif %}</h1>
       <p class="product-intro rts-format">{{ hero.intro | default: hero.description | default: product.description }}</p>
-      <div class="product-meta"><span>v{{ product.version }}</span>{% if product.category %}<span>{{ product.category }}</span>{% endif %}{% if product.author %}<span>{{ product.author }}</span>{% endif %}<span data-download-count>— downloads</span></div>
+      <div class="product-meta"><span>v{{ product.version }}</span>{% for tag in product.tags %}<span>{{ tag }}</span>{% endfor %}<span data-download-count>— downloads</span></div>
     </div>
     {% include product-release.html data=release product=product %}
   </section>
