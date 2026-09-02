@@ -65,6 +65,11 @@ jobs:
             manifest_path=$(echo "$entry" | jq -r '.manifest // "site/rts.json"')
             manifest="$path/$manifest_path"
             test -f "$manifest" || { echo "Missing product manifest: $manifest"; exit 1; }
+            service_sync=$(echo "$entry" | jq -r '.serviceSync // false')
+            review=$(jq -r '.review // true' "$manifest")
+            if [[ "$service_sync" != "true" && "$review" == "false" ]]; then
+              continue
+            fi
             slug=$(jq -r '.slug // .id // empty' "$manifest")
             test -n "$slug" || { echo "Product manifest has no slug/id: $manifest"; exit 1; }
             generated="_data/$slug.json"
@@ -76,7 +81,7 @@ jobs:
                   --data-binary @- \
                   "$RTS_SERVICES_URL/functions/v1/sync-extension"
             echo
-          done < <(jq -c '.products[] | select(.serviceSync == true or .review != false)' products/sources.json)
+          done < <(jq -c '.products[]' products/sources.json)
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
