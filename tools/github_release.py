@@ -7,6 +7,29 @@ import urllib.request
 from pathlib import Path
 
 
+def github_request(repository: str, endpoint: str) -> dict:
+    request = urllib.request.Request(
+        f"https://api.github.com/repos/{repository}/{endpoint}",
+        headers={"Accept": "application/vnd.github+json", "User-Agent": "RTS-site-importer"},
+    )
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        request.add_header("Authorization", f"Bearer {token}")
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except Exception as exc:
+        raise RuntimeError(f"Could not retrieve GitHub data for {repository}: {exc}") from exc
+
+
+def repository_visibility(repository: str) -> str:
+    """Return the repository visibility reported by GitHub."""
+    visibility = github_request(repository, "").get("visibility", "")
+    if visibility not in {"public", "private", "internal"}:
+        raise RuntimeError(f"Repository {repository} has no supported visibility")
+    return visibility
+
+
 def latest_release(repository: str) -> dict:
     """Return the latest published, non-draft, non-prerelease release."""
     request = urllib.request.Request(
