@@ -39,20 +39,20 @@ def copy_tree(source: Path, destination: Path) -> None:
             shutil.copy2(item, target)
 
 
-def rewrite_asset_paths(value, slug: str):
+def rewrite_asset_paths(value, product_path: str, slug: str):
     if isinstance(value, dict):
         return {
             key: (
-                f"extensions/{slug}/{item}"
+                f"{product_path}/{item}"
                 if key == "src" and isinstance(item, str) and item.startswith("assets/")
-                else f"other-tools/{slug}/assets/{item.removeprefix('images/')}"
+                else f"{product_path}/assets/{item.removeprefix('images/')}"
                 if key == "src" and isinstance(item, str) and item.startswith("images/")
-                else rewrite_asset_paths(item, slug)
+                else rewrite_asset_paths(item, product_path, slug)
             )
             for key, item in value.items()
         }
     if isinstance(value, list):
-        return [rewrite_asset_paths(item, slug) for item in value]
+        return [rewrite_asset_paths(item, product_path, slug) for item in value]
     return value
 
 
