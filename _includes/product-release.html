@@ -12,7 +12,7 @@
   <div class="product-downloads">
     {% for asset in release.assets %}{% if asset.downloadUrl != '' %}<a class="product-download" href="{{ asset.downloadUrl }}"><span>{{ asset.name }}</span><small>DOWNLOAD ↓</small></a>{% endif %}{% endfor %}
     {% if include.product.website.overlayZipFilename %}<a class="product-download" href="{{ include.product.website.overlayZipFilename | relative_url }}"><span>{{ release.downloadOverlayLabel | default: "Download Overlay" }}</span><small>DOWNLOAD ↓</small></a>{% endif %}
-    {% if include.product.releaseUrl %}<a class="secondary-button" href="{{ include.product.releaseUrl }}">View release on GitHub ↗</a>{% endif %}
+    {% if include.product.repositoryVisibility == "public" and include.product.releaseUrl %}<a class="secondary-button" href="{{ include.product.releaseUrl }}">View release on GitHub ↗</a>{% endif %}
   </div>
 </aside>
 {% endif %}
