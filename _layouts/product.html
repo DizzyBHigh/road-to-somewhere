@@ -12,7 +12,7 @@ layout: default
 {% if content.settings %}<link rel="stylesheet" href="{{ '/assets/extension.css' | relative_url }}">{% endif %}
 {% if product.review != false %}<link rel="stylesheet" href="{{ '/assets/reviews.css' | relative_url }}">{% endif %}
 <link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
-<main class="product-page product-page--{{ product.type | default: product.category }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}" data-overlay-zip-url="{{ product.website.overlayZipFilename | relative_url }}">
+<main class="product-page product-page--{{ product.type | default: product.category }}" data-product-slug="{{ product.slug }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}" data-overlay-zip-url="{{ product.website.overlayZipFilename | relative_url }}">
   <section class="product-hero">
     <div class="product-hero-main">
       <div class="section-kicker rts-format">{{ hero.kicker | default: product.name }}</div>
