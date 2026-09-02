@@ -64,6 +64,9 @@ def product_dir(manifest: dict) -> Path:
     page = manifest.get("page")
     if isinstance(page, dict) and isinstance(page.get("url"), str) and page["url"].strip("/"):
         return ROOT / page["url"].strip("/")
+    publish = manifest.get("publish", {})
+    if publish.get("overlay") or publish.get("importFile"):
+        return ROOT / "extensions" / manifest["slug"]
     base = "extensions" if manifest.get("category") == "extension" or manifest.get("type") == "extension" else "other-tools"
     return ROOT / base / manifest["slug"]
 
