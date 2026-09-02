@@ -58,10 +58,18 @@ jobs:
           test -n "$RTS_SERVICES_URL" || { echo "RTS_SERVICES_URL is not configured"; exit 1; }
           test -n "$RTS_SERVICES_SYNC_KEY" || { echo "RTS_SERVICES_SYNC_KEY is not configured"; exit 1; }
           while IFS= read -r entry; do
-            slug=$(echo "$entry" | jq -r '.repository | split("/")[1]' | tr '[:upper:]' '[:lower:]')
-            manifest="_data/$slug.json"
-            test -f "$manifest" || { echo "Missing generated extension data: $manifest"; exit 1; }
-            jq -c '{slug: .slug, name: .name, active: true, version: .version, downloadPath: .website.overlayZipFilename}' "$manifest" \
+            repo=$(echo "$entry" | jq -r '.repository')
+            ref=$(echo "$entry" | jq -r '.ref // "main"')
+            path=$(echo "$entry" | jq -r '.checkoutPath // empty')
+            path="${path:-.import-src/${repo##*/}}"
+            manifest_path=$(echo "$entry" | jq -r '.manifest // "site/rts.json"')
+            manifest="$path/$manifest_path"
+            test -f "$manifest" || { echo "Missing product manifest: $manifest"; exit 1; }
+            slug=$(jq -r '.slug // .id // empty' "$manifest")
+            test -n "$slug" || { echo "Product manifest has no slug/id: $manifest"; exit 1; }
+            generated="_data/$slug.json"
+            test -f "$generated" || { echo "Missing generated product data: $generated"; exit 1; }
+            jq -c '{slug: .slug, name: .name, active: true, version: .version, downloadPath: .website.overlayZipFilename}' "$generated" \
               | curl --fail-with-body -sS -X POST \
                   -H "Content-Type: application/json" \
                   -H "apikey: $RTS_SERVICES_SYNC_KEY" \
