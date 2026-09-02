@@ -3,7 +3,7 @@ import shutil
 import zipfile
 from pathlib import Path
 from github_release import download_asset, find_asset, release_version
-from product_paths import fail
+from product_paths import ROOT, fail
 
 
 def release_assets(release: dict, policy: dict) -> list[dict]:
@@ -26,6 +26,11 @@ def release_assets(release: dict, policy: dict) -> list[dict]:
 
 def publish_release_assets(release: dict, assets: list[dict], public_dir: Path) -> list[dict]:
     """Download selected release assets and return their RTS URLs."""
+    raw_assets = {
+        item.get("name"): item
+        for item in release.get("assets", [])
+        if isinstance(item, dict)
+    }
     destination = public_dir / "downloads"
     if destination.exists():
         shutil.rmtree(destination)
@@ -35,11 +40,14 @@ def publish_release_assets(release: dict, assets: list[dict], public_dir: Path) 
         name = asset.get("name", "")
         if not name or Path(name).name != name:
             fail(f"Invalid release asset filename: {name}")
+        source = raw_assets.get(name)
+        if not source:
+            fail(f"Release asset is no longer present: {name}")
         path = destination / name
-        download_asset(asset, path)
+        download_asset(source, path)
         published.append({
             "name": name,
-            "downloadUrl": f"{public_dir.relative_to(Path.cwd()).as_posix()}/downloads/{name}",
+            "downloadUrl": f"{public_dir.relative_to(ROOT).as_posix()}/downloads/{name}",
         })
     return published
 
