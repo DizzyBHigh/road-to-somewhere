@@ -24,6 +24,26 @@ def release_assets(release: dict, policy: dict) -> list[dict]:
     ]
 
 
+def publish_release_assets(release: dict, assets: list[dict], public_dir: Path) -> list[dict]:
+    """Download selected release assets and return their RTS URLs."""
+    destination = public_dir / "downloads"
+    if destination.exists():
+        shutil.rmtree(destination)
+    destination.mkdir(parents=True)
+    published = []
+    for asset in assets:
+        name = asset.get("name", "")
+        if not name or Path(name).name != name:
+            fail(f"Invalid release asset filename: {name}")
+        path = destination / name
+        download_asset(asset, path)
+        published.append({
+            "name": name,
+            "downloadUrl": f"{public_dir.relative_to(Path.cwd()).as_posix()}/downloads/{name}",
+        })
+    return published
+
+
 def publish_extension_files(manifest: dict, release: dict, public_dir: Path) -> None:
     publish = manifest.get("publish", {})
     version = release_version(release)
