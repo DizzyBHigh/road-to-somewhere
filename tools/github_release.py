@@ -77,10 +77,16 @@ def find_asset(release: dict, kind: str) -> dict:
 
 
 def download_asset(asset: dict, destination: Path) -> None:
-    url = asset.get("browser_download_url", "")
+    url = asset.get("url", "")
     if not url:
-        raise RuntimeError(f"Release asset has no download URL: {asset.get('name', '')}")
-    request = urllib.request.Request(url, headers={"User-Agent": "RTS-site-importer"})
+        raise RuntimeError(f"Release asset has no API URL: {asset.get('name', '')}")
+    request = urllib.request.Request(
+        url,
+        headers={
+            "Accept": "application/octet-stream",
+            "User-Agent": "RTS-site-importer",
+        },
+    )
     token = os.environ.get("RTS_EXTENSION_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if token:
         request.add_header("Authorization", f"Bearer {token}")
