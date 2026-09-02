@@ -11,7 +11,7 @@ def normalise_website(product: dict) -> None:
     website = product.get("website", {})
     if not isinstance(website, dict) or not website:
         return
-    if "hero" not in product:
+    if "hero" not in product and not product.get("content", {}).get("hero"):
         hero = website.get("hero", {})
         product["hero"] = {"kicker": website.get("sectionKicker", product.get("name", "")), "title": hero.get("title", product.get("name", "")), "titleEmphasis": hero.get("titleEmphasis"), "intro": hero.get("description", product.get("description", ""))}
     if "content" not in product:
