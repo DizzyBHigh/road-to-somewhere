@@ -2,7 +2,7 @@
 {% assign download_endpoint = "https://osiuynezqmocapioekoa.supabase.co/functions/v1/download" %}
 {% if release or include.product.website.importFilename or include.product.website.overlayUrl %}
 <aside class="product-release">
-  <div><div class="section-kicker rts-format">{{ release.kicker | default: "LATEST RELEASE" }}</div><h2>{{ include.product.version | default: release.version | default: release.tag }}</h2></div>
+  <div><div class="section-kicker rts-format">{{ release.kicker | default: "LATEST RELEASE" }}</div><h2>{{ include.product.version | default: release.version | default: release.tag }}</h2><span data-download-count>— downloads</span></div>
   {% if include.product.website.importFilename %}
   <div class="product-import">
     <div class="product-import-heading"><div><strong class="rts-format">{{ release.importKicker | default: "ACTION IMPORT CODE" }}</strong><span class="rts-format">{{ release.importMeta | default: "Copy this code into Streamer.bot → Import" }}</span></div><button class="copy-button" id="copyImport" type="button"><span class="copy-button-label rts-format">{{ release.copyImportLabel | default: "Copy Import" }}</span><span class="copy-icon">⧉</span></button></div>
