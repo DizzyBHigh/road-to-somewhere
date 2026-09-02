@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "products": [
+    {
+      "repository": "DizzyBHigh/RTS-Ban-Timeout-Widget",
+      "ref": "main",
+      "manifest": "site/rts.json",
+      "serviceSync": true
+    },
+    {
+      "repository": "DizzyBHigh/move-workflow",
+      "ref": "main",
+      "manifest": "site/rts.json"
+    },
+    {
+      "repository": "DizzyBHigh/RTS-UI-Dll",
+      "ref": "main",
+      "manifest": "site/rts.json"
+    }
+  ]
+}
