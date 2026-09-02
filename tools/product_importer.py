@@ -4,7 +4,7 @@ import shutil
 import zipfile
 from product_paths import DATA_DIR, ROOT, copy_tree, fail, load_json, product_dir, rewrite_asset_paths, safe_relative
 from product_release import publish_extension_files, release_assets
-from github_release import latest_release, release_version
+from github_release import latest_release, release_version, repository_visibility
 
 
 def normalise_website(product: dict) -> None:
@@ -58,6 +58,7 @@ def import_product(entry: dict) -> None:
     if not isinstance(name, str) or not name.strip():
         fail(f"{manifest_path}: name is required")
     public = json.loads(json.dumps(manifest))
+    public["repositoryVisibility"] = repository_visibility(repository)
     policy = public.get("release") if isinstance(public.get("release"), dict) else {}
     publish = public.get("publish", {})
     needs_release = bool(publish.get("overlay") or publish.get("importFile") or policy)
