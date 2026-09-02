@@ -59,17 +59,11 @@ jobs:
           test -n "$RTS_SERVICES_SYNC_KEY" || { echo "RTS_SERVICES_SYNC_KEY is not configured"; exit 1; }
           while IFS= read -r entry; do
             repo=$(echo "$entry" | jq -r '.repository')
-            ref=$(echo "$entry" | jq -r '.ref // "main"')
             path=$(echo "$entry" | jq -r '.checkoutPath // empty')
             path="${path:-.import-src/${repo##*/}}"
             manifest_path=$(echo "$entry" | jq -r '.manifest // "site/rts.json"')
             manifest="$path/$manifest_path"
             test -f "$manifest" || { echo "Missing product manifest: $manifest"; exit 1; }
-            service_sync=$(echo "$entry" | jq -r '.serviceSync // false')
-            review=$(jq -r 'if .review == null then true else .review end' "$manifest")
-            if [[ "$service_sync" != "true" && "$review" == "false" ]]; then
-              continue
-            fi
             slug=$(jq -r '.slug // .id // empty' "$manifest")
             test -n "$slug" || { echo "Product manifest has no slug/id: $manifest"; exit 1; }
             generated="_data/$slug.json"
