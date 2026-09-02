@@ -23,9 +23,7 @@ jobs:
       - name: Checkout public site
         uses: actions/checkout@v4
 
-      # The private extension repository is the source of truth; this checkout
-      # deliberately fetches the current main branch on every build.
-      - name: Checkout private extension sources
+      - name: Checkout product sources
         env:
           RTS_EXTENSION_TOKEN: ${{ secrets.RTS_EXTENSION_TOKEN }}
         run: |
@@ -43,40 +41,12 @@ jobs:
             mkdir -p "$(dirname "$path")"
             git -c "http.extraheader=AUTHORIZATION: basic $auth" \
               clone --depth 1 --branch "$ref" "https://github.com/$repo.git" "$path"
-          done < <(jq -c '.extensions[]' extensions/sources.json)
+          done < <(jq -c '.products[]' products/sources.json)
 
-      - name: Checkout public OBS plugin sources
-        run: |
-          set -euo pipefail
-          mkdir -p .import-src
-          while IFS= read -r entry; do
-            repo=$(echo "$entry" | jq -r '.repository')
-            ref=$(echo "$entry" | jq -r '.ref // "main"')
-            path=$(echo "$entry" | jq -r '.checkoutPath // empty')
-            path="${path:-.import-src/${repo##*/}}"
-            test -n "$repo"
-            rm -rf "$path"
-            mkdir -p "$(dirname "$path")"
-            git clone --depth 1 --branch "$ref" "https://github.com/$repo.git" "$path"
-          done < <(jq -c '.plugins[]' obs-plugins/sources.json)
-
-      - name: Checkout RTS UI DLL source
-        run: |
-          set -euo pipefail
-          mkdir -p .import-src
-          while IFS= read -r entry; do
-            repo=$(echo "$entry" | jq -r '.repository')
-            ref=$(echo "$entry" | jq -r '.ref // "main"')
-            path=$(echo "$entry" | jq -r '.checkoutPath // empty')
-            path="${path:-.import-src/${repo##*/}}"
-            test -n "$repo"
-            rm -rf "$path"
-            mkdir -p "$(dirname "$path")"
-            git clone --depth 1 --branch "$ref" "https://github.com/$repo.git" "$path"
-          done < <(jq -c '.dlls[]' extensions/sources.json)
-
-      - name: Import private extension manifests and public assets
-        run: python3 tools/import-private-extensions.py
+      - name: Import product manifests and release assets
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 tools/import-products.py
 
       - name: Sync extensions with RTS Services
         env:
@@ -97,15 +67,7 @@ jobs:
                   --data-binary @- \
                   "$RTS_SERVICES_URL/functions/v1/sync-extension"
             echo
-          done < <(jq -c '.extensions[]' extensions/sources.json)
-
-      - name: Import OBS plugin manifests and public assets
-        run: python3 tools/import-obs-plugins.py
-
-      - name: Import RTS UI DLL manifest and release information
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: python3 tools/import-dll.py
+          done < <(jq -c '.products[] | select(.serviceSync == true)' products/sources.json)
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
