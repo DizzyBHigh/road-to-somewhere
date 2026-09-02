@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-  const root = document.querySelector('[data-extension-slug]');
+  const root = document.querySelector('[data-product-slug]');
   if (!root || !window.supabase) return;
   const list = root.querySelector('[data-review-list]');
   const summary = root.querySelector('[data-review-summary]');
@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const fallbackName = discord.name || metadata.name || discord.username || metadata.user_name || metadata.full_name || profile?.display_name;
     return globalName || cleanLegacyName(fallbackName) || 'RTS user';
   };
-  const { data: extension, error: extensionError } = await client.from('extensions').select('id').eq('slug', root.dataset.extensionSlug).single();
-  if (extensionError) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
+  const { data: product, error: productError } = await client.from('products').select('id').eq('slug', root.dataset.productSlug).single();
+  if (productError) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
   const setRating = rating => {
     const value = Number(rating);
     starsInput.value = value || '';
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   stars.forEach(star => star.addEventListener('click', () => setRating(star.dataset.rating)));
   const loadReviews = async () => {
-    const { data, error } = await client.from('reviews').select('id,user_id,rating,body,created_at,status,profiles(display_name,avatar_url)').eq('extension_id', extension.id).eq('status', 'published').order('created_at', { ascending: false });
+    const { data, error } = await client.from('reviews').select('id,user_id,rating,body,created_at,status,profiles(display_name,avatar_url)').eq('product_id', product.id).eq('status', 'published').order('created_at', { ascending: false });
     if (error) { list.innerHTML = '<p class="reviews-empty">Reviews are temporarily unavailable.</p>'; return; }
     const average = data.length ? data.reduce((sum, r) => sum + Number(r.rating), 0) / data.length : 0;
     const rounded = Math.round(average);
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const identityStyle = 'display:flex;flex-direction:row;align-items:center;gap:10px;min-width:0;';
       const detailsStyle = 'display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;';
       return `<article class="review-card"><div class="review-card__top"><div class="review-card__identity" style="${identityStyle}"><img src="${escape(avatar)}" alt="" class="review-card__avatar" style="${avatarStyle}" onerror="this.style.display='none'"><div class="review-card__details" style="${detailsStyle}"><strong>${escape(name)}</strong>${date ? `<span class="review-card__date">${escape(date)}</span>` : ''}</div></div><span>${starText(review.rating)}</span></div><p>${escape(review.body)}</p></article>`;
-    }).join('') : '<p class="reviews-empty">Be the first to review this extension.</p>';
+    }).join('') : '<p class="reviews-empty">Be the first to review this product.</p>';
   };
   const showUser = async user => {
     if (!user) {
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const name = displayName(user, profile);
     const avatarUrl = profile?.avatar_url || user.user_metadata?.avatar_url || '';
     state.innerHTML = `<span class="review-signed-in"><img src="${escape(avatarUrl)}" alt=""><span>Signed in as <strong>${escape(name)}</strong></span></span>`;
-    const { data: own } = await client.from('reviews').select('id,rating,body,status').eq('extension_id', extension.id).eq('user_id', user.id).maybeSingle();
+    const { data: own } = await client.from('reviews').select('id,rating,body,status').eq('product_id', product.id).eq('user_id', user.id).maybeSingle();
     form.hidden = false;
     if (own) {
       setRating(own.rating);
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     form.onsubmit = async event => {
       event.preventDefault(); message.textContent = 'Saving…';
       const values = Object.fromEntries(new FormData(form));
-      const payload = { extension_id: extension.id, user_id: user.id, rating: Number(values.rating), body: values.body.trim(), status: 'hidden' };
+      const payload = { product_id: product.id, user_id: user.id, rating: Number(values.rating), body: values.body.trim(), status: 'hidden' };
       if (!payload.rating || payload.rating < 1 || payload.rating > 5) { message.textContent = 'Please select a rating.'; return; }
       const result = own ? await client.from('reviews').update(payload).eq('id', own.id).eq('user_id', user.id) : await client.from('reviews').insert(payload);
       message.textContent = result.error ? `Could not save review: ${result.error.message}` : 'Review submitted for moderation.';
