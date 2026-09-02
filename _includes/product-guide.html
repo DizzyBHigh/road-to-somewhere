@@ -2,9 +2,9 @@
   <article class="product-content-card">
     <div class="product-guide-heading">
       <div class="section-kicker">{{ include.kicker | default: 'GUIDE' }}</div>
-      <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}Content" aria-expanded="true">Collapse</button>
+      <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}Content" aria-expanded="false">Expand +</button>
     </div>
-    <div class="collapsible-content" id="{{ include.id }}Content">
+    <div class="collapsible-content" id="{{ include.id }}Content" hidden>
       <h2 class="rts-format">{{ include.data.title }}</h2>
       {% if include.data.intro %}<p class="product-guide-intro rts-format">{{ include.data.intro }}</p>{% endif %}
       <ol class="product-guide-list">
