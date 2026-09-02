@@ -15,7 +15,7 @@ def github_request(repository: str, endpoint: str) -> dict:
         url,
         headers={"Accept": "application/vnd.github+json", "User-Agent": "RTS-site-importer"},
     )
-    token = os.environ.get("GITHUB_TOKEN")
+    token = os.environ.get("RTS_EXTENSION_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if token:
         request.add_header("Authorization", f"Bearer {token}")
     try:
@@ -39,7 +39,7 @@ def latest_release(repository: str) -> dict:
         f"https://api.github.com/repos/{repository}/releases?per_page=20",
         headers={"Accept": "application/vnd.github+json", "User-Agent": "RTS-site-importer"},
     )
-    token = os.environ.get("GITHUB_TOKEN")
+    token = os.environ.get("RTS_EXTENSION_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if token:
         request.add_header("Authorization", f"Bearer {token}")
     try:
@@ -81,7 +81,7 @@ def download_asset(asset: dict, destination: Path) -> None:
     if not url:
         raise RuntimeError(f"Release asset has no download URL: {asset.get('name', '')}")
     request = urllib.request.Request(url, headers={"User-Agent": "RTS-site-importer"})
-    token = os.environ.get("GITHUB_TOKEN")
+    token = os.environ.get("RTS_EXTENSION_TOKEN") or os.environ.get("GITHUB_TOKEN")
     if token:
         request.add_header("Authorization", f"Bearer {token}")
     destination.parent.mkdir(parents=True, exist_ok=True)
