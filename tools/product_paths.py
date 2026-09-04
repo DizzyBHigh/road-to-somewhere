@@ -44,9 +44,9 @@ def rewrite_asset_paths(value, product_path: str, slug: str):
         return {
             key: (
                 f"{product_path}/{item}"
-                if key == "src" and isinstance(item, str) and item.startswith("assets/")
+                if key in {"src", "image"} and isinstance(item, str) and item.startswith("assets/")
                 else f"{product_path}/assets/{item.removeprefix('images/')}"
-                if key == "src" and isinstance(item, str) and item.startswith("images/")
+                if key in {"src", "image"} and isinstance(item, str) and item.startswith("images/")
                 else rewrite_asset_paths(item, product_path, slug)
             )
             for key, item in value.items()
