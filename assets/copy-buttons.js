@@ -41,6 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
+  const resolveSiteUrl = value => {
+    const url = new URL(value, window.location.origin);
+    return new URL(url.pathname + url.search + url.hash, window.location.origin).href;
+  };
+
   const importButton = document.getElementById('copyImport');
   const importCode = document.getElementById('importCode');
   if (importButton && page.dataset.importUrl) {
@@ -57,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const overlayButton = document.getElementById('copyOverlayUrl');
   if (overlayButton && page.dataset.overlayUrl) {
-    bind(overlayButton, () => new URL(page.dataset.overlayUrl, window.location.origin).href);
+    bind(overlayButton, () => resolveSiteUrl(page.dataset.overlayUrl));
   }
 
   document.querySelectorAll('.rts-copy-token').forEach(button => {
