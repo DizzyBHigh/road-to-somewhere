@@ -52,6 +52,28 @@ def publish_release_assets(release: dict, assets: list[dict], public_dir: Path) 
     return published
 
 
+def extract_overlay(archive: zipfile.ZipFile, destination: Path) -> None:
+    """Extract an overlay ZIP with or without a top-level overlay directory."""
+    members = [item for item in archive.infolist() if item.filename]
+    paths = [Path(item.filename) for item in members]
+    top_levels = {path.parts[0] for path in paths if path.parts}
+    prefix = "overlay" if top_levels == {"overlay"} else ""
+    base = destination.resolve()
+
+    for member in members:
+        relative = Path(member.filename)
+        if prefix:
+            relative = Path(*relative.parts[1:]) if len(relative.parts) > 1 else Path()
+        target = (destination / relative).resolve()
+        if target != base and base not in target.parents:
+            fail(f"Overlay archive contains unsafe path: {member.filename}")
+        if member.is_dir() or not relative:
+            continue
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with archive.open(member) as source, target.open("wb") as output:
+            shutil.copyfileobj(source, output)
+
+
 def publish_extension_files(manifest: dict, release: dict, public_dir: Path) -> None:
     publish = manifest.get("publish", {})
     version = release_version(release)
@@ -68,12 +90,7 @@ def publish_extension_files(manifest: dict, release: dict, public_dir: Path) -> 
             shutil.rmtree(overlay_dir)
         overlay_dir.mkdir(parents=True)
         with zipfile.ZipFile(zip_path) as archive:
-            base = overlay_dir.resolve()
-            for member in archive.infolist():
-                target = (overlay_dir / member.filename).resolve()
-                if base not in target.parents:
-                    fail(f"Overlay archive contains unsafe path: {member.filename}")
-            archive.extractall(overlay_dir)
+            extract_overlay(archive, overlay_dir)
         website["overlayUrl"] = f"/extensions/{manifest['slug']}/overlay/"
         website["overlayZipFilename"] = f"extensions/{manifest['slug']}/{zip_name}"
     if publish.get("importFile"):
