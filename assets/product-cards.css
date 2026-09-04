@@ -17,6 +17,11 @@
   display: grid;
   place-items: center;
 }
+.product-image {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+}
 .product-badge {
   position: absolute; top: 12px; left: 14px;
   color: var(--accent2); font: 500 8px var(--mono);
