@@ -56,13 +56,17 @@ footer {
   margin: auto;
   padding: 14px 28px 20px;
   border-top: 1px solid var(--line);
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  color: var(--accent);
   font: 400 8px var(--mono);
   letter-spacing: .1em;
   text-transform: uppercase;
 }
+
+footer span:nth-child(2) { text-align: center; }
+footer span:nth-child(3) { text-align: right; }
 
 @media(max-width:760px) {
   .section { padding: 14px 20px 22px; }
@@ -74,6 +78,7 @@ footer {
     padding-left: 0;
     padding-right: 0;
     gap: 12px;
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
+  footer span:nth-child(2), footer span:nth-child(3) { text-align: left; }
 }
