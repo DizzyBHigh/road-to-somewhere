@@ -1,0 +1,121 @@
+{% assign documentation = include.data %}
+{% if documentation %}
+<section class="product-guide" id="documentation">
+  <article class="product-content-card">
+    <div class="product-guide-heading">
+      <div class="section-kicker rts-format">DOCUMENTATION</div>
+      <button class="collapse-toggle" type="button" data-toggle="documentationContent" aria-expanded="false">Expand +</button>
+    </div>
+    <div class="collapsible-content" id="documentationContent" hidden>
+      <h2 class="setup-title rts-format">{{ documentation.title }}</h2>
+      {% if documentation.intro %}<p class="settings-intro rts-format">{{ documentation.intro }}</p>{% endif %}
+      {% for section in documentation.sections %}
+      <section class="documentation-section">
+        <h3 class="documentation-section-title rts-format">{{ section.title }}</h3>
+        {% if section.intro %}<p class="settings-intro rts-format">{{ section.intro }}</p>{% endif %}
+        {% if section.controls %}
+        <div class="settings-groups">
+          <div class="settings-group">
+            {% for control in section.controls %}
+            <div class="setting-row">
+              <strong class="rts-format">{{ control[0] }}</strong>
+              <span class="rts-format">{{ control[1] }}</span>
+              {% if control[2] %}<div class="setting-range rts-format">{{ control[2] }}</div>{% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if section.commands %}
+        <div class="settings-groups">
+          <div class="settings-group">
+            {% for command in section.commands %}
+            <div class="setting-row">
+              <strong class="rts-format">{{ command[0] }}</strong>
+              <span class="rts-format">[[code:{{ command[1] }}]]</span>
+              <span class="rts-format">{{ command[2] }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+        {% if section.bullets %}
+        <ul class="product-list">{% for item in section.bullets %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul>
+        {% endif %}
+        {% if section.notes %}
+        <ul class="product-list">{% for note in section.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>
+        {% endif %}
+        {% for subsection in section.sections %}
+        <article class="documentation-subsection">
+          <h4 class="documentation-subsection-title rts-format">{{ subsection.title }}</h4>
+          {% if subsection.intro %}<p class="settings-intro rts-format">{{ subsection.intro }}</p>{% endif %}
+          {% if subsection.controls %}
+          <div class="settings-groups">
+            <div class="settings-group">
+              {% for control in subsection.controls %}
+              <div class="setting-row">
+                <strong class="rts-format">{{ control[0] }}</strong>
+                <span class="rts-format">{{ control[1] }}</span>
+                {% if control[2] %}<div class="setting-range rts-format">{{ control[2] }}</div>{% endif %}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          {% if subsection.commands %}
+          <div class="settings-groups">
+            <div class="settings-group">
+              {% for command in subsection.commands %}
+              <div class="setting-row">
+                <strong class="rts-format">{{ command[0] }}</strong>
+                <span class="rts-format">[[code:{{ command[1] }}]]</span>
+                <span class="rts-format">{{ command[2] }}</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+          {% if subsection.bullets %}<ul class="product-list">{% for item in subsection.bullets %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul>{% endif %}
+          {% if subsection.notes %}<ul class="product-list">{% for note in subsection.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}
+          {% for detail in subsection.sections %}
+          <article class="documentation-detail">
+            <h5 class="documentation-detail-title rts-format">{{ detail.title }}</h5>
+            {% if detail.intro %}<p class="settings-intro rts-format">{{ detail.intro }}</p>{% endif %}
+            {% if detail.controls %}
+            <div class="settings-groups">
+              <div class="settings-group">
+                {% for control in detail.controls %}
+                <div class="setting-row">
+                  <strong class="rts-format">{{ control[0] }}</strong>
+                  <span class="rts-format">{{ control[1] }}</span>
+                  {% if control[2] %}<div class="setting-range rts-format">{{ control[2] }}</div>{% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+            {% if detail.commands %}
+            <div class="settings-groups">
+              <div class="settings-group">
+                {% for command in detail.commands %}
+                <div class="setting-row">
+                  <strong class="rts-format">{{ command[0] }}</strong>
+                  <span class="rts-format">[[code:{{ command[1] }}]]</span>
+                  <span class="rts-format">{{ command[2] }}</span>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+            {% if detail.bullets %}<ul class="product-list">{% for item in detail.bullets %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul>{% endif %}
+            {% if detail.notes %}<ul class="product-list">{% for note in detail.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}
+          </article>
+          {% endfor %}
+        </article>
+        {% endfor %}
+      </section>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+{% endif %}
