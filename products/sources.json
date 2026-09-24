@@ -2,6 +2,11 @@
   "schemaVersion": 1,
   "products": [
     {
+      "repository": "DizzyBHigh/RTS-Action-Replay",
+      "ref": "main",
+      "manifest": "site/rts.json"
+    },
+    {
       "repository": "DizzyBHigh/RTS-Ban-Timeout-Widget",
       "ref": "main",
       "manifest": "site/rts.json",
