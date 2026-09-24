@@ -87,7 +87,9 @@ jobs:
           destination: ./_site
 
       - name: Cache-bust CSS and JavaScript
-        run: python3 tools/asset-cache-bust.py _site
+        run: |
+          chmod -R u+rwX _site
+          python3 tools/asset-cache-bust.py _site
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
