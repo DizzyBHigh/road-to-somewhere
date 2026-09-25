@@ -86,6 +86,15 @@ jobs:
           source: ./
           destination: ./_site
 
+      - name: Diagnose site permissions
+        run: |
+          echo "=== _site ==="
+          ls -ld _site
+          echo "=== index.html ==="
+          ls -l _site/index.html
+          echo "=== ownership ==="
+          stat -c '%U:%G %a %n' _site _site/index.html
+
       - name: Cache-bust CSS and JavaScript
         run: python3 tools/asset-cache-bust.py _site
 
