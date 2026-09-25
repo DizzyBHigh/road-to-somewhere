@@ -14,7 +14,7 @@
           <div class="section-heading-row product-step-heading">
             <span>{{ step.number }}</span>
             <strong class="rts-format">{{ step.title | escape }}</strong>
-            <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}-step-{{ forloop.index }}" aria-expanded="true">Collapse −</button>
+            <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}-step-{{ forloop.index }}" aria-expanded="false">Expand +</button>
           </div>
           <div class="collapsible-content product-guide-step-content" id="{{ include.id }}-step-{{ forloop.index }}">
           {% if step.description %}<p class="product-step-description rts-format">{{ step.description | escape }}</p>{% endif %}
@@ -34,7 +34,7 @@
                   <div class="product-guide-setting">
                     <div class="section-heading-row product-guide-setting-heading">
                       <strong class="rts-format">{{ setting.title | escape }}</strong>
-                      <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}-{{ step.number }}-{{ substep.number }}-setting-{{ forloop.index }}" aria-expanded="true">Collapse −</button>
+                      <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}-{{ step.number }}-{{ substep.number }}-setting-{{ forloop.index }}" aria-expanded="false">Expand +</button>
                     </div>
                     <div class="collapsible-content product-guide-setting-content" id="{{ include.id }}-{{ step.number }}-{{ substep.number }}-setting-{{ forloop.index }}">
                       <span class="rts-format">{{ setting.description | escape }}</span>
