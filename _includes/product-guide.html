@@ -6,42 +6,42 @@
       <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}Content" aria-expanded="false">Expand +</button>
     </div>
     <div class="collapsible-content" id="{{ include.id }}Content" hidden>
-      <h2 class="rts-format">{{ include.data.title }}</h2>
-      {% if include.data.intro %}<p class="product-guide-intro rts-format">{{ include.data.intro }}</p>{% endif %}
+      <h2 class="rts-format">{{ include.data.title | escape }}</h2>
+      {% if include.data.intro %}<p class="product-guide-intro rts-format">{{ include.data.intro | escape }}</p>{% endif %}
       <ol class="product-guide-list">
         {% for step in include.data.steps %}
         <li class="product-guide-step">
-          <div class="product-step-heading"><span>{{ step.number }}</span><strong class="rts-format">{{ step.title }}</strong></div>
-          {% if step.description %}<p class="product-step-description rts-format">{{ step.description }}</p>{% endif %}
-          {% if step.bullets %}<ul class="product-list">{% for item in step.bullets %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul>{% endif %}
-          {% if step.notes %}<ul class="product-list">{% for note in step.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}
+          <div class="product-step-heading"><span>{{ step.number }}</span><strong class="rts-format">{{ step.title | escape }}</strong></div>
+          {% if step.description %}<p class="product-step-description rts-format">{{ step.description | escape }}</p>{% endif %}
+          {% if step.bullets %}<ul class="product-list">{% for item in step.bullets %}<li class="rts-format">{{ item | escape }}</li>{% endfor %}</ul>{% endif %}
+          {% if step.notes %}<ul class="product-list">{% for note in step.notes %}<li class="rts-format">{{ note | escape }}</li>{% endfor %}</ul>{% endif %}
           {% if step.substeps and step.substeps.size > 0 %}
           <div class="product-substeps">
             {% for substep in step.substeps %}
             <article class="product-substep{% unless substep.images and substep.images.size > 0 %} product-substep--no-image{% endunless %}">
               <div>
                 <span>{{ substep.number }}</span>
-                <h3 class="rts-format">{{ substep.title }}</h3>
-                {% if substep.text %}<p class="rts-format">{{ substep.text }}</p>{% endif %}
+                <h3 class="rts-format">{{ substep.title | escape }}</h3>
+                {% if substep.text %}<p class="rts-format">{{ substep.text | escape }}</p>{% endif %}
                 {% if substep.settings %}
                 <div class="product-guide-settings">
                   {% for setting in substep.settings %}
                   <div class="product-guide-setting">
-                    <strong class="rts-format">{{ setting.title }}</strong>
-                    <span class="rts-format">{{ setting.description }}</span>
-                    {% if setting.value %}<div class="setting-range rts-format">{{ setting.value }}</div>{% endif %}
+                    <strong class="rts-format">{{ setting.title | escape }}</strong>
+                    <span class="rts-format">{{ setting.description | escape }}</span>
+                    {% if setting.value %}<div class="setting-range rts-format">{{ setting.value | escape }}</div>{% endif %}
                   </div>
                   {% endfor %}
                 </div>
                 {% endif %}
-                {% if substep.bullets %}<ul class="product-list">{% for item in substep.bullets %}<li class="rts-format">{{ item }}</li>{% endfor %}</ul>{% endif %}
-                {% if substep.notes %}<ul class="product-list">{% for note in substep.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}
+                {% if substep.bullets %}<ul class="product-list">{% for item in substep.bullets %}<li class="rts-format">{{ item | escape }}</li>{% endfor %}</ul>{% endif %}
+                {% if substep.notes %}<ul class="product-list">{% for note in substep.notes %}<li class="rts-format">{{ note | escape }}</li>{% endfor %}</ul>{% endif %}
                 {% if substep.variables %}
                 <div class="product-guide-callout">
                   <strong>Variables</strong>
                   {% for variable in substep.variables %}
-                  {% if variable.title %}<div class="product-guide-variable-group"><span class="rts-format">{{ variable.title }}</span>{% for value in variable.values %}<code>{{ value }}</code>{% endfor %}</div>
-                  {% else %}<code>{{ variable }}</code>{% endif %}
+                  {% if variable.title %}<div class="product-guide-variable-group"><span class="rts-format">{{ variable.title | escape }}</span>{% for value in variable.values %}<code>{{ value | escape }}</code>{% endfor %}</div>
+                  {% else %}<code>{{ variable | escape }}</code>{% endif %}
                   {% endfor %}
                 </div>
                 {% endif %}
@@ -52,7 +52,7 @@
                   {% for group in include.data.commands %}
                   {% for command in group.commands %}
                   {% if command.id == command_id %}
-                  <div class="product-guide-command"><code>{{ command.syntax }}</code><span class="rts-format">{{ command.description }}</span></div>
+                  <div class="product-guide-command"><code>{{ command.syntax | escape }}</code><span class="rts-format">{{ command.description | escape }}</span></div>
                   {% endif %}
                   {% endfor %}
                   {% endfor %}
@@ -63,7 +63,7 @@
               {% if substep.images and substep.images.size > 0 %}
               <div class="product-substep-images">
                 {% for image in substep.images %}
-                <figure><img src="{{ image.src | relative_url }}" alt="{{ image.alt }}" loading="lazy"></figure>
+                <figure><img src="{{ image.src | relative_url }}" alt="{{ image.alt | escape }}" loading="lazy"></figure>
                 {% endfor %}
               </div>
               {% endif %}
