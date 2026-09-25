@@ -15,7 +15,7 @@
           {% if step.substeps and step.substeps.size > 0 %}
           <div class="product-substeps">
             {% for substep in step.substeps %}
-            <article class="product-substep">
+            <article class="product-substep{% unless substep.images and substep.images.size > 0 %} product-substep--no-image{% endunless %}">
               <div><span>{{ substep.number }}</span><h3 class="rts-format">{{ substep.title }}</h3>{% if substep.text %}<p class="rts-format">{{ substep.text }}</p>{% endif %}</div>
               {% if substep.images and substep.images.size > 0 %}<div class="product-substep-images">{% for image in substep.images %}<figure><img src="{{ image.src | relative_url }}" alt="{{ image.alt }}" loading="lazy"></figure>{% endfor %}</div>{% endif %}
             </article>
