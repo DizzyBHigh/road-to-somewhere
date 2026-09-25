@@ -3,7 +3,7 @@ layout: default
 title: Streamer.bot Extensions — The Road to Somewhere
 description: Streamer.bot extensions from The Road to Somewhere.
 ---
-{% assign extension = site.data["rts-ban-timeout-widget"] %}
+{% assign products = site.data.products.extensions %}
 <main>
   <section class="section">
     <div class="section-kicker">THE WORKSHOP</div>
@@ -11,18 +11,24 @@ description: Streamer.bot extensions from The Road to Somewhere.
       <h3>Streamer.bot Extensions</h3>
       <p>Tools for building more capable Streamer.bot setups.</p>
     </div>
-    <article class="product-card">
-      <div class="product-art">
-        {% if extension.home.image %}<img src="{{ extension.home.image | relative_url }}" alt="{{ extension.name }}" class="product-image">{% else %}<div class="product-badge">01 / {{ extension.status }}</div><div class="van-lockup"><span class="crown">♛</span><span class="van">DUHBUH</span></div>{% endif %}
-      </div>
-      <div class="product-info">
-        <div class="product-type">STREAMER.BOT EXTENSION</div>
-        <h3>{{ extension.name }}</h3>
-        <p>{{ extension.description }}</p>
-        <div class="tags">{% for tag in extension.tags %}<span>{{ tag }}</span>{% endfor %}</div>
-        <div class="product-actions"><a class="button" href="{{ '/extensions/' | append: extension.slug | append: '/' | relative_url }}">View extension <span>→</span></a><span class="status">v{{ extension.version }}</span></div>
-      </div>
-      <div class="product-card-footer"><span>01</span><strong>{{ extension.website.footerLabel }}</strong><span>v{{ extension.version }}</span></div>
-    </article>
+    {% for slug in products %}
+      {% assign extension = site.data[slug] %}
+      {% if extension %}
+        {% if extension.page.url %}{% assign product_path = extension.page.url %}{% else %}{% assign product_path = '/extensions/' | append: extension.slug | append: '/' %}{% endif %}
+        <article class="product-card">
+          <div class="product-art">
+            {% if extension.home.image %}<img src="{{ extension.home.image | relative_url }}" alt="{{ extension.name }}" class="product-image">{% else %}<div class="product-badge">{{ forloop.index | prepend: '0' }} / {{ extension.status }}</div><div class="van-lockup"><span class="crown">♛</span><span class="van">DUHBUH</span></div>{% endif %}
+          </div>
+          <div class="product-info">
+            <div class="product-type">STREAMER.BOT EXTENSION</div>
+            <h3>{{ extension.name }}</h3>
+            <p>{{ extension.description }}</p>
+            <div class="tags">{% for tag in extension.tags %}<span>{{ tag }}</span>{% endfor %}</div>
+            <div class="product-actions"><a class="button" href="{{ product_path | relative_url }}">View extension <span>→</span></a><span class="status">v{{ extension.version }}</span></div>
+          </div>
+          <div class="product-card-footer"><span>{{ forloop.index | prepend: '0' }}</span><strong>{{ extension.website.footerLabel }}</strong><span>v{{ extension.version }}</span></div>
+        </article>
+      {% endif %}
+    {% endfor %}
   </section>
 </main>
