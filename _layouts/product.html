@@ -32,7 +32,7 @@ layout: default
   {% if setup %}{% include product-guide.html data=setup id="install" kicker="INSTALLATION" %}{% endif %}
   {% if getting_started %}{% include product-guide.html data=getting_started id="getting-started" kicker="GETTING STARTED" %}{% endif %}
   {% if content.settings %}{% include product-settings.html data=content.settings id="settings" %}{% endif %}
-  {% if product.documentation %}{% include product-documentation.html data=product.documentation %}{% endif %}
+  {% if product.documentation %}{% include product-guide.html data=product.documentation id="documentation" kicker="DOCUMENTATION" %}{% include product-commands.html data=product.documentation %}{% endif %}
   {% if product.notes or product.links %}<section class="product-section"><article class="product-content-card"><div class="section-kicker">IMPORTANT NOTES</div>{% if product.notes %}<ul class="product-list">{% for note in product.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}<div class="product-links">{% if product.repository %}<a class="secondary-button" href="{{ product.repository }}">Source repository ↗</a>{% endif %}{% for link in product.links %}<a class="secondary-button" href="{{ link[1] }}">{{ link[0] }} ↗</a>{% endfor %}</div></article></section>{% endif %}
   {% if product.review != false %}{% include product-reviews.html product=product %}<script src="{{ '/assets/reviews.js' | relative_url }}" defer></script>{% endif %}
   <script src="{{ '/assets/product-downloads.js' | relative_url }}" defer></script>
