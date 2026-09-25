@@ -27,9 +27,14 @@
                 <div class="product-guide-settings">
                   {% for setting in substep.settings %}
                   <div class="product-guide-setting">
-                    <strong class="rts-format">{{ setting.title | escape }}</strong>
-                    <span class="rts-format">{{ setting.description | escape }}</span>
-                    {% if setting.value %}<div class="setting-range rts-format">{{ setting.value | escape }}</div>{% endif %}
+                    <div class="section-heading-row product-guide-setting-heading">
+                      <strong class="rts-format">{{ setting.title | escape }}</strong>
+                      <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}-{{ step.number }}-{{ substep.number }}-setting-{{ forloop.index }}" aria-expanded="true">Collapse −</button>
+                    </div>
+                    <div class="collapsible-content product-guide-setting-content" id="{{ include.id }}-{{ step.number }}-{{ substep.number }}-setting-{{ forloop.index }}">
+                      <span class="rts-format">{{ setting.description | escape }}</span>
+                      {% if setting.value %}<div class="setting-range rts-format">{{ setting.value | escape }}</div>{% endif %}
+                    </div>
                   </div>
                   {% endfor %}
                 </div>
