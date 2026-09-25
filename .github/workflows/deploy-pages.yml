@@ -95,6 +95,9 @@ jobs:
           echo "=== ownership ==="
           stat -c '%U:%G %a %n' _site _site/index.html
 
+      - name: Fix site ownership
+        run: sudo chown -R "$(id -u):$(id -g)" _site
+
       - name: Cache-bust CSS and JavaScript
         run: python3 tools/asset-cache-bust.py _site
 
