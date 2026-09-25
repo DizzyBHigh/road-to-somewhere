@@ -39,11 +39,14 @@ function appendFormattedText(parent, text) {
         if (colon !== -1) {
           const tag = token.slice(0, colon).toLowerCase();
           const value = token.slice(colon + 1);
-          if (['blue', 'yellow', 'muted'].includes(tag)) {
+          if (['blue', 'yellow', 'red', 'green', 'white', 'purple', 'muted'].includes(tag)) {
             const span = document.createElement('span');
             span.className = `rts-text-${tag}`;
             appendFormattedText(span, value);
             parent.appendChild(span);
+          } else if (tag === 'overlayurl') {
+            const overlayUrl = document.querySelector('[data-overlay-url]')?.dataset.overlayUrl;
+            if (overlayUrl) parent.appendChild(document.createTextNode(new URL(overlayUrl, window.location.origin).href));
           } else if (tag === 'code' || tag === 'overlay') {
             parent.appendChild(makeCopyButton(value, tag));
           } else if (tag === 'overlayzip') {
