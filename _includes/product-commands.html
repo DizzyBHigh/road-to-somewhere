@@ -12,14 +12,14 @@
       <ol class="product-guide-list">
         {% for group in documentation.commands %}
         <li class="product-guide-step">
-          <div class="product-step-heading"><span>{{ group.number }}</span><strong class="rts-format">{{ group.title }}</strong></div>
-          {% if group.description %}<p class="product-step-description rts-format">{{ group.description }}</p>{% endif %}
+          <div class="product-step-heading"><span>{{ group.number }}</span><strong class="rts-format">{{ group.title | escape }}</strong></div>
+          {% if group.description %}<p class="product-step-description rts-format">{{ group.description | escape }}</p>{% endif %}
           <div class="product-command-list">
             {% for command in group.commands %}
             <article class="product-command">
-              <strong class="rts-format">{{ command.title }}</strong>
-              <code>{{ command.syntax }}</code>
-              <span class="rts-format">{{ command.description }}</span>
+              <strong class="rts-format">{{ command.title | escape }}</strong>
+              <code>{{ command.syntax | escape }}</code>
+              <span class="rts-format">{{ command.description | escape }}</span>
             </article>
             {% endfor %}
           </div>
