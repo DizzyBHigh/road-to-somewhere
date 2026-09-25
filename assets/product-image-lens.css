@@ -1,5 +1,4 @@
 .product-substep-images figure{position:relative;overflow:visible}
 .product-image-lens{position:absolute;z-index:5;width:180px;height:180px;border:3px solid var(--text);border-radius:50%;background-color:var(--bg);background-repeat:no-repeat;box-shadow:0 5px 18px rgba(0,0,0,.45);pointer-events:none;display:none}
-.product-image-lens::after{content:"";position:absolute;width:72px;height:10px;right:-54px;bottom:-28px;border-radius:6px;background:var(--text);transform:rotate(45deg);transform-origin:left center;box-shadow:0 2px 5px rgba(0,0,0,.3)}
 .product-substep-images figure.rts-lens-active .product-image-lens{display:block}
 @media(max-width:760px){.product-image-lens{width:140px;height:140px}.product-image-lens::after{width:58px;right:-43px;bottom:-23px}}
