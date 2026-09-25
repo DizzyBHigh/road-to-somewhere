@@ -1,0 +1,4 @@
+/* Shared styling for RTS double-bracket formatting. */
+.rts-text-blue{color:#0384CB}
+.rts-text-yellow{color:#f2b900}
+.rts-text-muted{color:var(--muted)}
