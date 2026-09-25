@@ -1,0 +1,32 @@
+{% assign documentation = include.data %}
+{% if documentation and documentation.commands %}
+<section class="product-guide" id="commands">
+  <article class="product-content-card">
+    <div class="product-guide-heading">
+      <div class="section-kicker rts-format">COMMANDS</div>
+      <button class="collapse-toggle" type="button" data-toggle="commandsContent" aria-expanded="false">Expand +</button>
+    </div>
+    <div class="collapsible-content" id="commandsContent" hidden>
+      <h2 class="rts-format">Command Reference</h2>
+      <p class="product-guide-intro rts-format">Complete reference for the RTS Action Replay chat commands.</p>
+      <ol class="product-guide-list">
+        {% for group in documentation.commands %}
+        <li class="product-guide-step">
+          <div class="product-step-heading"><span>{{ group.number }}</span><strong class="rts-format">{{ group.title }}</strong></div>
+          {% if group.description %}<p class="product-step-description rts-format">{{ group.description }}</p>{% endif %}
+          <div class="product-command-list">
+            {% for command in group.commands %}
+            <article class="product-command">
+              <strong class="rts-format">{{ command.title }}</strong>
+              <code>{{ command.syntax }}</code>
+              <span class="rts-format">{{ command.description }}</span>
+            </article>
+            {% endfor %}
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </article>
+</section>
+{% endif %}
