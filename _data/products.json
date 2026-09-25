@@ -1,6 +1,7 @@
 {
   "extensions": [
-    "rts-ban-timeout-widget"
+    "rts-ban-timeout-widget",
+    "rts-action-replay"
   ],
   "shared": [
     "rts-ui-dll"
