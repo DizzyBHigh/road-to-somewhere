@@ -55,7 +55,7 @@ def import_product(entry: dict) -> None:
     public_dir.mkdir(parents=True, exist_ok=True)
     if publish.get("overlay") or publish.get("importFile"):
         try:
-            publish_extension_files(public, release, public_dir)
+            publish_extension_files(public, release, public_dir, repo_dir)
         except (OSError, RuntimeError, zipfile.BadZipFile) as exc:
             fail(f"Could not publish extension release files: {exc}")
     if release and selected_assets:
