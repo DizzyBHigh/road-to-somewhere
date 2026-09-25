@@ -12,10 +12,14 @@ function setCollapseState(toggle, target, expanded) {
 
 function loadCollapseState(toggle) {
   try {
-    return localStorage.getItem(collapseStorageKey(toggle)) === 'expanded';
+    const saved = localStorage.getItem(collapseStorageKey(toggle));
+    if (saved === 'expanded') return true;
+    if (saved === 'collapsed') return false;
   } catch {
-    return false;
+    // Storage may be unavailable; use the markup default.
   }
+
+  return toggle.getAttribute('aria-expanded') === 'true';
 }
 
 function saveCollapseState(toggle, expanded) {
