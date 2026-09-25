@@ -46,6 +46,13 @@
                 </div>
                 {% endif %}
               </div>
+              {% if substep.images and substep.images.size > 0 %}
+              <div class="product-substep-images">
+                {% for image in substep.images %}
+                <figure><img src="{{ image.src | relative_url }}" alt="{{ image.alt | escape }}" loading="lazy"></figure>
+                {% endfor %}
+              </div>
+              {% endif %}
               {% if substep.commands %}
               <div class="product-guide-callout product-guide-callout--commands">
                 <strong>Related Commands</strong>
@@ -57,13 +64,6 @@
                 {% endif %}
                 {% endfor %}
                 {% endfor %}
-                {% endfor %}
-              </div>
-              {% endif %}
-              {% if substep.images and substep.images.size > 0 %}
-              <div class="product-substep-images">
-                {% for image in substep.images %}
-                <figure><img src="{{ image.src | relative_url }}" alt="{{ image.alt | escape }}" loading="lazy"></figure>
                 {% endfor %}
               </div>
               {% endif %}
