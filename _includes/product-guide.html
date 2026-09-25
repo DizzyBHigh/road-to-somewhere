@@ -45,21 +45,21 @@
                   {% endfor %}
                 </div>
                 {% endif %}
-                {% if substep.commands %}
-                <div class="product-guide-callout">
-                  <strong>Related Commands</strong>
-                  {% for command_id in substep.commands %}
-                  {% for group in include.data.commands %}
-                  {% for command in group.commands %}
-                  {% if command.id == command_id %}
-                  <div class="product-guide-command"><code>{{ command.syntax | escape }}</code><span class="rts-format">{{ command.description | escape }}</span></div>
-                  {% endif %}
-                  {% endfor %}
-                  {% endfor %}
-                  {% endfor %}
-                </div>
-                {% endif %}
               </div>
+              {% if substep.commands %}
+              <div class="product-guide-callout product-guide-callout--commands">
+                <strong>Related Commands</strong>
+                {% for command_id in substep.commands %}
+                {% for group in include.data.commands %}
+                {% for command in group.commands %}
+                {% if command.id == command_id %}
+                <div class="product-guide-command"><code>{{ command.syntax | escape }}</code><span class="rts-format">{{ command.description | escape }}</span></div>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+                {% endfor %}
+              </div>
+              {% endif %}
               {% if substep.images and substep.images.size > 0 %}
               <div class="product-substep-images">
                 {% for image in substep.images %}
