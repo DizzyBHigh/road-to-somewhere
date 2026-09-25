@@ -1,6 +1,5 @@
 from __future__ import annotations
 import shutil
-import zipfile
 from pathlib import Path
 from github_release import download_asset, find_asset, release_version
 from product_paths import ROOT, fail
@@ -52,29 +51,16 @@ def publish_release_assets(release: dict, assets: list[dict], public_dir: Path) 
     return published
 
 
-def extract_overlay(archive: zipfile.ZipFile, destination: Path) -> None:
-    """Extract an overlay ZIP with or without a top-level overlay directory."""
-    members = [item for item in archive.infolist() if item.filename]
-    paths = [Path(item.filename) for item in members]
-    top_levels = {path.parts[0] for path in paths if path.parts}
-    prefix = "overlay" if top_levels == {"overlay"} else ""
-    base = destination.resolve()
-
-    for member in members:
-        relative = Path(member.filename)
-        if prefix:
-            relative = Path(*relative.parts[1:]) if len(relative.parts) > 1 else Path()
-        target = (destination / relative).resolve()
-        if target != base and base not in target.parents:
-            fail(f"Overlay archive contains unsafe path: {member.filename}")
-        if member.is_dir() or not relative:
-            continue
-        target.parent.mkdir(parents=True, exist_ok=True)
-        with archive.open(member) as source, target.open("wb") as output:
-            shutil.copyfileobj(source, output)
+def copy_overlay(source: Path, destination: Path) -> None:
+    """Copy the checked-out overlay directory into the published extension directory."""
+    if not source.is_dir():
+        fail(f"Published overlay directory does not exist: {source}")
+    if destination.exists():
+        shutil.rmtree(destination)
+    shutil.copytree(source, destination)
 
 
-def publish_extension_files(manifest: dict, release: dict, public_dir: Path) -> None:
+def publish_extension_files(manifest: dict, release: dict, public_dir: Path, repo_dir: Path) -> None:
     publish = manifest.get("publish", {})
     version = release_version(release)
     website = manifest.setdefault("website", {})
@@ -86,11 +72,7 @@ def publish_extension_files(manifest: dict, release: dict, public_dir: Path) -> 
         zip_path = public_dir / zip_name
         download_asset(asset, zip_path)
         overlay_dir = public_dir / "overlay"
-        if overlay_dir.exists():
-            shutil.rmtree(overlay_dir)
-        overlay_dir.mkdir(parents=True)
-        with zipfile.ZipFile(zip_path) as archive:
-            extract_overlay(archive, overlay_dir)
+        copy_overlay(repo_dir / "overlay", overlay_dir)
         website["overlayUrl"] = f"/extensions/{manifest['slug']}/overlay/"
         website["overlayZipFilename"] = f"extensions/{manifest['slug']}/{zip_name}"
     if publish.get("importFile"):
