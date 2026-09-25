@@ -11,7 +11,12 @@
       <ol class="product-guide-list">
         {% for step in include.data.steps %}
         <li class="product-guide-step">
-          <div class="product-step-heading"><span>{{ step.number }}</span><strong class="rts-format">{{ step.title | escape }}</strong></div>
+          <div class="section-heading-row product-step-heading">
+            <span>{{ step.number }}</span>
+            <strong class="rts-format">{{ step.title | escape }}</strong>
+            <button class="collapse-toggle" type="button" data-toggle="{{ include.id }}-step-{{ forloop.index }}" aria-expanded="true">Collapse −</button>
+          </div>
+          <div class="collapsible-content product-guide-step-content" id="{{ include.id }}-step-{{ forloop.index }}">
           {% if step.description %}<p class="product-step-description rts-format">{{ step.description | escape }}</p>{% endif %}
           {% if step.bullets %}<ul class="product-list">{% for item in step.bullets %}<li class="rts-format">{{ item | escape }}</li>{% endfor %}</ul>{% endif %}
           {% if step.notes %}<ul class="product-list">{% for note in step.notes %}<li class="rts-format">{{ note | escape }}</li>{% endfor %}</ul>{% endif %}
@@ -76,6 +81,7 @@
             {% endfor %}
           </div>
           {% endif %}
+          </div>
         </li>
         {% endfor %}
       </ol>
