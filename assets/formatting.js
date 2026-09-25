@@ -1,3 +1,4 @@
+// RTS formatting tags are shared by all data-driven product pages.
 function siteRootPath() {
   const stylesheet = document.querySelector('link[href*="/assets/site.css"]');
   if (!stylesheet) return '';
