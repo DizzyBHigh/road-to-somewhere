@@ -24,7 +24,7 @@ function makeCopyButton(label, kind) {
   button.className = 'rts-copy-token';
   button.dataset.copyKind = kind;
   appendFormattedText(button, label);
-  button.appendChild(document.createTextNode(' ⧉'));
+  button.appendChild(document.createTextNode(' [COPY]'));
   return button;
 }
 

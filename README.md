@@ -1,4 +1,4 @@
-# DBH — On the Road to Somewhere
+# DBH - On the Road to Somewhere
 
 Streaming brand and OBS overlay system for DuhBuhHuh (DBH).
 

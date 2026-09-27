@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "rts-ban-timeout-widget",
-  "name": "RTS — Ban / Timeout Widget",
+  "name": "RTS - Ban / Timeout Widget",
   "slug": "rts-ban-timeout-widget",
   "version": "1.0.0",
   "status": "released",
