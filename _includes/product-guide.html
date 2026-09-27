@@ -38,8 +38,10 @@
                       {% for setting in substep.settings %}
                       <div class="product-guide-setting">
                         <strong class="rts-format">{{ setting.title | escape }}</strong>
-                        <span class="rts-format">{{ setting.description | escape }}</span>
-                        {% if setting.value %}<div class="setting-range rts-format">{{ setting.value | escape }}</div>{% endif %}
+                        <div class="product-guide-setting-content">
+                          <span class="rts-format">{{ setting.description | escape }}</span>
+                          {% if setting.value %}<div class="setting-range rts-format">{{ setting.value | escape }}</div>{% endif %}
+                        </div>
                       </div>
                       {% endfor %}
                     </div>
