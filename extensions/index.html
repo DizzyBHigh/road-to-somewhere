@@ -21,12 +21,12 @@ description: Streamer.bot extensions from The Road to Somewhere.
           </div>
           <div class="product-info">
             <div class="product-type">STREAMER.BOT EXTENSION</div>
-            <h3>{{ extension.name }}</h3>
-            <p>{{ extension.description }}</p>
+            <h3 class="rts-format">{{ extension.name }}</h3>
+            <p class="rts-format">{{ extension.description }}</p>
             <div class="tags">{% for tag in extension.tags %}<span>{{ tag }}</span>{% endfor %}</div>
             <div class="product-actions"><a class="button" href="{{ product_path | relative_url }}">View extension <span>→</span></a><span class="status">v{{ extension.version }}</span></div>
           </div>
-          <div class="product-card-footer"><span>{{ forloop.index | prepend: '0' }}</span><strong>{{ extension.website.footerLabel }}</strong><span>v{{ extension.version }}</span></div>
+          <div class="product-card-footer"><span>{{ forloop.index | prepend: '0' }}</span><strong class="rts-format">{{ extension.website.footerLabel }}</strong><span>v{{ extension.version }}</span></div>
         </article>
       {% endif %}
     {% endfor %}
