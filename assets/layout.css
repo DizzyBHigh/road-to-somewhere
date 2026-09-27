@@ -51,11 +51,18 @@ main { overflow: hidden; }
   background: linear-gradient(90deg, transparent, rgba(17, 110, 208, .035), transparent);
 }
 
+.support-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
 .support-link {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin-top: 10px;
+  margin-top: 0;
   padding: 9px 13px;
   border: 1px solid #0384CB;
   border-radius: 4px;
@@ -65,7 +72,27 @@ main { overflow: hidden; }
   text-transform: uppercase;
 }
 
+.support-link--gold {
+  border-color: var(--accent2);
+  background: var(--accent2);
+  color: #101416;
+}
+
 .support-link:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+.ffn-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 0 0 6px;
+  padding: 3px 6px;
+  border: 1px solid var(--accent2);
+  border-radius: 3px;
+  color: var(--accent2);
+  font: 600 8px var(--mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 
 footer {
   max-width: var(--max);
@@ -89,7 +116,8 @@ footer span:nth-child(3) { text-align: right; }
   .section-heading, .split { display: block; }
   .section-heading p { margin-top: 11px; }
   .split .copy { padding-top: 12px; }
-  .support-link { margin-top: 8px; }
+  .support-actions { align-items: stretch; }
+  .support-link { justify-content: center; }
   footer {
     margin: 0 20px;
     padding-left: 0;

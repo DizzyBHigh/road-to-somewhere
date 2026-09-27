@@ -12,7 +12,7 @@ layout: default
       <div class="section-kicker">{{ extension.name }}</div>
       <h1><span class="rts-format">{{ extension_content.hero.title }}</span><br><em class="rts-format">{{ extension_content.hero.titleAccent }}</em></h1>
       <p class="extension-hero-copy rts-format">{{ extension.description }}</p>
-      <div class="release-line"><span class="version">v{{ extension.version }} / {{ extension.status | upcase }}</span>{% for platform in extension.runtime.platforms %}<span>{{ platform }}</span>{% endfor %}</div>
+      <div class="release-line"><span class="ffn-badge">FFN · FREE FOR NOW</span><span class="version">v{{ extension.version }} / {{ extension.status | upcase }}</span>{% for platform in extension.runtime.platforms %}<span>{{ platform }}</span>{% endfor %}</div>
     </div>
     {% if extension_content.release or extension.website.overlayZipFilename or extension.website.importFilename %}
     <aside class="extension-release-card">

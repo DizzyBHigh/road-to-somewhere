@@ -22,7 +22,7 @@
   "extensions": {
     "kicker": "THE WORKSHOP",
     "title": "Streamer.bot Extensions",
-    "text": "Built to be installed easily, configured clearly, and seen on stream."
+    "text": "Built to be installed easily, configured clearly, and seen on stream. All RTS extensions are FFN — Free For Now."
   },
   "shared": {
     "kicker": "SHARED",
@@ -44,9 +44,11 @@
   },
   "support": {
     "kicker": "SUPPORT",
-    "title": "Need a hand?",
-    "text": "Get support, ask questions, share ideas, and hang out with the Road to Somewhere community on Discord.",
+    "title": "Keep the journey moving.",
+    "text": "RTS extensions are FFN — Free For Now. If you use the extensions a lot, enjoy having them on your stream, or simply want to support the time and work that goes into building and maintaining them, donations are always appreciated. There is never any obligation to donate — using and enjoying the extensions is already appreciated.",
     "linkLabel": "Join the Road to Somewhere Discord",
-    "linkHref": "https://discord.gg/3hSTfz32HT"
+    "linkHref": "https://discord.gg/3hSTfz32HT",
+    "donationLabel": "Support RTS on Ko-fi",
+    "donationHref": "https://ko-fi.com/duhbuhhuh"
   }
 }
