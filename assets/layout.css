@@ -51,6 +51,22 @@ main { overflow: hidden; }
   background: linear-gradient(90deg, transparent, rgba(17, 110, 208, .035), transparent);
 }
 
+.support-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 9px 13px;
+  border: 1px solid #0384CB;
+  border-radius: 4px;
+  background: #0384CB;
+  color: #fff;
+  font: 600 9px var(--mono);
+  text-transform: uppercase;
+}
+
+.support-link:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
 footer {
   max-width: var(--max);
   margin: auto;
@@ -73,6 +89,7 @@ footer span:nth-child(3) { text-align: right; }
   .section-heading, .split { display: block; }
   .section-heading p { margin-top: 11px; }
   .split .copy { padding-top: 12px; }
+  .support-link { margin-top: 8px; }
   footer {
     margin: 0 20px;
     padding-left: 0;

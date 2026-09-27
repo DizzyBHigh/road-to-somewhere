@@ -43,8 +43,10 @@
     ]
   },
   "support": {
-    "kicker": "NEED A HAND?",
-    "title": "Every project comes with documentation that tells you what to do — and why.",
-    "text": "Installation steps, settings references, troubleshooting, and release notes will live alongside each product."
+    "kicker": "SUPPORT",
+    "title": "Need a hand?",
+    "text": "Get support, ask questions, share ideas, and hang out with the Road to Somewhere community on Discord.",
+    "linkLabel": "Join the Road to Somewhere Discord",
+    "linkHref": "https://discord.gg/3hSTfz32HT"
   }
 }

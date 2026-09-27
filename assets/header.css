@@ -33,6 +33,8 @@ nav {
   color: var(--body); text-transform: uppercase;
 }
 nav a:hover { color: var(--text); }
+nav .discord-link { color: #0384CB; }
+nav .discord-link:hover { color: var(--text); }
 .font-picker { display: flex; align-items: center; gap: 5px; }
 .font-picker span { font: 500 8px var(--mono); color: var(--muted); letter-spacing: .1em; }
 .font-picker select, .theme-toggle {
