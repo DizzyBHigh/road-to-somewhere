@@ -69,6 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     group.appendChild(summary);
     group.appendChild(trend);
+    const chart = trend.querySelector('.analytics-trend__chart');
+    trend.addEventListener('toggle', () => {
+      if (trend.open) window.RTSAnalyticsChart.render(chart, daily);
+    }, { once: true });
     cards.appendChild(group);
 
 
