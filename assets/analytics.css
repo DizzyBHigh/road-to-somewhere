@@ -12,6 +12,8 @@
   border-radius: 4px; background: var(--panel); color: var(--text); font: 400 10px var(--mono);
 }
 .analytics-toolbar .button { min-height: 34px; }
+.analytics-product + .analytics-product { margin-top: 28px; }
+.analytics-product h4 { margin: 0 0 10px; font: 700 12px var(--mono); text-transform: uppercase; }
 .analytics-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
 .analytics-card { padding: 18px; border: 1px solid var(--line); background: var(--panel); }
 .analytics-card__count { display: block; font: 700 28px var(--mono); color: var(--accent); }
