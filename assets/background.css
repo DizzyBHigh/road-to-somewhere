@@ -13,3 +13,10 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+html[data-theme="light"] body {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(3, 132, 203, 0.10), transparent 32%),
+    radial-gradient(circle at 75% 12%, rgba(242, 185, 0, 0.09), transparent 30%),
+    linear-gradient(135deg, #f2f4f3 0%, #f7f8f7 45%, #edf1f2 100%);
+}
