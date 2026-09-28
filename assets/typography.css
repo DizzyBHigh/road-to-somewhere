@@ -15,11 +15,15 @@
   margin: 5px 0;
 }
 
-.section-heading p,
+.section-heading p {
+  color: var(--muted);
+  max-width: 430px;
+}
+
 .copy p,
 .support p {
   color: var(--muted);
-  max-width: 430px;
+  max-width: none;
 }
 
 .copy p { font-size: 15px; margin: 0 0 11px; }
