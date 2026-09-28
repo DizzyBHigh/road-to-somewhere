@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-rts-analytics-endpoint="{{ site.rts_services_url }}/functions/v1/track-site-event">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,6 +22,7 @@
   {{ content }}
   {% include footer.html %}
   <script src="{{ '/assets/site.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+  <script src="{{ '/assets/analytics.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
   <script src="{{ '/assets/formatting.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
   <script src="{{ '/assets/copy-buttons.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
   <script src="{{ '/assets/demo-player.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
