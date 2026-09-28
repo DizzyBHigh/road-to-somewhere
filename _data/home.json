@@ -37,7 +37,6 @@
   "about": {
     "kicker": "THE IDEA",
     "title": "Tools and Widgets with a purpose.",
-    "image": "/assets/images/rts-front-page-graphic-car.png",
     "paragraphs": [
       "The Road to Somewhere is a collection of tools designed to help you **REACT** to **EVENTS** and **INTERACTIONS** from your **AUDIENCE** and streaming **PLATFORMS** to help make your stream more **ENGAGING**.",
       "Each project is designed as a complete experience: polished visuals, useful configuration, clear documentation, and sensible installation."
@@ -46,7 +45,6 @@
   "support": {
     "kicker": "SUPPORT",
     "title": "Keep the journey moving.",
-    "image": "/assets/images/rts-front-page-graphic-computer.png",
     "text": "RTS extensions are FFN - Free For Now. If you use the extensions a lot, enjoy having them on your stream, or simply want to support the time and work that goes into building and maintaining them, donations are always appreciated. There is never any obligation to donate - using and enjoying the extensions is already appreciated.",
     "linkLabel": "Join the Road to Somewhere Discord",
     "linkHref": "https://discord.gg/3hSTfz32HT",
