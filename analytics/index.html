@@ -1,0 +1,34 @@
+---
+layout: default
+title: RTS Analytics
+description: Internal RTS product analytics.
+extra_css: /assets/analytics.css
+extra_js: /assets/analytics-dashboard.js
+analytics: true
+---
+<main class="analytics-page">
+  <section class="section">
+    <div class="section-kicker">INTERNAL</div>
+    <div class="section-heading">
+      <h3>RTS Analytics</h3>
+      <p>Product event activity for the Road to Somewhere.</p>
+    </div>
+    <div id="analyticsStatus" class="analytics-status" role="status">Checking your RTS admin access...</div>
+    <div id="analyticsApp" hidden>
+      <div class="analytics-toolbar">
+        <label>
+          <span>PRODUCT</span>
+          <select id="analyticsProduct">
+            {% for slug in site.data.products.extensions %}
+              {% assign product = site.data[slug] %}
+              {% if product %}<option value="{{ slug }}">{{ product.name }}</option>{% endif %}
+            {% endfor %}
+          </select>
+        </label>
+        <button id="analyticsRefresh" class="button" type="button">Refresh</button>
+      </div>
+      <div id="analyticsCards" class="analytics-cards"></div>
+      <p id="analyticsEmpty" class="analytics-empty" hidden>No events recorded for this product.</p>
+    </div>
+  </section>
+</main>
