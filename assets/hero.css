@@ -87,3 +87,10 @@
   .dbhh-name { font-size: 24px; }
   .route-line { display: none; }
 }
+
+
+html[data-theme="light"] .hero-road-art::after {
+  background:
+    linear-gradient(180deg, rgba(242,244,243,.18) 0%, transparent 18%, transparent 78%, rgba(242,244,243,.68) 100%),
+    linear-gradient(90deg, rgba(242,244,243,.78) 0%, rgba(242,244,243,.14) 28%, transparent 58%);
+}
