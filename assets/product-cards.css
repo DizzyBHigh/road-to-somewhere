@@ -79,3 +79,8 @@
   .product-actions { align-items: flex-start; flex-direction: column; }
   .product-card-footer { height: 34px; padding: 0 10px; }
 }
+
+
+html[data-theme="light"] .product-art {
+  background: linear-gradient(180deg, #e8eef1 0%, #f3f5f4 55%, #ece9df 100%);
+}
