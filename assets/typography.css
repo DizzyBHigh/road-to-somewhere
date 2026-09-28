@@ -20,6 +20,12 @@
   max-width: 430px;
 }
 
+.section-description {
+  color: var(--muted);
+  max-width: none;
+  margin: 6px 0 14px;
+}
+
 .copy p,
 .support p {
   color: var(--muted);
