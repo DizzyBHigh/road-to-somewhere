@@ -18,15 +18,16 @@
 }
 
 html[data-theme="light"] {
-  --bg: #f5f6f4;
-  --panel: #fff;
-  --panel2: #edf1f3;
-  --line: #cbd2d6;
-  --text: #101820;
-  --muted: #58636b;
-  --accent: #116ed0;
-  --accent2: #e8a900;
-  --button-text: #fff;
+  --bg: #f2f4f3;
+  --panel: #ffffff;
+  --panel2: #e8edef;
+  --line: #c8ced1;
+  --body: #171b1e;
+  --text: #0384CB;
+  --muted: #59646b;
+  --accent: #f2b900;
+  --accent2: #0384CB;
+  --button-text: #11100a;
 }
 
 html[data-font="trailhead"] { --heading: 'Space Grotesk', sans-serif; --font-body: 'DM Sans', sans-serif; }
