@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = document.querySelector('[data-import-url], [data-overlay-url]');
   if (!page) return;
 
-  const product = page.dataset.product || null;
+  const product = page.dataset.product || page.dataset.productSlug || null;
   const track = event => window.RTSAnalytics?.track(event, product);
 
   const copyText = async (button, text) => {
