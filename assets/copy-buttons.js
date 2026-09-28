@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const page = document.querySelector('[data-import-url], [data-overlay-url]');
   if (!page) return;
 
+  const product = page.dataset.product || null;
+  const track = event => window.RTSAnalytics?.track(event, product);
+
   const copyText = async (button, text) => {
     if (!text) return;
     if (navigator.clipboard && window.isSecureContext) {
@@ -35,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
     button.addEventListener('click', async () => {
       try {
         await copyText(button, await getText());
+        if (button.id === 'copyImport') track('import_copy');
+        else if (button.id === 'copyOverlayUrl') track('overlay_url_copy');
+        else if (button.dataset.copyKind === 'overlay') track('overlay_url_copy');
+        else track('import_copy');
       } catch (error) {
         console.error('Could not copy:', error);
       }
