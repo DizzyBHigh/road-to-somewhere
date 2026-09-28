@@ -20,7 +20,7 @@
 .analytics-summary__count { display: block; font: 700 20px var(--mono); color: var(--accent); }
 .analytics-summary__label { display: block; margin-top: 6px; font: 400 8px var(--mono); color: var(--muted); text-transform: uppercase; line-height: 1.35; }
 .analytics-trend { margin-top: 10px; border: 1px solid var(--line); background: var(--panel); }
-.analytics-trend summary { padding: 10px 14px; cursor: pointer; font: 400 9px var(--mono); color: var(--muted); text-transform: uppercase; }
+.analytics-trend summary { padding: 10px 14px; cursor: pointer; font: 400 9px var(--mono); color: #0384CB; text-transform: uppercase; }
 .analytics-trend__chart { padding: 8px 14px 14px; overflow-x: auto; color: var(--accent); }
 .analytics-chart { display: block; width: 100%; min-width: 520px; height: 220px; }
 .analytics-chart__meta { display: flex; justify-content: space-between; padding: 0 4px 6px; font: 400 8px var(--mono); color: var(--muted); }
