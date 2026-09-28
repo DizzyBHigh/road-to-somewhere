@@ -14,15 +14,21 @@
 .analytics-toolbar .button { min-height: 34px; }
 .analytics-product + .analytics-product { margin-top: 28px; }
 .analytics-product h4 { margin: 0 0 10px; font: 700 12px var(--mono); text-transform: uppercase; }
-.analytics-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-.analytics-card { padding: 18px; border: 1px solid var(--line); background: var(--panel); }
-.analytics-card__count { display: block; font: 700 28px var(--mono); color: var(--accent); }
-.analytics-card__label {
-  display: block; margin-top: 8px; font: 400 9px var(--mono);
-  color: var(--muted); text-transform: uppercase;
-}
+.analytics-summary { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); border: 1px solid var(--line); background: var(--panel); }
+.analytics-summary__item { min-width: 0; padding: 14px 12px; border-right: 1px solid var(--line); }
+.analytics-summary__item:last-child { border-right: 0; }
+.analytics-summary__count { display: block; font: 700 20px var(--mono); color: var(--accent); }
+.analytics-summary__label { display: block; margin-top: 6px; font: 400 8px var(--mono); color: var(--muted); text-transform: uppercase; line-height: 1.35; }
+.analytics-trend { margin-top: 10px; border: 1px solid var(--line); background: var(--panel); }
+.analytics-trend summary { padding: 10px 14px; cursor: pointer; font: 400 9px var(--mono); color: var(--muted); text-transform: uppercase; }
+.analytics-trend__chart { padding: 8px 14px 14px; overflow-x: auto; color: var(--accent); }
+.analytics-chart { display: block; width: 100%; min-width: 520px; height: 220px; }
+.analytics-chart__meta { display: flex; justify-content: space-between; padding: 0 4px 6px; font: 400 8px var(--mono); color: var(--muted); }
 .analytics-empty { margin-top: 16px; color: var(--muted); }
 @media (max-width: 600px) {
   .analytics-toolbar { align-items: stretch; flex-direction: column; }
   .analytics-toolbar label { min-width: 0; }
+  .analytics-summary { grid-template-columns: repeat(2, 1fr); }
+  .analytics-summary__item:nth-child(2n) { border-right: 0; }
+  .analytics-summary__item { border-bottom: 1px solid var(--line); }
 }
