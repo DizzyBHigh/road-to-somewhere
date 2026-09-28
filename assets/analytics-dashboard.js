@@ -45,26 +45,33 @@ document.addEventListener('DOMContentLoaded', () => {
     return response.json();
   };
 
-  const renderEvents = (slug, name, events) => {
+  const renderEvents = (slug, name, events, daily) => {
     const group = document.createElement('section');
     group.className = 'analytics-product';
     group.innerHTML = '<h4>' + name + '</h4>';
 
-    const grid = document.createElement('div');
-    grid.className = 'analytics-cards';
+    const summary = document.createElement('div');
+    summary.className = 'analytics-summary';
 
     const counts = new Map(events.map(event => [event.event_type, Number(event.event_count)]));
     for (const [eventType, label] of Object.entries(labels)) {
-      const card = document.createElement('article');
-      card.className = 'analytics-card';
-      card.innerHTML =
-        '<span class="analytics-card__count">' + (counts.get(eventType) || 0).toLocaleString() +
-        '</span><span class="analytics-card__label">' + label + '</span>';
-      grid.appendChild(card);
+      const item = document.createElement('div');
+      item.className = 'analytics-summary__item';
+      item.innerHTML =
+        '<span class="analytics-summary__count">' + (counts.get(eventType) || 0).toLocaleString() +
+        '</span><span class="analytics-summary__label">' + label + '</span>';
+      summary.appendChild(item);
     }
 
-    group.appendChild(grid);
+    const trend = document.createElement('details');
+    trend.className = 'analytics-trend';
+    trend.innerHTML = '<summary>Activity by date</summary><div class="analytics-trend__chart"></div>';
+
+    group.appendChild(summary);
+    group.appendChild(trend);
     cards.appendChild(group);
+
+
   };
 
   const load = async () => {
@@ -87,12 +94,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const results = await Promise.all(
           products.map(async item => ({
             ...item,
-            events: (await fetchProduct(token, item.slug)).events || []
+            data: await fetchProduct(token, item.slug)
           }))
         );
 
         for (const item of results) {
-          renderEvents(item.slug, item.name, item.events);
+          renderEvents(item.slug, item.name, item.data.events || [], item.data.daily || []);
         }
 
         empty.hidden = true;
@@ -105,7 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
       renderEvents(
         product.value,
         product.options[product.selectedIndex].textContent,
-        result.events || []
+        result.events || [],
+        result.daily || []
       );
 
       empty.hidden = true;
