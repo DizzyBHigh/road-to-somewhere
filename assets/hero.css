@@ -89,8 +89,11 @@
 }
 
 
+html[data-theme="light"] .hero-road-art {
+  background-image: url('images/rts-front-page-graphic-computer-light.webp');
+}
 html[data-theme="light"] .hero-road-art::after {
   background:
-    linear-gradient(180deg, rgba(242,244,243,.18) 0%, transparent 18%, transparent 78%, rgba(242,244,243,.68) 100%),
-    linear-gradient(90deg, rgba(242,244,243,.78) 0%, rgba(242,244,243,.14) 28%, transparent 58%);
+    linear-gradient(180deg, rgba(242,244,243,.08) 0%, transparent 20%, transparent 82%, rgba(242,244,243,.18) 100%),
+    linear-gradient(90deg, rgba(242,244,243,.88) 0%, rgba(242,244,243,.24) 24%, transparent 52%);
 }
