@@ -5,12 +5,12 @@
     "eyebrow": "Stuff for Streamers",
     "title": "Make your stream",
     "titleAccent": "come alive.",
-    "copy": "The Road to Somewhere builds tools and visual experiences for streamers who want to provide visual responses to events that happen on their streams, and content to engage their viewers.",
+    "copy": "The Road to Somewhere builds tools for streamers who want to provide visual responses to events that happen on their streams, and content to engage their viewers.",
     "primaryAction": "Explore extensions",
     "primaryHref": "/extensions/",
     "secondaryAction": "Explore tools",
     "secondaryHref": "/other-tools/",
-    "routeLabel": "KEEP GOING ->"
+    "routeLabel": "KEEP GOING ->."
   },
   "sections": [
     "extensions",
@@ -21,8 +21,8 @@
   ],
   "extensions": {
     "kicker": "THE WORKSHOP",
-    "title": "Streamer.bot Extensions",
-    "text": "Built to be installed easily, configured clearly, and seen on stream. All RTS extensions are FFN - Free For Now."
+    "title": "Streamerbot Extensions",
+    "text": "Built to be installed easily, configured clearly, and seen on stream. We thoroughly test our extensions before releasing them and provide documentation on the extensions page. If, however, something does not work as expected or you have a question, jump in on the RTS [[link:https://discord.gg/3hSTfz32HT|RTS Discord]] and ask away.\\n\\nWhat you won't find here are things like; Chat widgets, Ad Timers, Goal Bars, Subathon Managers; there are plenty of these already available from other creators such as [[link:https://tawmae.xyz|Tawmae]], [[link:https://nutty.gg|Nutty]] and so many others that I won't list here. I probably need a new section for these..."
   },
   "shared": {
     "kicker": "SHARED",
@@ -45,7 +45,7 @@
   "support": {
     "kicker": "SUPPORT",
     "title": "Keep the journey moving.",
-    "text": "RTS extensions are FFN - Free For Now. If you use the extensions a lot, enjoy having them on your stream, or simply want to support the time and work that goes into building and maintaining them, donations are always appreciated. There is never any obligation to donate - using and enjoying the extensions is already appreciated.",
+    "text": "RTS extensions are FFN - Free For Now. If you use the extensions a lot, enjoy having them on your stream, or simply want to support the time and work that goes into building and maintaining them, donations are always appreciated. There is never any obligation to donate - using and enjoying the extensions is already appreciated.\\n\\n What does FFN mean? We do not currently charge for our extensions; we rely on donations to keep us going, enabling us to convert our ideas into working extensions for you to use. We understand that streaming is a tough gig, especially when starting out, so we don't want to gatekeep our extensions through a paywall that a lot of people cannot afford. We hope that should you make it big or at a time when you can afford to, you would come back and drop a donation/tip, whatever you want to call it, to show your appreciation.",
     "linkLabel": "Join the Road to Somewhere Discord",
     "linkHref": "https://discord.gg/3hSTfz32HT",
     "donationLabel": "Support RTS on Ko-fi",
