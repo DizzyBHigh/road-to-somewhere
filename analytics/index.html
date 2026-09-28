@@ -19,6 +19,7 @@ analytics: true
         <label>
           <span>PRODUCT</span>
           <select id="analyticsProduct">
+            <option value="__all__">All Products</option>
             {% for slug in site.data.products.extensions %}
               {% assign product = site.data[slug] %}
               {% if product %}<option value="{{ slug }}">{{ product.name }}</option>{% endif %}
