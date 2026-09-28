@@ -30,7 +30,7 @@ main { overflow: hidden; }
   display: flex;
   justify-content: space-between;
   gap: 40px;
-  align-items: end;
+  align-items: flex-start;
   margin: 4px 0 14px;
 }
 
