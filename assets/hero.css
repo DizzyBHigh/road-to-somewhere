@@ -88,12 +88,12 @@
   .route-line { display: none; }
 }
 
-
 html[data-theme="light"] .hero-road-art {
-  background-image: url('images/rts-front-page-graphic-computer-light.webp');
+  background-image: url('images/rts-front-page-graphic-computer.png');
+  opacity: .18;
 }
 html[data-theme="light"] .hero-road-art::after {
   background:
-    linear-gradient(180deg, rgba(242,244,243,.08) 0%, transparent 20%, transparent 82%, rgba(242,244,243,.18) 100%),
-    linear-gradient(90deg, rgba(242,244,243,.88) 0%, rgba(242,244,243,.24) 24%, transparent 52%);
+    linear-gradient(180deg, rgba(242,244,243,.02) 0%, transparent 20%, transparent 82%, rgba(242,244,243,.08) 100%),
+    linear-gradient(90deg, rgba(242,244,243,.94) 0%, rgba(242,244,243,.58) 24%, transparent 52%);
 }
