@@ -53,21 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.createElement('div');
     grid.className = 'analytics-cards';
 
-    for (const event of events) {
+    const counts = new Map(events.map(event => [event.event_type, Number(event.event_count)]));
+    for (const [eventType, label] of Object.entries(labels)) {
       const card = document.createElement('article');
       card.className = 'analytics-card';
       card.innerHTML =
-        '<span class="analytics-card__count">' + Number(event.event_count).toLocaleString() +
-        '</span><span class="analytics-card__label">' +
-        (labels[event.event_type] || event.event_type) + '</span>';
+        '<span class="analytics-card__count">' + (counts.get(eventType) || 0).toLocaleString() +
+        '</span><span class="analytics-card__label">' + label + '</span>';
       grid.appendChild(card);
-    }
-
-    if (!events.length) {
-      const note = document.createElement('p');
-      note.className = 'analytics-empty';
-      note.textContent = 'No events recorded.';
-      grid.appendChild(note);
     }
 
     group.appendChild(grid);
