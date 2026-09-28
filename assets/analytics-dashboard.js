@@ -25,6 +25,55 @@ document.addEventListener('DOMContentLoaded', () => {
     status.classList.toggle('analytics-status--error', error);
   };
 
+  const fetchProduct = async (token, slug) => {
+    const response = await fetch(
+      endpoint.replace('/track-site-event', '/product-analytics') +
+        '?product=' + encodeURIComponent(slug),
+      { headers: { Authorization: 'Bearer ' + token } }
+    );
+
+    if (response.status === 403) {
+      throw new Error('Your account is not registered as an RTS administrator.');
+    }
+    if (response.status === 401) {
+      throw new Error('Your RTS session has expired. Sign in again.');
+    }
+    if (!response.ok) {
+      throw new Error('Analytics service returned HTTP ' + response.status + '.');
+    }
+
+    return response.json();
+  };
+
+  const renderEvents = (slug, name, events) => {
+    const group = document.createElement('section');
+    group.className = 'analytics-product';
+    group.innerHTML = '<h4>' + name + '</h4>';
+
+    const grid = document.createElement('div');
+    grid.className = 'analytics-cards';
+
+    for (const event of events) {
+      const card = document.createElement('article');
+      card.className = 'analytics-card';
+      card.innerHTML =
+        '<span class="analytics-card__count">' + Number(event.event_count).toLocaleString() +
+        '</span><span class="analytics-card__label">' +
+        (labels[event.event_type] || event.event_type) + '</span>';
+      grid.appendChild(card);
+    }
+
+    if (!events.length) {
+      const note = document.createElement('p');
+      note.className = 'analytics-empty';
+      note.textContent = 'No events recorded.';
+      grid.appendChild(note);
+    }
+
+    group.appendChild(grid);
+    cards.appendChild(group);
+  };
+
   const load = async () => {
     const token = window.rtsAuthSession?.access_token;
     if (!token) {
@@ -35,35 +84,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showStatus('Loading analytics...');
     try {
-      const response = await fetch(
-        endpoint.replace('/track-site-event', '/product-analytics') +
-          '?product=' + encodeURIComponent(product.value),
-        { headers: { Authorization: 'Bearer ' + token } }
+      cards.replaceChildren();
+
+      if (product.value === '__all__') {
+        const products = Array.from(product.options)
+          .filter(option => option.value !== '__all__')
+          .map(option => ({ slug: option.value, name: option.textContent }));
+
+        const results = await Promise.all(
+          products.map(async item => ({
+            ...item,
+            events: (await fetchProduct(token, item.slug)).events || []
+          }))
+        );
+
+        for (const item of results) {
+          renderEvents(item.slug, item.name, item.events);
+        }
+
+        empty.hidden = true;
+        app.hidden = false;
+        showStatus('All products loaded.');
+        return;
+      }
+
+      const result = await fetchProduct(token, product.value);
+      renderEvents(
+        product.value,
+        product.options[product.selectedIndex].textContent,
+        result.events || []
       );
 
-      if (response.status === 403) {
-        throw new Error('Your account is not registered as an RTS administrator.');
-      }
-      if (response.status === 401) {
-        throw new Error('Your RTS session has expired. Sign in again.');
-      }
-      if (!response.ok) throw new Error('Analytics service returned HTTP ' + response.status + '.');
-
-      const result = await response.json();
-      cards.replaceChildren();
-      const events = result.events || [];
-
-      for (const event of events) {
-        const card = document.createElement('article');
-        card.className = 'analytics-card';
-        card.innerHTML =
-          '<span class="analytics-card__count">' + Number(event.event_count).toLocaleString() +
-          '</span><span class="analytics-card__label">' +
-          (labels[event.event_type] || event.event_type) + '</span>';
-        cards.appendChild(card);
-      }
-
-      empty.hidden = events.length !== 0;
+      empty.hidden = true;
       app.hidden = false;
       showStatus('Analytics loaded.');
     } catch (error) {
