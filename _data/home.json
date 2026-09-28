@@ -12,17 +12,25 @@
     "secondaryHref": "/other-tools/",
     "routeLabel": "KEEP GOING ->."
   },
-  "sections": [
+  "sections": [ 
+    "about",
     "extensions",
     "shared",
     "other-tools",
-    "about",
     "support"
   ],
+  "about": {
+    "kicker": "THE IDEA",
+    "title": "Tools and Widgets with a purpose.",
+    "paragraphs": [
+      "The Road to Somewhere is a collection of tools designed to help you **REACT** to **EVENTS** and **INTERACTIONS** from your **AUDIENCE** and streaming **PLATFORMS** to help make your stream more **ENGAGING**.",
+      "Each project is designed as a complete experience: polished visuals, useful configuration, clear documentation, and sensible installation."
+    ]
+  },
   "extensions": {
     "kicker": "THE WORKSHOP",
     "title": "Streamerbot Extensions",
-    "text": "Built to be installed easily, configured clearly, and seen on stream. We thoroughly test our extensions before releasing them and provide documentation on the extensions page. If, however, something does not work as expected or you have a question, jump in on the RTS [[link:https://discord.gg/3hSTfz32HT|RTS Discord]] and ask away.\\n\\nWhat you won't find here are things like; Chat widgets, Ad Timers, Goal Bars, Subathon Managers; there are plenty of these already available from other creators such as [[link:https://tawmae.xyz|Tawmae]], [[link:https://nutty.gg|Nutty]] and so many others that I won't list here. I probably need a new section for these..."
+    "text": "Built to be installed easily, configured clearly, and seen on stream. We thoroughly test our extensions before releasing them and provide documentation on the extensions page. If, however, something does not work as expected or you have a question, jump in on the RTS [[link:https://discord.gg/3hSTfz32HT|RTS Discord]] and ask away.\\n\\nWhat you won't find here are things like: Chat widgets, Ad Timers, Goal Bars, Subathon Managers; there are plenty of these already available from other creators such as [[link:https://tawmae.xyz|Tawmae]], [[link:https://nutty.gg|Nutty]] and so many others that I won't list here. I probably need a new section for these..."
   },
   "shared": {
     "kicker": "SHARED",
@@ -33,14 +41,6 @@
     "kicker": "OTHER TOOLS",
     "title": "Tools for your streaming setup.",
     "text": "Useful tools for OBS and the wider streaming workflow."
-  },
-  "about": {
-    "kicker": "THE IDEA",
-    "title": "Tools and Widgets with a purpose.",
-    "paragraphs": [
-      "The Road to Somewhere is a collection of tools designed to help you **REACT** to **EVENTS** and **INTERACTIONS** from your **AUDIENCE** and streaming **PLATFORMS** to help make your stream more **ENGAGING**.",
-      "Each project is designed as a complete experience: polished visuals, useful configuration, clear documentation, and sensible installation."
-    ]
   },
   "support": {
     "kicker": "SUPPORT",
