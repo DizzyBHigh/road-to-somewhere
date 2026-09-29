@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cards = document.getElementById('analyticsCards');
   const empty = document.getElementById('analyticsEmpty');
   const endpoint = document.documentElement.dataset.rtsAnalyticsEndpoint;
+  let loadInProgress = false;
   const labels = {
     extension_view: 'Extension Views',
     import_copy: 'Import Code Copies',
@@ -78,9 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   };
 
-  const load = async () => {
+  const load = async (force = false) => {
+    if (loadInProgress && !force) return;
+    loadInProgress = true;
+
     const token = window.rtsAuthSession?.access_token;
     if (!token) {
+      loadInProgress = false;
       showStatus('Sign in with Discord to access RTS analytics.', true);
       app.hidden = true;
       return;
@@ -126,11 +131,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       app.hidden = true;
       showStatus(error.message || 'Unable to load analytics.', true);
+    } finally {
+      loadInProgress = false;
     }
   };
 
-  product.addEventListener('change', load);
-  refresh.addEventListener('click', load);
+  product.addEventListener('change', () => load(true));
+  refresh.addEventListener('click', () => load(true));
   window.addEventListener('rts-auth-state', load);
   if (window.rtsAuthSession) load();
 });
