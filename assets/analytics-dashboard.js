@@ -1,3 +1,7 @@
+if (window.__rtsAnalyticsDashboardLoaded) {
+  // Prevent duplicate initialization if the dashboard script is included more than once.
+} else {
+window.__rtsAnalyticsDashboardLoaded = true;
 document.addEventListener('DOMContentLoaded', () => {
   const page = document.querySelector('.analytics-page');
   if (!page) return;
@@ -107,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }))
         );
 
+        cards.replaceChildren();
         for (const item of results) {
           renderEvents(item.slug, item.name, item.data.events || [], item.data.daily || []);
         }
@@ -118,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const result = await fetchProduct(token, product.value);
+      cards.replaceChildren();
       renderEvents(
         product.value,
         product.options[product.selectedIndex].textContent,
@@ -141,3 +147,4 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('rts-auth-state', load);
   if (window.rtsAuthSession) load();
 });
+}
