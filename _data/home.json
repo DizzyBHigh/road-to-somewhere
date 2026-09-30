@@ -30,7 +30,7 @@
   "extensions": {
     "kicker": "THE WORKSHOP",
     "title": "Streamerbot Extensions",
-    "text": "Built to be installed easily, configured clearly, and seen on stream. We thoroughly test our extensions before releasing them and provide documentation on the extensions page. If, however, something does not work as expected or you have a question, jump in on the RTS [[link:https://discord.gg/3hSTfz32HT|RTS Discord]] and ask away.\\n\\nWhat you won't find here are things like: Chat widgets, Ad Timers, Goal Bars, Subathon Managers; there are plenty of these already available from other creators such as [[link:https://tawmae.xyz|Tawmae]], [[link:https://nutty.gg|Nutty]] and so many others that I won't list here. I probably need a new section for these..."
+    "text": "Built to be installed easily, configured clearly, and seen on stream. We thoroughly test our extensions before releasing them and provide documentation on the extensions page. If, however, something does not work as expected or you have a question, jump in on the RTS [[link:https://discord.gg/3hSTfz32HT|RTS Discord]] and ask away.\\n\\nWhat you won't find here are things like: Chat widgets, Ad Timers, Goal Bars, Subathon Managers; there are plenty of these already available from other creators."
   },
   "shared": {
     "kicker": "SHARED",
