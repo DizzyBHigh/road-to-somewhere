@@ -12,7 +12,16 @@ layout: default
 {% if content.settings %}<link rel="stylesheet" href="{{ '/assets/extension.css' | relative_url }}">{% endif %}
 {% if product.review != false %}<link rel="stylesheet" href="{{ '/assets/reviews.css' | relative_url }}">{% endif %}
 <link rel="stylesheet" href="{{ '/assets/product.css' | relative_url }}">
-<main class="product-page product-page--{{ product.type | default: product.category }}" data-product-slug="{{ product.slug }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}" data-overlay-zip-url="{{ product.website.overlayZipFilename | relative_url }}">
+{% if product.visibility == "private" %}
+<section class="section private-product-gate" data-private-product>
+  <div class="section-kicker">INTERNAL</div>
+  <div class="section-heading">
+    <h3>Administrator access required</h3>
+    <p data-private-product-status>Checking administrator access...</p>
+  </div>
+</section>
+{% endif %}
+<main class="product-page product-page--{{ product.type | default: product.category }}"{% if product.visibility == "private" %} hidden data-private-product-content{% endif %} data-product-slug="{{ product.slug }}" data-import-url="{{ product.website.importFilename | relative_url }}" data-overlay-url="{{ product.website.overlayUrl | relative_url }}" data-overlay-zip-url="{{ product.website.overlayZipFilename | relative_url }}">
   <section class="product-hero">
     <div class="product-hero-main">
       <div class="section-kicker rts-format">{{ hero.kicker | default: product.name }}</div>
@@ -36,5 +45,6 @@ layout: default
   {% if product.notes or product.links %}<section class="product-section"><article class="product-content-card"><div class="section-kicker">IMPORTANT NOTES</div>{% if product.notes %}<ul class="product-list">{% for note in product.notes %}<li class="rts-format">{{ note }}</li>{% endfor %}</ul>{% endif %}<div class="product-links">{% if product.repository %}<a class="secondary-button" href="{{ product.repository }}">Source repository -></a>{% endif %}{% for link in product.links %}<a class="secondary-button" href="{{ link[1] }}">{{ link[0] }} -></a>{% endfor %}</div></article></section>{% endif %}
   {% if product.review != false %}{% include product-reviews.html product=product %}<script src="{{ '/assets/reviews.js' | relative_url }}" defer></script>{% endif %}
   <script src="{{ '/assets/product-downloads.js' | relative_url }}" defer></script>
+  {% if product.visibility == "private" %}<script src="{{ '/assets/private-product.js' | relative_url }}" defer></script>{% endif %}
   <div class="product-page-footer"><span>{{ product.name | upcase }}</span><span>v{{ product.version }}</span><span>{{ product.website.footerLabel }}</span></div>
 </main>
