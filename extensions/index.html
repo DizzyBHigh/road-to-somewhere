@@ -13,7 +13,7 @@ description: Streamer.bot extensions from The Road to Somewhere.
     </div>
     {% for slug in products %}
       {% assign extension = site.data[slug] %}
-      {% if extension %}
+      {% if extension and extension.visibility != "private" %}
         {% if extension.page.url %}{% assign product_path = extension.page.url %}{% else %}{% assign product_path = '/extensions/' | append: extension.slug | append: '/' %}{% endif %}
         <article class="product-card">
           <div class="product-art">
