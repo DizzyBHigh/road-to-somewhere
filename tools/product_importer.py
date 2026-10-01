@@ -40,6 +40,10 @@ def import_product(entry: dict) -> None:
     public = json.loads(json.dumps(manifest))
     public["slug"] = slug
     public["repositoryVisibility"] = repository_visibility(repository)
+    visibility = public.get("visibility", "public")
+    if visibility not in {"public", "private"}:
+        fail(f"{manifest_path}: visibility must be public or private")
+    public["visibility"] = visibility
     policy = public.get("release") if isinstance(public.get("release"), dict) else {}
     publish = public.get("publish", {})
     needs_release = bool(publish.get("overlay") or publish.get("importFile") or policy)
