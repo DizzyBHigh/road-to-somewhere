@@ -30,7 +30,7 @@ jobs:
           set -euo pipefail
           test -n "$RTS_EXTENSION_TOKEN" || { echo "RTS_EXTENSION_TOKEN is not configured"; exit 1; }
           mkdir -p .import-src
-          auth=$(printf 'x-access-token:%s' "$RTS_EXTENSION_TOKEN" | base64 -w0)
+          auth=$(printf 'DizzyBHigh:%s' "$RTS_EXTENSION_TOKEN" | base64 -w0)
           while IFS= read -r entry; do
             repo=$(echo "$entry" | jq -r '.repository')
             ref=$(echo "$entry" | jq -r '.ref // "main"')
